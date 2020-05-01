@@ -32,8 +32,7 @@ async def test_xml_request(aresponses):
         response = await client._request("response/xml")
 
         assert isinstance(response, dict)
-        assert response["status"]
-        assert response["status"]["#text"] == "OK"
+        assert response["status"] == "OK"
 
 
 @pytest.mark.asyncio
@@ -66,8 +65,7 @@ async def test_internal_session(aresponses):
         response = await client._request("response/xml")
 
         assert isinstance(response, dict)
-        assert response["status"]
-        assert response["status"]["#text"] == "OK"
+        assert response["status"] == "OK"
 
 
 @pytest.mark.asyncio
