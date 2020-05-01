@@ -10,7 +10,7 @@ from yarl import URL
 from .__version__ import __version__
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
-from .models import Device, Channel, State
+from .models import Device, Application
 
 
 class Roku:
@@ -22,7 +22,7 @@ class Roku:
         self,
         host: str,
         base_path: str = "/",
-        port: int = 8080,
+        port: int = 8060,
         request_timeout: int = 8,
         session: aiohttp.client.ClientSession = None,
         user_agent: str = None,
