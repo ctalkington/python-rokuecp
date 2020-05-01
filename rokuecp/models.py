@@ -26,16 +26,24 @@ class Application:
 
 @dataclass(frozen=True)
 class Info:
-    """Object holding information from Roku."""
+    """Object holding device information from Roku."""
 
     brand: str
+    model_name: str
+    model_number: str
+    serial_number: str
     version: str
 
     @staticmethod
     def from_dict(data: dict):
         """Return Info object from Roku API response."""
         return Info(
-            brand="Roku", version=data.get("software-version", None),
+            name=data.get("user-device-name", None),
+            brand=data.get("vendor-name", "Roku"),
+            model_name=data.get("model-name", None),
+            model_number=data.get("model-number", None),
+            serial_number=data.get("serial-number", None),
+            version=data.get("software-version", None),
         )
 
 
