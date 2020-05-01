@@ -9,7 +9,7 @@ from . import load_fixture
 INFO = xmltodict.parse(load_fixture("device-info.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 
-DEVICE = {"info": INFO, "apps": APPS["apps"]["app"]}
+DEVICE = {"info": INFO["device-info"], "apps": APPS["apps"]["app"]}
 
 
 def test_device() -> None:
