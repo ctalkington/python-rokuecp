@@ -96,7 +96,7 @@ class Roku:
 
         if "application/xml" in content_type:
             content = await response.text()
-            
+
             try:
                 data = xmltodict.parse(content)
             except (ExpatError, IndexError) as error:
