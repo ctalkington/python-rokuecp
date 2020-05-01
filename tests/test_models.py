@@ -44,4 +44,3 @@ def test_application() -> None:
     assert app
     assert app.app_id == ""
     assert app.name == ""
-
