@@ -34,8 +34,12 @@ def test_info() -> None:
     info = models.Info.from_dict(INFO["device-info"])
 
     assert info
-    assert info.name == ""
-    assert info.version == ""
+    assert info.name == "My Roku 3"
+    assert info.brand == "Roku"
+    assert info.model_name == "Roku 3"
+    assert info.model_number == "4200X"
+    assert info.serial_number == "1GU48T017973'"
+    assert info.version == "7.5.0"
 
 
 def test_application() -> None:
