@@ -30,6 +30,9 @@ async def test_xml_request(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client._request("response/xml")
+
+        assert isinstance(response, dict)
+        assert response["status"]
         assert response["status"]["#text"] == "OK"
 
 
@@ -61,6 +64,9 @@ async def test_internal_session(aresponses):
 
     async with Roku(HOST) as client:
         response = await client._request("response/xml")
+
+        assert isinstance(response, dict)
+        assert response["status"]
         assert response["status"]["#text"] == "OK"
 
 
