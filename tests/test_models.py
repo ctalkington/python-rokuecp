@@ -14,7 +14,7 @@ DEVICE = {"info": INFO, "apps": APPS["apps"]["app"]}
 
 def test_device() -> None:
     """Test the Device model."""
-    device = models.Device(APPLICATION)
+    device = models.Device(DEVICE)
 
     assert device
 
