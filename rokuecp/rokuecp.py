@@ -122,7 +122,7 @@ class Roku:
             if apps is None or "apps" not in apps:
                 raise RokuError("Roku device returned an empty API response")
 
-            self._device = Device({"info": info, "apps": apps["apps"]["app"]})
+            self._device = Device({"info": info["device-info"], "apps": apps["apps"]["app"]})
             return self._device
 
         self._device.update_from_dict({})
