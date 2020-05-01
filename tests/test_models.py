@@ -1,6 +1,4 @@
 """Tests for Roku Models."""
-from typing import List
-
 import pytest
 import rokuecp.models as models
 import xmltodict
