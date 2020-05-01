@@ -23,7 +23,7 @@ async def test_xml_request(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
-            text='<status>OK</status>',
+            text="<status>OK</status>",
         ),
     )
 
@@ -55,7 +55,7 @@ async def test_internal_session(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
-            text='<status>OK</status>',
+            text="<status>OK</status>",
         ),
     )
 
@@ -88,9 +88,7 @@ async def test_request_port(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Roku(
-            host=HOST, port=NON_STANDARD_PORT, session=session
-        )
+        client = Roku(host=HOST, port=NON_STANDARD_PORT, session=session)
         response = await client._request("support/port")
         assert response == "OK"
 
