@@ -98,9 +98,7 @@ class Roku:
             content = await response.text()
 
             try:
-                print(content)
                 data = xmltodict.parse(content)
-                print(data)
             except (ExpatError, IndexError) as error:
                 raise RokuError from error
 
