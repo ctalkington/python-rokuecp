@@ -1,7 +1,7 @@
 """Models for Roku."""
 
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List
 
 from .exceptions import RokuError
 
@@ -35,8 +35,7 @@ class Info:
     def from_dict(data: dict):
         """Return Info object from Roku API response."""
         return Info(
-            brand="Roku",
-            version=data.get("software-version", {}).get("#text"),
+            brand="Roku", version=data.get("software-version", {}).get("#text"),
         )
 
 
@@ -50,9 +49,7 @@ class Device:
         """Initialize an empty Roku device class."""
         # Check if all elements are in the passed dict, else raise an Error
         if any(k not in data for k in ["info"]):
-            raise RokuError(
-                "Roku data is incomplete, cannot construct device object"
-            )
+            raise RokuError("Roku data is incomplete, cannot construct device object")
         self.update_from_dict(data)
 
     def update_from_dict(self, data: dict) -> "Device":
