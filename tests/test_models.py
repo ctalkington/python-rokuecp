@@ -40,7 +40,7 @@ def test_info() -> None:
 
 def test_application() -> None:
     """Test the Application model."""
-    app = models.Application.from_dict(APPS[0])
+    app = models.Application.from_dict(next(APPS["apps"]["app"]))
 
     assert app
     assert app.app_id == ""
