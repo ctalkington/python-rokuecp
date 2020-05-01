@@ -12,7 +12,7 @@ from yarl import URL
 from .__version__ import __version__
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
-from .models import Device, Application
+from .models import Device
 
 
 class Roku:
