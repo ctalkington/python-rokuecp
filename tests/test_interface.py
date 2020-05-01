@@ -2,9 +2,9 @@
 from typing import List
 
 import pytest
-import roku.models as models
+import rokuecp.models as models
 from aiohttp import ClientSession
-from roku import Roku
+from rokuecp import Roku
 
 from . import load_fixture
 
