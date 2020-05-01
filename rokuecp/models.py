@@ -35,7 +35,7 @@ class Info:
     def from_dict(data: dict):
         """Return Info object from Roku API response."""
         return Info(
-            brand="Roku", version=data.get("software-version", {}).get("#text"),
+            brand="Roku", version=data.get("software-version", None),
         )
 
 
