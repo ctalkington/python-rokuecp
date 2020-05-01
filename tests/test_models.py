@@ -31,7 +31,7 @@ def test_device_no_data() -> None:
 def test_info() -> None:
     """Test the Info model."""
     print(INFO)
-    info = models.Info.from_dict(INFO)
+    info = models.Info.from_dict(INFO["device-info"])
 
     assert info
     assert info.name == ""
@@ -40,7 +40,7 @@ def test_info() -> None:
 
 def test_application() -> None:
     """Test the Application model."""
-    app = models.Application.from_dict(next(APPS["apps"]["app"]))
+    app = models.Application.from_dict(APPS["apps"]["app"])
 
     assert app
     assert app.app_id == ""
