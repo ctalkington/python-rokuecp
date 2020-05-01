@@ -23,14 +23,14 @@ async def test_xml_request(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
-            text='<apps><app id="string">name</app></apps>',
+            text='<status>OK</status>',
         ),
     )
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client._request("response/xml")
-        assert response["status"] == "OK"
+        assert response["status"]["#text"] == "OK"
 
 
 @pytest.mark.asyncio
@@ -55,13 +55,13 @@ async def test_internal_session(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
-            text='<apps><app id="string">name</app></apps>',
+            text='<status>OK</status>',
         ),
     )
 
     async with Roku(HOST) as client:
         response = await client._request("response/xml")
-        assert response["status"] == "OK"
+        assert response["status"]["#text"] == "OK"
 
 
 @pytest.mark.asyncio
