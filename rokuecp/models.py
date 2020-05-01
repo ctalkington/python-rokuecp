@@ -18,9 +18,9 @@ class Application:
     def from_dict(data: dict):
         """Return Application object from Roku API response."""
         return Application(
-            channel_id=data.get("@id"),
-            name=data.get("#text"),
-            version=data.get("@version"),
+            app_id=data.get("@id", None),
+            name=data.get("#text", None),
+            version=data.get("@version", None),
         )
 
 
