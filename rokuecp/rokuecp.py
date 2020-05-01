@@ -2,9 +2,11 @@
 import asyncio
 from socket import gaierror as SocketGIAEroor
 from typing import Any, Mapping, Optional
+from xml.parsers.expat import ExpatError
 
 import aiohttp
 import async_timeout
+import xmltodict
 from yarl import URL
 
 from .__version__ import __version__
@@ -93,8 +95,13 @@ class Roku:
             )
 
         if "application/xml" in content_type:
-            data = await response.read()
+            content = await response.text()
             
+            try:
+                data = xmltodict.parse(content)
+            except (ExpatError, IndexError) as error:
+                raise RokuError from error
+
             return data
 
         return await response.text()
