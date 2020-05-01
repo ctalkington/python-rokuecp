@@ -7,17 +7,17 @@ from .exceptions import RokuError
 
 
 @dataclass(frozen=True)
-class Channel:
-    """Object holding channel information from Roku."""
+class Application:
+    """Object holding application information from Roku."""
 
-    channel_id: str
+    app_id: str
     name: str
     version: str
 
     @staticmethod
     def from_dict(data: dict):
-        """Return Channel object from Roku API response."""
-        return Channel(
+        """Return Application object from Roku API response."""
+        return Application(
             channel_id=data.get("@id"),
             name=data.get("#text"),
             version=data.get("@version"),
@@ -44,7 +44,7 @@ class Device:
     """Object holding all information of device."""
 
     info: Info
-    channels: List[Channel]
+    apps: List[Application]
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
@@ -60,8 +60,8 @@ class Device:
         if "info" in data and data["info"]:
             self.info = Info.from_dict(data["info"])
 
-        if "channels" in data and data["channels"]:
-            channels = [Chanmel.from_dict(channel) for location in data["channels"]]
-            self.channels = channels
+        if "apps" in data and data["apps"]:
+            apps = [Application.from_dict(app) for app in data["apps"]]
+            self.apps = apps
 
         return self
