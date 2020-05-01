@@ -30,6 +30,7 @@ def test_device_no_data() -> None:
 
 def test_info() -> None:
     """Test the Info model."""
+    print(INFO)
     info = models.Info.from_dict(INFO)
 
     assert info
