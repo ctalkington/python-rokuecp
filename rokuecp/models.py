@@ -67,9 +67,10 @@ class Device:
             self.info = Info.from_dict(data["info"])
 
         if "apps" in data and data["apps"]:
+            print(data["apps"])
             apps = [
                 Application.from_dict(app_data)
-                for app_data in data["apps"]["app"].items()
+                for app_data in data["apps"]
             ]
             self.apps = apps
 
