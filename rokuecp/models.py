@@ -28,6 +28,7 @@ class Application:
 class Info:
     """Object holding device information from Roku."""
 
+    name: str
     brand: str
     model_name: str
     model_number: str
