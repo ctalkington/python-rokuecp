@@ -43,7 +43,7 @@ async def test_device(aresponses):
         client = Roku(HOST, session=session)
         await client.update()
 
-        assert client.app
+        assert client.device
         assert isinstance(client.device, models.Device)
 
 
