@@ -89,7 +89,7 @@ def test_application_active_app() -> None:
 
 def test_channel() -> None:
     """Test the Channel model."""
-    channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["tv-channel"][0])
+    channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["tv-channel"])
 
     assert channel
     assert channel.name == "WhatsOn"
@@ -105,7 +105,7 @@ def test_channel() -> None:
 
 def test_channel_active_tv() -> None:
     """Test the Channel model with active TV channel."""
-    channel = models.Channel.from_dict(TV_ACTIVE_CHANNEL["tv-channel"]["channel"][0])
+    channel = models.Channel.from_dict(TV_ACTIVE_CHANNEL["tv-channel"]["channel"])
     description = """The team will travel all around the world in order to shut down
 a global crime ring."""
 
