@@ -113,7 +113,7 @@ async def test_update(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_private__get_apps(aresponses):
+async def test_private_get_apps(aresponses):
     """Test _get_apps method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
