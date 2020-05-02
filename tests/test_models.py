@@ -12,6 +12,7 @@ ACTIVE_APP_NETFLIX = xmltodict.parse(load_fixture("active-app-netflix.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
 DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+TV_ACTIVE_CHANNEL = xmltodict.parse(load_fixture("tv-active-channel.xml"))
 TV_CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
 
 DEVICE = {
@@ -89,12 +90,29 @@ def test_channel() -> None:
     channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["tv-channel"][0])
 
     assert channel
-    assert channel.name == "Roku Channel Store"
-    assert channel.number == "11"
-    assert channel.channel_type == ""
-    assert channel.program_title == ""
-    assert channel.program_description == ""
-    assert channel.program_rating == ""
+    assert channel.name == "WhatsOn"
+    assert channel.number == "1.1"
+    assert channel.channel_type == "air-digital"
+    assert not channel.hidden
+    assert channel.program_title is None
+    assert channel.program_description is None
+    assert channel.program_rating is None
+
+
+def test_channel_active_tv() -> None:
+    """Test the Channel model with active TV channel."""
+    channel = models.Channel.from_dict(TV_ACTIVE_CHANNEL["tv-channel"]["channel"][0])
+    description = """The team will travel all around the world in order to shut down
+a global crime ring."""
+
+    assert channel
+    assert channel.name == "getTV"
+    assert channel.number == "14.3"
+    assert channel.channel_type == "air-digital"
+    assert not channel.hidden
+    assert channel.program_title == "Airwolf"
+    assert channel.program_description == description.replace("\n", " ")
+    assert channel.program_rating == "TV-14-D-V"
 
 
 def test_state() -> None:
