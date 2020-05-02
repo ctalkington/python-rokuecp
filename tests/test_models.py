@@ -37,7 +37,7 @@ def test_info() -> None:
     assert info.brand == "Roku"
     assert info.model_name == "Roku 3"
     assert info.model_number == "4200X"
-    assert info.serial_number == "1GU48T017973'"
+    assert info.serial_number == "1GU48T017973"
     assert info.version == "7.5.0"
 
 
