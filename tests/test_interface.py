@@ -217,11 +217,11 @@ async def test_update_tv(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_apps(aresponses):
-    """Test _get_apps method is handled correctly."""
+async def test_get_tv_active_channel(aresponses):
+    """Test _get_tv_active_channel method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
-        "/query/apps",
+        "/query/tv-active-channel",
         "GET",
         aresponses.Response(
             status=200,
@@ -233,7 +233,27 @@ async def test_get_apps(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_apps()
+            assert await client._get_tv_active_channel()
+
+
+@pytest.mark.asyncio
+async def test_get_active_app(aresponses):
+    """Test _get_active_app method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/active-app",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_active_app()
 
 
 @pytest.mark.asyncio
@@ -254,6 +274,26 @@ async def test_get_device_info(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_device_info()
+
+
+@pytest.mark.asyncio
+async def test_get_tv_active_channel(aresponses):
+    """Test _get_tv_active_channel method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-active-channel",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_tv_active_channel()
 
 
 @pytest.mark.asyncio
