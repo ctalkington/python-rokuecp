@@ -103,7 +103,7 @@ class Device:
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
         # Check if all elements are in the passed dict, else raise an Error
-        if any(k not in data for k in ["info"]):
+        if any(k not in data for k in ["info", "apps", "channels"]):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
         self.update_from_dict(data)
@@ -114,7 +114,11 @@ class Device:
             self.info = Info.from_dict(data["info"])
 
         if "apps" in data and data["apps"]:
-            self.apps = [Application.from_dict(app_data) for app_data in data["apps"]]
+            self.apps = [
+                Application.from_dict(app_data)
+                for app_data in data["apps"]
+                if data["apps"] is not None
+            ]
 
         if "channels" in data and data["channels"]:
             self.channels = [Channel.from_dict(channwl_data) for channel_data in data["channels"]]
