@@ -1,5 +1,6 @@
 """Tests for Roku Models."""
 from datetime import datetime
+from typing import List
 
 import pytest
 import rokuecp.models as models
