@@ -114,12 +114,41 @@ class Roku:
     async def update(self) -> Device:
         """Get all information about the device in a single call."""
         updates = {}
-        tasks = ["info", "apps", "app"]
+        updates["info"] = info = await self._get_device_info()
+
+        standby = False
+
+        if info.get("power-mode") == "PowerOff":
+            available = False
+            standby = True
+        elif info.get("power-mode") is None:
+            available = False
+        else:
+            available = True
+
+        updates["available"] = available
+        updates["standby"] = standby
+
+        if not available:
+            if self._device is None:
+                self._device = Device(updates)
+            else:
+                self._device.update_from_dict(updates)
+
+        tasks = ["apps"]
         futures = [
-            self._get_device_info(),
             self._get_apps(),
-            self._get_app(),
         ]
+
+        if not standby:
+            updates["app"] = app = await self._get_app()
+
+            if app.get("@id") == "tvinput.dtv":
+                tasks.append("channels")
+                futures.append(self._get_tv_channels())
+
+                tasks.append("channel")
+                futures.append(self._get_tv_channel())
 
         results = await asyncio.gather(*futures)
 
