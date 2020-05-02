@@ -131,10 +131,7 @@ class Roku:
                     f"Roku device returned an empty result ({task})"
                 )
 
-            if task == "info" and "device-info" in result:     
-                updates[task] = result["device-info"]
-            elif task == "apps" and "apps" in result:
-                updates[task] = result["apps"]["app"]
+            updates[task] = result
 
         if self._device is None or full_update:
             self._device = Device(updates)
@@ -156,7 +153,7 @@ class Roku:
         
         if "apps" not in res:
             raise RokuError(
-                f"Roku device returned a malformed result (apps)"
+                "Roku device returned a malformed result (apps)"
             )
 
         return res["apps"]["app"]
@@ -167,7 +164,7 @@ class Roku:
         
         if "device-info" not in res:
             raise RokuError(
-                f"Roku device returned a malformed result (device-info)"
+                "Roku device returned a malformed result (device-info)"
             )
 
         return res["device-info"]
