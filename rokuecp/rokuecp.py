@@ -154,7 +154,6 @@ class Roku:
     async def _get_device_info(self) -> dict:
         """Retrieve device info for updates."""
         res = await self._request("/query/device-info")
-        print(res)
 
         if "device-info" not in res:
             raise RokuError("Roku device returned a malformed result (device-info)")
