@@ -85,7 +85,6 @@ class Channel:
     @staticmethod
     def from_dict(data: dict):
         """Return Channel object from Roku response."""
-        print(data)
         strength = data.get("signal-strength", None)
 
         return Channel(
