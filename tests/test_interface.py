@@ -118,6 +118,9 @@ async def test_update(aresponses):
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
 
+        assert response.state.available
+        assert not response.state.standby
+
         response = await client.update()
 
         assert response
@@ -125,6 +128,9 @@ async def test_update(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+
+        assert response.state.available
+        assert not response.state.standby
 
 
 @pytest.mark.asyncio
@@ -194,6 +200,9 @@ async def test_update_tv(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+
+        assert response.state.available
+        assert not response.state.standby
 
 
 @pytest.mark.asyncio
