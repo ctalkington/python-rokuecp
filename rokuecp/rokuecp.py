@@ -142,7 +142,7 @@ class Roku:
             tasks.append("apps")
             futures.append(self._get_apps())
 
-            updates["app"] = app = await self._get_app()
+            updates["app"] = app = await self._get_active_app()
 
             if info.get("is-tv", "false") == "true":
                 tasks.append("channels")
@@ -175,14 +175,14 @@ class Roku:
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
 
-    async def _get_app(self) -> dict:
+    async def _get_active_app(self) -> dict:
         """Retrieve active app for updates."""
         res = await self._request("/query/active-app")
 
-        if "app" not in res:
+        if "active-app" not in res:
             raise RokuError("Roku device returned a malformed result (active-app)")
 
-        return res["app"]
+        return res["active-app"]["app"]
 
     async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
