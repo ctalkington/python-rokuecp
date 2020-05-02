@@ -113,21 +113,27 @@ class Roku:
 
     async def update(self, full_update: bool = False) -> Device:
         """Get all information about the device in a single call."""
-        if self._device is None or full_update:
-            info = await self._request("/query/device-info")
-            if info is None:
+        updates = {}
+        tasks = ["info", "apps"]
+        results = await asyncio.gather(
+            self._request("/query/device-info"),
+            self._request("/query/apps"),
+        )
+
+        for (task, result) in zip(tasks, results):
+            if result is None:
                 raise RokuError("Roku device returned an empty API response")
 
-            apps = await self._request("/query/apps")
-            if apps is None or "apps" not in apps:
-                raise RokuError("Roku device returned an empty API response")
+            if task == "info":     
+                updates[task] = result["device-info"]
+            elif task == "apps":
+                updates[task] = result["apps"]["app"]
 
-            self._device = Device(
-                {"info": info["device-info"], "apps": apps["apps"]["app"]}
-            )
-            return self._device
+        if self._device is None:
+            self._device = Device(updates)
+        else:
+            self._device.update_from_dict(updates)
 
-        self._device.update_from_dict({})
         return self._device
 
     async def remote(self, key: str) -> None:
