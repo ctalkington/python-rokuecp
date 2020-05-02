@@ -111,24 +111,22 @@ class Roku:
         """Return the cached Device object."""
         return self._device
 
-    async def update(self, full_update: bool = False) -> Device:
+    async def update(self) -> Device:
         """Get all information about the device in a single call."""
         updates = {}
-        tasks = ["info"]
+        tasks = ["info", "apps", "app"]
         futures = [
             self._get_device_info(),
+            self._get_apps(),
+            self._get_app(),
         ]
-
-        if self._device is None or full_update:
-            tasks.append("apps")
-            futures.append(self._get_apps())
 
         results = await asyncio.gather(*futures)
 
         for (task, result) in zip(tasks, results):
             updates[task] = result
 
-        if self._device is None or full_update:
+        if self._device is None:
             self._device = Device(updates)
         else:
             self._device.update_from_dict(updates)
@@ -141,6 +139,15 @@ class Roku:
             raise RokuError(f"Remote key is invalid: {key}")
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+
+    async def _get_app(self) -> dict:
+        """Retrieve active app for updates."""
+        res = await self._request("/query/active-app")
+
+        if "app" not in res:
+            raise RokuError("Roku device returned a malformed result (active-app)")
+
+        return res["app"]
 
     async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
