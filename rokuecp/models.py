@@ -41,9 +41,9 @@ class Info:
         """Return Info object from Roku API response."""
         device_type = "box"
 
-        if data.get("is-tv"):
+        if data.get("is-tv", "false") == "true":
             device_type = "tv"
-        elif data.get("is-stick"):
+        elif data.get("is-stick", "false") == "true":
             device_type = "stick"
 
         return Info(
