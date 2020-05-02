@@ -120,9 +120,7 @@ async def test_private_get_apps(aresponses):
         "/query/apps",
         "GET",
         aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text="<other>value</other>",
+            status=200, headers={"Content-Type": "application/xml"}, text="",
         ),
     )
 
