@@ -130,6 +130,7 @@ async def test_private_get_apps(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
+            assert 2 == 1
 
 
 @pytest.mark.asyncio
