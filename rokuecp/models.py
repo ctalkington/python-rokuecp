@@ -27,6 +27,7 @@ class Application:
         if isinstance(app, str):
             app = {"#text": app}
 
+        print(app)
         return Application(
             app_id=app.get("@id", None),
             name=app.get("#text", None),
