@@ -19,6 +19,8 @@ DEVICE = {
     "info": DEVICE_INFO["device-info"],
     "apps": APPS["apps"]["app"],
     "app": ACTIVE_APP_NETFLIX,
+    "available": True,
+    "standby": False,
 }
 
 
