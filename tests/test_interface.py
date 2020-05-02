@@ -113,7 +113,7 @@ async def test_update(aresponses):
 
 
 @pytest.mark.asyncio
-async def test__get_apps(aresponses):
+async def test_private__get_apps(aresponses):
     """Test _get_apps method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -131,7 +131,7 @@ async def test__get_apps(aresponses):
 
 
 @pytest.mark.asyncio
-async def test__get_device_info(aresponses):
+async def test_private_get_device_info(aresponses):
     """Test _get_device_info method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
