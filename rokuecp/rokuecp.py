@@ -135,7 +135,7 @@ class Roku:
         if not key.lower() in VALID_REMOTE_KEYS:
             raise RokuError(f"Remote key is invalid: {key}")
 
-        await self._request("keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+        await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
 
     async def close(self) -> None:
         """Close open client session."""
