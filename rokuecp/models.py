@@ -27,7 +27,6 @@ class Application:
         if isinstance(app, str):
             app = {"#text": app}
 
-        print(app)
         return Application(
             app_id=app.get("@id", None),
             name=app.get("#text", None),
@@ -86,6 +85,7 @@ class Channel:
     @staticmethod
     def from_dict(data: dict):
         """Return Channel object from Roku response."""
+        print(data)
         strength = data.get("signal-strength", None)
 
         return Channel(
