@@ -8,7 +8,7 @@ from rokuecp import RokuError
 
 from . import load_fixture
 
-ACTIVE_APP_NETFLIX = xmltodict(load_fixture("active-app-netflix.xml"))
+ACTIVE_APP_NETFLIX = xmltodict.parse(load_fixture("active-app-netflix.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
 DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
@@ -76,7 +76,7 @@ def test_application() -> None:
 
 def test_application_active_app() -> None:
     """Test the Application model with active app."""
-    app = models.Application.from_dict(ACTIVE_APP["app"])
+    app = models.Application.from_dict(ACTIVE_APP_NETFLIX["app"])
 
     assert app
     assert app.app_id == "12"
