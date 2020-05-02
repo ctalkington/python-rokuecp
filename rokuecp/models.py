@@ -14,14 +14,21 @@ class Application:
     app_id: str
     name: str
     version: str
+    screensaver: bool
 
     @staticmethod
     def from_dict(data: dict):
         """Return Application object from Roku API response."""
+        app = data.get("app", {})
+
+        if isinstance(app, str):
+            app = {"#text": app}
+
         return Application(
-            app_id=data.get("@id", None),
-            name=data.get("#text", None),
-            version=data.get("@version", None),
+            app_id=app.get("@id", None),
+            name=app.get("#text", None),
+            version=app.get("@version", None),
+            screensaver=data.get("screensaver") is not None,
         )
 
 
@@ -137,5 +144,8 @@ class Device:
                 for channel_data in data["channels"]
                 if data["channels"] is not None
             ]
+
+        if "app" in data and data["app"]:
+            self.app = Application.from_dict(data["app"])
 
         return self
