@@ -74,27 +74,28 @@ async def test_remote_invalid_key():
 @pytest.mark.asyncio
 async def test_update(aresponses):
     """Test update method is handled correctly."""
-    aresponses.add(
-        MATCH_HOST,
-        "/query/device-info",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("device-info.xml"),
-        ),
-    )
+    for _ in range(0, 2):
+        aresponses.add(
+            MATCH_HOST,
+            "/query/device-info",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("device-info.xml"),
+            ),
+        )
 
-    aresponses.add(
-        MATCH_HOST,
-        "/query/apps",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("apps.xml"),
-        ),
-    )
+        aresponses.add(
+            MATCH_HOST,
+            "/query/apps",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("apps.xml"),
+            ),
+        )
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
@@ -109,3 +110,43 @@ async def test_update(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.apps, List)
+
+
+@pytest.mark.asyncio
+async def test_get_apps(aresponses):
+    """Test _get_apps method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_apps()
+
+
+@pytest.mark.asyncio
+async def test_get_device_info(aresponses):
+    """Test _get_device_info method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_device_info()

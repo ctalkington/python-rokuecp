@@ -30,6 +30,7 @@ class Info:
 
     name: str
     brand: str
+    device_type: str
     model_name: str
     model_number: str
     serial_number: str
@@ -38,9 +39,17 @@ class Info:
     @staticmethod
     def from_dict(data: dict):
         """Return Info object from Roku API response."""
+        device_type = "box"
+
+        if data.get("is-tv", "false") == "true":
+            device_type = "tv"
+        elif data.get("is-stick", "false") == "true":
+            device_type = "stick"
+
         return Info(
             name=data.get("user-device-name", None),
             brand=data.get("vendor-name", "Roku"),
+            device_type=device_type,
             model_name=data.get("model-name", None),
             model_number=data.get("model-number", None),
             serial_number=data.get("serial-number", None),
@@ -59,6 +68,7 @@ class Device:
         # Check if all elements are in the passed dict, else raise an Error
         if any(k not in data for k in ["info"]):
             raise RokuError("Roku data is incomplete, cannot construct device object")
+
         self.update_from_dict(data)
 
     def update_from_dict(self, data: dict) -> "Device":

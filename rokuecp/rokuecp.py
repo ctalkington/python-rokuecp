@@ -113,21 +113,26 @@ class Roku:
 
     async def update(self, full_update: bool = False) -> Device:
         """Get all information about the device in a single call."""
+        updates = {}
+        tasks = ["info"]
+        futures = [
+            self._get_device_info(),
+        ]
+
         if self._device is None or full_update:
-            info = await self._request("/query/device-info")
-            if info is None:
-                raise RokuError("Roku device returned an empty API response")
+            tasks.append("apps")
+            futures.append(self._get_apps())
 
-            apps = await self._request("/query/apps")
-            if apps is None or "apps" not in apps:
-                raise RokuError("Roku device returned an empty API response")
+        results = await asyncio.gather(*futures)
 
-            self._device = Device(
-                {"info": info["device-info"], "apps": apps["apps"]["app"]}
-            )
-            return self._device
+        for (task, result) in zip(tasks, results):
+            updates[task] = result
 
-        self._device.update_from_dict({})
+        if self._device is None or full_update:
+            self._device = Device(updates)
+        else:
+            self._device.update_from_dict(updates)
+
         return self._device
 
     async def remote(self, key: str) -> None:
@@ -136,6 +141,24 @@ class Roku:
             raise RokuError(f"Remote key is invalid: {key}")
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+
+    async def _get_apps(self) -> dict:
+        """Retrieve apps for updates."""
+        res = await self._request("/query/apps")
+
+        if "apps" not in res:
+            raise RokuError("Roku device returned a malformed result (apps)")
+
+        return res["apps"]["app"]
+
+    async def _get_device_info(self) -> dict:
+        """Retrieve device info for updates."""
+        res = await self._request("/query/device-info")
+
+        if "device-info" not in res:
+            raise RokuError("Roku device returned a malformed result (device-info)")
+
+        return res["device-info"]
 
     async def close(self) -> None:
         """Close open client session."""
