@@ -89,7 +89,7 @@ def test_application_active_app() -> None:
 
 def test_channel() -> None:
     """Test the Channel model."""
-    channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["tv-channel"])
+    channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["channel"][0])
 
     assert channel
     assert channel.name == "WhatsOn"
