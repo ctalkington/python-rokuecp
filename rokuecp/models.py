@@ -85,6 +85,8 @@ class Channel:
     @staticmethod
     def from_dict(data: dict):
         """Return Channel object from Roku response."""
+        strength = data.get("signal-strength", None)
+
         return Channel(
             name=data.get("name", None),
             number=data.get("number", None),
@@ -94,7 +96,7 @@ class Channel:
             program_description=data.get("program-description", None),
             program_rating=data.get("program-ratings", None),
             signal_mode=data.get("signal-mode", None),
-            signal_strength=data.get("signal-strength", None),
+            signal_strength=int(strength) if strength is not None else None,
         )
 
 
