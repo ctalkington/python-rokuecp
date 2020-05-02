@@ -30,7 +30,6 @@ def test_device_no_data() -> None:
 
 def test_info() -> None:
     """Test the Info model."""
-    print(INFO["device-info"])
     info = models.Info.from_dict(INFO["device-info"])
 
     assert info
@@ -47,5 +46,5 @@ def test_application() -> None:
     app = models.Application.from_dict(APPS["apps"]["app"][0])
 
     assert app
-    assert app.app_id == ""
-    assert app.name == ""
+    assert app.app_id == "11"
+    assert app.name == "Roku Channel Store"
