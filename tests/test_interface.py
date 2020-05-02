@@ -104,7 +104,7 @@ async def test_update(aresponses):
             aresponses.Response(
                 status=200,
                 headers={"Content-Type": "application/xml"},
-                text=load_fixture("active-app.xml"),
+                text=load_fixture("active-app-roku.xml"),
             ),
         )
 
