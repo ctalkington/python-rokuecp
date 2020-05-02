@@ -153,4 +153,7 @@ class Device:
         if "app" in data and data["app"]:
             self.app = Application.from_dict(data["app"])
 
+        if "channel" in data and data["channel"]:
+            self.channel = Channel.from_dict(data["channel"])
+
         return self
