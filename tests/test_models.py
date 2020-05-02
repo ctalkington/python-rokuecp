@@ -9,7 +9,9 @@ from rokuecp import RokuError
 from . import load_fixture
 
 ACTIVE_APP_NETFLIX = xmltodict.parse(load_fixture("active-app-netflix.xml"))
+ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
+APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
 DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
 TV_ACTIVE_CHANNEL = xmltodict.parse(load_fixture("tv-active-channel.xml"))
@@ -23,6 +25,14 @@ DEVICE = {
     "standby": False,
 }
 
+DEVICE_TV = {
+    "info": DEVICE_INFO_TV["device-info"],
+    "apps": APPS_TV["apps"]["app"],
+    "app": ACTIVE_APP_TV,
+    "available": True,
+    "standby": False,
+}
+
 
 def test_device() -> None:
     """Test the Device model."""
@@ -31,13 +41,40 @@ def test_device() -> None:
     assert device
 
     assert device.info
-    assert isinstance(device.info, models.Info)
+    assert isinstance(device.info, models.Info) 
+
+    assert device.state
+    assert isinstance(device.state, models.State)
+
+    assert device.app
+    assert isinstance(device.app, models.Application)
+
+    assert device.channel is None
 
 
 def test_device_no_data() -> None:
-    """Test the Device model."""
+    """Test the Device model with no device info."""
     with pytest.raises(RokuError):
         models.Device({})
+
+
+def test_device_tv() -> None:
+    """Test the Device model with Roku TV."""
+    device = models.Device(DEVICE)
+
+    assert device
+
+    assert device.info
+    assert isinstance(device.info, models.Info) 
+
+    assert device.state
+    assert isinstance(device.state, models.State)
+
+    assert device.app
+    assert isinstance(device.app, models.Application)
+
+    assert device.channel
+    assert isinstance(device.channel, models.Channel)
 
 
 def test_info() -> None:
