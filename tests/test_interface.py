@@ -4,7 +4,7 @@ from typing import List
 import pytest
 import rokuecp.models as models
 from aiohttp import ClientSession
-from rokuecp import Roku
+from rokuecp import Roku, RokuError
 
 from . import load_fixture
 
