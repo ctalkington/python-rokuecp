@@ -113,7 +113,7 @@ class Roku:
 
     async def update(self) -> Device:
         """Get all information about the device in a single call."""
-        dict: updates = {
+        updates: dict = {
             "app": None,
             "apps": [],
             "channel": None,
