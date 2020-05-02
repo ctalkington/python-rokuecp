@@ -9,7 +9,7 @@ from rokuecp import RokuError
 from . import load_fixture
 
 ACTIVE_APP_NETFLIX = xmltodict.parse(load_fixture("active-app-netflix.xml"))
-ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-"))
+ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-tvinput-dtv.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
