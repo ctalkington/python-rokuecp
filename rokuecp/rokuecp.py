@@ -150,7 +150,7 @@ class Roku:
 
             if isinstance(app["app"], dict) and app["app"].get("@id") == "tvinput.dtv":
                 tasks.append("channel")
-                futures.append(self._get_tv_channel())
+                futures.append(self._get_tv_active_channel())
         elif available:
             tasks.append("apps")
             futures.append(self._get_apps())
@@ -202,7 +202,7 @@ class Roku:
 
         return res["device-info"]
 
-    async def _get_tv_channel(self) -> dict:
+    async def _get_tv_active_channel(self) -> dict:
         """Retrieve active TV channel for updates."""
         res = await self._request("/query/tv-active-channel")
 
