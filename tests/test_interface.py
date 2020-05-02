@@ -113,14 +113,16 @@ async def test_update(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_private_get_apps(aresponses):
+async def test_get_apps(aresponses):
     """Test _get_apps method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
         "/query/apps",
         "GET",
         aresponses.Response(
-            status=200, headers={"Content-Type": "application/xml"}, text="",
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
         ),
     )
 
@@ -128,11 +130,10 @@ async def test_private_get_apps(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
-            assert 2 == 1
 
 
 @pytest.mark.asyncio
-async def test_private_get_device_info(aresponses):
+async def test_get_device_info(aresponses):
     """Test _get_device_info method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
