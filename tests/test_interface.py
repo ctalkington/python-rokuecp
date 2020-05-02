@@ -114,6 +114,7 @@ async def test_update(aresponses):
 
         assert response
         assert isinstance(response.info, models.Info)
+        assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
 
@@ -121,6 +122,7 @@ async def test_update(aresponses):
 
         assert response
         assert isinstance(response.info, models.Info)
+        assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
 
@@ -189,6 +191,7 @@ async def test_update_tv(aresponses):
 
         assert response
         assert isinstance(response.info, models.Info)
+        assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
 
