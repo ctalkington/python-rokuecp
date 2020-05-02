@@ -127,9 +127,7 @@ class Roku:
 
         for (task, result) in zip(tasks, results):
             if result is None:
-                raise RokuError(
-                    f"Roku device returned an empty result ({task})"
-                )
+                raise RokuError(f"Roku device returned an empty result ({task})")
 
             updates[task] = result
 
@@ -150,22 +148,18 @@ class Roku:
     async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
         res = await self._request("/query/apps")
-        
+
         if "apps" not in res:
-            raise RokuError(
-                "Roku device returned a malformed result (apps)"
-            )
+            raise RokuError("Roku device returned a malformed result (apps)")
 
         return res["apps"]["app"]
 
     async def _get_device_info(self) -> dict:
         """Retrieve device info for updates."""
         res = await self._request("/query/device-info")
-        
+
         if "device-info" not in res:
-            raise RokuError(
-                "Roku device returned a malformed result (device-info)"
-            )
+            raise RokuError("Roku device returned a malformed result (device-info)")
 
         return res["device-info"]
 
