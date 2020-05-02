@@ -97,6 +97,8 @@ def test_channel() -> None:
     assert channel.program_title is None
     assert channel.program_description is None
     assert channel.program_rating is None
+    assert channel.signal_mode is None
+    assert channel.signal_strength is None
 
 
 def test_channel_active_tv() -> None:
@@ -113,6 +115,8 @@ a global crime ring."""
     assert channel.program_title == "Airwolf"
     assert channel.program_description == description.replace("\n", " ")
     assert channel.program_rating == "TV-14-D-V"
+    assert channel.signal_mode == "480i"
+    assert channel.signal_strength == -75
 
 
 def test_state() -> None:
