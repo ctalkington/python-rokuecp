@@ -79,7 +79,7 @@ def test_application() -> None:
 
 def test_application_active_app() -> None:
     """Test the Application model with active app."""
-    app = models.Application.from_dict(ACTIVE_APP_NETFLIX["app"])
+    app = models.Application.from_dict(ACTIVE_APP_NETFLIX["active-app"])
 
     assert app
     assert app.app_id == "12"
