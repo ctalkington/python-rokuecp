@@ -41,13 +41,19 @@ def test_device() -> None:
     assert device
 
     assert device.info
-    assert isinstance(device.info, models.Info) 
+    assert isinstance(device.info, models.Info)
 
     assert device.state
     assert isinstance(device.state, models.State)
 
+    assert device.apps
+    assert isinstance(device.apps, List)
+
     assert device.app
     assert isinstance(device.app, models.Application)
+
+    assert device.channels
+    assert isinstance(device.channels, List)
 
     assert device.channel is None
 
@@ -65,13 +71,20 @@ def test_device_tv() -> None:
     assert device
 
     assert device.info
-    assert isinstance(device.info, models.Info) 
+    assert isinstance(device.info, models.Info)
 
     assert device.state
     assert isinstance(device.state, models.State)
 
+    assert device.apps
+    assert isinstance(device.apps, List)
+
     assert device.app
     assert isinstance(device.app, models.Application)
+    assert device.app.app_id == "tvinput.dtv"
+
+    assert device.channels
+    assert isinstance(device.channels, List)
 
     assert device.channel
     assert isinstance(device.channel, models.Channel)
