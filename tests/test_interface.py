@@ -127,7 +127,7 @@ async def test_update(aresponses):
 
 @pytest.mark.asyncio
 async def test_update_tv(aresponses):
-    """Test update method is handled correctly for TVs"""
+    """Test update method is handled correctly for TVs."""
     aresponses.add(
         MATCH_HOST,
         "/query/device-info",
