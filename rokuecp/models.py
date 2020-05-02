@@ -121,6 +121,6 @@ class Device:
             ]
 
         if "channels" in data and data["channels"]:
-            self.channels = [Channel.from_dict(channwl_data) for channel_data in data["channels"]]
+            self.channels = [Channel.from_dict(channel_data) for channel_data in data["channels"]]
 
         return self
