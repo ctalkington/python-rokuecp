@@ -111,24 +111,57 @@ class Roku:
         """Return the cached Device object."""
         return self._device
 
-    async def update(self, full_update: bool = False) -> Device:
+    async def update(self) -> Device:
         """Get all information about the device in a single call."""
-        updates = {}
-        tasks = ["info"]
-        futures = [
-            self._get_device_info(),
-        ]
+        updates: dict = {
+            "app": None,
+            "apps": [],
+            "channel": None,
+            "channels": [],
+            "info": None,
+            "available": True,
+            "standby": False,
+        }
+        updates["info"] = info = await self._get_device_info()
 
-        if self._device is None or full_update:
+        available = True
+        standby = False
+
+        if info.get("power-mode") == "PowerOff":
+            standby = True
+        elif info.get("power-mode") is None:
+            available = False
+
+        updates["available"] = available
+        updates["standby"] = standby
+
+        tasks = []
+        futures = []
+
+        if available and not standby:
             tasks.append("apps")
             futures.append(self._get_apps())
 
-        results = await asyncio.gather(*futures)
+            updates["app"] = app = await self._get_active_app()
 
-        for (task, result) in zip(tasks, results):
-            updates[task] = result
+            if info.get("is-tv", "false") == "true":
+                tasks.append("channels")
+                futures.append(self._get_tv_channels())
 
-        if self._device is None or full_update:
+            if isinstance(app["app"], dict) and app["app"].get("@id") == "tvinput.dtv":
+                tasks.append("channel")
+                futures.append(self._get_tv_channel())
+        elif available:
+            tasks.append("apps")
+            futures.append(self._get_apps())
+
+        if len(tasks) > 0:
+            results = await asyncio.gather(*futures)
+
+            for (task, result) in zip(tasks, results):
+                updates[task] = result
+
+        if self._device is None:
             self._device = Device(updates)
         else:
             self._device.update_from_dict(updates)
@@ -141,6 +174,15 @@ class Roku:
             raise RokuError(f"Remote key is invalid: {key}")
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+
+    async def _get_active_app(self) -> dict:
+        """Retrieve active app for updates."""
+        res = await self._request("/query/active-app")
+
+        if "active-app" not in res:
+            raise RokuError("Roku device returned a malformed result (active-app)")
+
+        return res["active-app"]
 
     async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
@@ -159,6 +201,26 @@ class Roku:
             raise RokuError("Roku device returned a malformed result (device-info)")
 
         return res["device-info"]
+
+    async def _get_tv_channel(self) -> dict:
+        """Retrieve active TV channel for updates."""
+        res = await self._request("/query/tv-active-channel")
+
+        if "tv-channel" not in res:
+            raise RokuError(
+                "Roku device returned a malformed result (tv-active-channel)"
+            )
+
+        return res["tv-channel"]["channel"]
+
+    async def _get_tv_channels(self) -> dict:
+        """Retrieve TV channels for updates."""
+        res = await self._request("/query/tv-channels")
+
+        if "tv-channels" not in res:
+            raise RokuError("Roku device returned a malformed result (tv-channels)")
+
+        return res["tv-channels"]["channel"]
 
     async def close(self) -> None:
         """Close open client session."""

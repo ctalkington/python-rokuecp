@@ -1,7 +1,8 @@
 """Models for Roku."""
 
 from dataclasses import dataclass
-from typing import List
+from datetime import datetime
+from typing import List, Optional
 
 from .exceptions import RokuError
 
@@ -13,14 +14,24 @@ class Application:
     app_id: str
     name: str
     version: str
+    screensaver: bool
 
     @staticmethod
     def from_dict(data: dict):
         """Return Application object from Roku API response."""
+        if "app" in data:
+            app = data["app"]
+        else:
+            app = data
+
+        if isinstance(app, str):
+            app = {"#text": app}
+
         return Application(
-            app_id=data.get("@id", None),
-            name=data.get("#text", None),
-            version=data.get("@version", None),
+            app_id=app.get("@id", None),
+            name=app.get("#text", None),
+            version=app.get("@version", None),
+            screensaver=data.get("screensaver") is not None,
         )
 
 
@@ -57,27 +68,92 @@ class Info:
         )
 
 
+@dataclass(frozen=True)
+class Channel:
+    """Object holding all information of TV Channel."""
+
+    name: str
+    number: str
+    channel_type: str
+    hidden: bool
+    program_title: Optional[str] = None
+    program_description: Optional[str] = None
+    program_rating: Optional[str] = None
+    signal_mode: Optional[str] = None
+    signal_strength: Optional[int] = None
+
+    @staticmethod
+    def from_dict(data: dict):
+        """Return Channel object from Roku response."""
+        strength = data.get("signal-strength", None)
+
+        return Channel(
+            name=data.get("name", None),
+            number=data.get("number", None),
+            channel_type=data.get("type", "unknown"),
+            hidden=data.get("user-hidden", "false") == "true",
+            program_title=data.get("program-title", None),
+            program_description=data.get("program-description", None),
+            program_rating=data.get("program-ratings", None),
+            signal_mode=data.get("signal-mode", None),
+            signal_strength=int(strength) if strength is not None else None,
+        )
+
+
+@dataclass(frozen=True)
+class State:
+    """Object holding all information of device state."""
+
+    available: bool
+    standby: bool
+    at: datetime = datetime.utcnow()
+
+
 class Device:
     """Object holding all information of device."""
 
     info: Info
-    apps: List[Application]
+    state: State
+    apps: Optional[List[Application]] = []
+    channels: Optional[List[Channel]] = []
+    app: Optional[Application] = None
+    channel: Optional[Channel] = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
         # Check if all elements are in the passed dict, else raise an Error
-        if any(k not in data for k in ["info"]):
+        if any(k not in data for k in ["info", "available", "standby"]):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
         self.update_from_dict(data)
 
     def update_from_dict(self, data: dict) -> "Device":
         """Return Device object from Roku API response."""
+        self.state = State(
+            available=data.get("available", False), standby=data.get("standby", False),
+        )
+
         if "info" in data and data["info"]:
             self.info = Info.from_dict(data["info"])
 
         if "apps" in data and data["apps"]:
-            apps = [Application.from_dict(app_data) for app_data in data["apps"]]
-            self.apps = apps
+            self.apps = [
+                Application.from_dict(app_data)
+                for app_data in data["apps"]
+                if data["apps"] is not None
+            ]
+
+        if "channels" in data and data["channels"]:
+            self.channels = [
+                Channel.from_dict(channel_data)
+                for channel_data in data["channels"]
+                if data["channels"] is not None
+            ]
+
+        if "app" in data and data["app"]:
+            self.app = Application.from_dict(data["app"])
+
+        if "channel" in data and data["channel"]:
+            self.channel = Channel.from_dict(data["channel"])
 
         return self

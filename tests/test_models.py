@@ -1,4 +1,7 @@
 """Tests for Roku Models."""
+from datetime import datetime
+from typing import List
+
 import pytest
 import rokuecp.models as models
 import xmltodict
@@ -6,11 +9,32 @@ from rokuecp import RokuError
 
 from . import load_fixture
 
+ACTIVE_APP_NETFLIX = xmltodict.parse(load_fixture("active-app-netflix.xml"))
+ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-tvinput-dtv.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
-INFO = xmltodict.parse(load_fixture("device-info.xml"))
-INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
+DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
+DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+TV_ACTIVE_CHANNEL = xmltodict.parse(load_fixture("tv-active-channel.xml"))
+TV_CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
 
-DEVICE = {"info": INFO["device-info"], "apps": APPS["apps"]["app"]}
+DEVICE = {
+    "info": DEVICE_INFO["device-info"],
+    "apps": APPS["apps"]["app"],
+    "app": ACTIVE_APP_NETFLIX["active-app"],
+    "available": True,
+    "standby": False,
+}
+
+DEVICE_TV = {
+    "info": DEVICE_INFO_TV["device-info"],
+    "apps": APPS_TV["apps"]["app"],
+    "app": ACTIVE_APP_TV["active-app"],
+    "channels": TV_CHANNELS["tv-channels"]["channel"],
+    "channel": TV_ACTIVE_CHANNEL["tv-channel"]["channel"],
+    "available": True,
+    "standby": False,
+}
 
 
 def test_device() -> None:
@@ -22,16 +46,55 @@ def test_device() -> None:
     assert device.info
     assert isinstance(device.info, models.Info)
 
+    assert device.state
+    assert isinstance(device.state, models.State)
+
+    assert device.apps
+    assert isinstance(device.apps, List)
+
+    assert device.app
+    assert isinstance(device.app, models.Application)
+
+    assert isinstance(device.channels, List)
+    assert len(device.channels) == 0
+
+    assert device.channel is None
+
 
 def test_device_no_data() -> None:
-    """Test the Device model."""
+    """Test the Device model with no device info."""
     with pytest.raises(RokuError):
         models.Device({})
 
 
+def test_device_tv() -> None:
+    """Test the Device model with Roku TV."""
+    device = models.Device(DEVICE_TV)
+
+    assert device
+
+    assert device.info
+    assert isinstance(device.info, models.Info)
+
+    assert device.state
+    assert isinstance(device.state, models.State)
+
+    assert device.apps
+    assert isinstance(device.apps, List)
+
+    assert device.app
+    assert isinstance(device.app, models.Application)
+    assert device.app.app_id == "tvinput.dtv"
+
+    assert isinstance(device.channels, List)
+    assert len(device.channels) == 2
+
+    assert isinstance(device.channel, models.Channel)
+
+
 def test_info() -> None:
     """Test the Info model."""
-    info = models.Info.from_dict(INFO["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO["device-info"])
 
     assert info
     assert info.name == "My Roku 3"
@@ -45,7 +108,7 @@ def test_info() -> None:
 
 def test_info_tv() -> None:
     """Test the Info model."""
-    info = models.Info.from_dict(INFO_TV["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO_TV["device-info"])
 
     assert info
     assert info.name == '58" Onn Roku TV'
@@ -64,3 +127,55 @@ def test_application() -> None:
     assert app
     assert app.app_id == "11"
     assert app.name == "Roku Channel Store"
+
+
+def test_application_active_app() -> None:
+    """Test the Application model with active app."""
+    app = models.Application.from_dict(ACTIVE_APP_NETFLIX["active-app"])
+
+    assert app
+    assert app.app_id == "12"
+    assert app.name == "Netflix"
+    assert app.version == "4.1.218"
+
+
+def test_channel() -> None:
+    """Test the Channel model."""
+    channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["channel"][0])
+
+    assert channel
+    assert channel.name == "WhatsOn"
+    assert channel.number == "1.1"
+    assert channel.channel_type == "air-digital"
+    assert not channel.hidden
+    assert channel.program_title is None
+    assert channel.program_description is None
+    assert channel.program_rating is None
+    assert channel.signal_mode is None
+    assert channel.signal_strength is None
+
+
+def test_channel_active_tv() -> None:
+    """Test the Channel model with active TV channel."""
+    channel = models.Channel.from_dict(TV_ACTIVE_CHANNEL["tv-channel"]["channel"])
+    description = """The team will travel all around the world in order to shut down
+a global crime ring."""
+
+    assert channel
+    assert channel.name == "getTV"
+    assert channel.number == "14.3"
+    assert channel.channel_type == "air-digital"
+    assert not channel.hidden
+    assert channel.program_title == "Airwolf"
+    assert channel.program_description == description.replace("\n", " ")
+    assert channel.program_rating == "TV-14-D-V"
+    assert channel.signal_mode == "480i"
+    assert channel.signal_strength == -75
+
+
+def test_state() -> None:
+    """Test the State model."""
+    state = models.State(available=True, standby=False)
+
+    assert state
+    assert isinstance(state.at, datetime)
