@@ -30,6 +30,8 @@ DEVICE_TV = {
     "info": DEVICE_INFO_TV["device-info"],
     "apps": APPS_TV["apps"]["app"],
     "app": ACTIVE_APP_TV["active-app"],
+    "channels": TV_CHANNELS["tv-channels"],
+    "channel": TV_ACTIVE_CHANNEL["tv-channel"],
     "available": True,
     "standby": False,
 }
