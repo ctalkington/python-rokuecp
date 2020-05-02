@@ -8,12 +8,17 @@ from rokuecp import RokuError
 
 from . import load_fixture
 
+ACTIVE_APP_NETFLIX = xmltodict(load_fixture("active-app-netflix.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
-CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
-INFO = xmltodict.parse(load_fixture("device-info.xml"))
-INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
+DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+TV_CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
 
-DEVICE = {"info": INFO["device-info"], "apps": APPS["apps"]["app"]}
+DEVICE = {
+    "info": DEVICE_INFO["device-info"],
+    "apps": APPS["apps"]["app"],
+    "app": ACTIVE_APP_NETFLIX,
+}
 
 
 def test_device() -> None:
@@ -34,7 +39,7 @@ def test_device_no_data() -> None:
 
 def test_info() -> None:
     """Test the Info model."""
-    info = models.Info.from_dict(INFO["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO["device-info"])
 
     assert info
     assert info.name == "My Roku 3"
@@ -48,7 +53,7 @@ def test_info() -> None:
 
 def test_info_tv() -> None:
     """Test the Info model."""
-    info = models.Info.from_dict(INFO_TV["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO_TV["device-info"])
 
     assert info
     assert info.name == '58" Onn Roku TV'
@@ -69,9 +74,19 @@ def test_application() -> None:
     assert app.name == "Roku Channel Store"
 
 
+def test_application_active_app() -> None:
+    """Test the Application model with active app."""
+    app = models.Application.from_dict(ACTIVE_APP["app"])
+
+    assert app
+    assert app.app_id == "12"
+    assert app.name == "Netflix"
+    assert app.version == "4.1.218"
+
+
 def test_channel() -> None:
     """Test the Channel model."""
-    channel = models.Channel.from_dict(CHANNELS["tv-channels"]["tv-channel"][0])
+    channel = models.Channel.from_dict(TV_CHANNELS["tv-channels"]["tv-channel"][0])
 
     assert channel
     assert channel.name == "Roku Channel Store"
