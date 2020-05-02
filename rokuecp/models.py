@@ -19,7 +19,7 @@ class Application:
     @staticmethod
     def from_dict(data: dict):
         """Return Application object from Roku API response."""
-        if "app" in data:
+        if "app" not in data:
            app = data
         else:
            app = data.get("app", {})
