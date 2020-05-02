@@ -101,7 +101,7 @@ class Device:
     apps: Optional[List[Application]] = []
     channels: Optional[List[Channel]] = []
     app: Optional[Application] = None
-    channel: Optional[Channel) = None
+    channel: Optional[Channel] = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
