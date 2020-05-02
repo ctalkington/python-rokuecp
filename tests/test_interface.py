@@ -96,6 +96,28 @@ async def test_update(aresponses):
         ),
     )
 
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("device-info.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps.xml"),
+        ),
+    )
+
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client.update()
