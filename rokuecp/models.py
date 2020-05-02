@@ -97,19 +97,27 @@ class Device:
     """Object holding all information of device."""
 
     info: Info
-    apps: List[Application]
-    channels: List[Channel]
+    state: State
+    apps: Optional[List[Application]] = []
+    channels: Optional[List[Channel]] = []
+    app: Optional[Application] = None
+    channel: Optional[Channel) = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
         # Check if all elements are in the passed dict, else raise an Error
-        if any(k not in data for k in ["info", "apps", "channels"]):
+        if any(k not in data for k in ["info", "available", "standby"]):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
         self.update_from_dict(data)
 
     def update_from_dict(self, data: dict) -> "Device":
         """Return Device object from Roku API response."""
+        self.state = State(
+            available=data.get("available", False),
+            standby=data.get("standby", False),
+        )
+
         if "info" in data and data["info"]:
             self.info = Info.from_dict(data["info"])
 
