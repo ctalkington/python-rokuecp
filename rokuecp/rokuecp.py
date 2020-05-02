@@ -116,25 +116,25 @@ class Roku:
         updates = {}
         tasks = ["info"]
         futures = [
-            self._request("/query/device-info"),
+            self._get_device_info(),
         ]
 
         if self._device is None or full_update:
             tasks.append("apps")
-            futures.append(self._request("/query/apps"))
+            futures.append(self._get_apps())
 
         results = await asyncio.gather(*futures)
 
         for (task, result) in zip(tasks, results):
             if result is None:
-                continue
+                raise RokuError(
+                    f"Roku device returned an empty result ({task})"
+                )
 
             if task == "info" and "device-info" in result:     
                 updates[task] = result["device-info"]
             elif task == "apps" and "apps" in result:
                 updates[task] = result["apps"]["app"]
-            else:
-                updates[task] = None
 
         if self._device is None or full_update:
             self._device = Device(updates)
@@ -149,6 +149,28 @@ class Roku:
             raise RokuError(f"Remote key is invalid: {key}")
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+
+    async def _get_apps() -> dict:
+        """Retrieve apps for updates."""
+        res = await self._request("/query/apps")
+        
+        if "apps" not in res:
+            raise RokuError(
+                f"Roku device returned a malformed result (apps)"
+            )
+
+        return res["apps"]["app"]
+
+    async def _get_device_info() -> dict:
+        """Retrieve device info for updates."""
+        res = await self._request("/query/device-info")
+        
+        if "device-info" not in res:
+            raise RokuError(
+                f"Roku device returned a malformed result (device-info)"
+            )
+
+        return res["device-info"]
 
     async def close(self) -> None:
         """Close open client session."""
