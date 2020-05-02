@@ -21,7 +21,7 @@ TV_CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
 DEVICE = {
     "info": DEVICE_INFO["device-info"],
     "apps": APPS["apps"]["app"],
-    "app": ACTIVE_APP_NETFLIX,
+    "app": ACTIVE_APP_NETFLIX["active-app"],
     "available": True,
     "standby": False,
 }
@@ -29,7 +29,7 @@ DEVICE = {
 DEVICE_TV = {
     "info": DEVICE_INFO_TV["device-info"],
     "apps": APPS_TV["apps"]["app"],
-    "app": ACTIVE_APP_TV,
+    "app": ACTIVE_APP_TV["active-app"],
     "available": True,
     "standby": False,
 }
