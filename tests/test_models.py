@@ -66,7 +66,7 @@ def test_device_no_data() -> None:
 
 def test_device_tv() -> None:
     """Test the Device model with Roku TV."""
-    device = models.Device(DEVICE)
+    device = models.Device(DEVICE_TV)
 
     assert device
 
