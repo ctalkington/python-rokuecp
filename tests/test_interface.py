@@ -159,9 +159,9 @@ async def test_update_tv(aresponses):
             headers={"Content-Type": "application/xml"},
             text=load_fixture("active-app-tv.xml"),
         ),
-   )
+    )
 
-   aresponses.add(
+    aresponses.add(
         MATCH_HOST,
         "/query/tv-channels",
         "GET",
@@ -181,7 +181,7 @@ async def test_update_tv(aresponses):
             headers={"Content-Type": "application/xml"},
             text=load_fixture("tv-active-channel.xml"),
         ),
-   )
+    )
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
@@ -211,6 +211,26 @@ async def test_get_apps(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
+
+
+@pytest.mark.asyncio
+async def test_get_tv_channels(aresponses):
+    """Test _get_tv_channels method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_tv_channels()
 
 
 @pytest.mark.asyncio
