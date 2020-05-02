@@ -54,10 +54,7 @@ async def test_remote(aresponses):
         MATCH_HOST,
         "/keypress/Home",
         "POST",
-        aresponses.Response(
-            status=200,
-            text="OK",
-        ),
+        aresponses.Response(status=200, text="OK"),
     )
 
     async with ClientSession() as session:
