@@ -126,9 +126,6 @@ class Roku:
         results = await asyncio.gather(*futures)
 
         for (task, result) in zip(tasks, results):
-            if result is None:
-                raise RokuError(f"Roku device returned an empty result ({task})")
-
             updates[task] = result
 
         if self._device is None or full_update:
