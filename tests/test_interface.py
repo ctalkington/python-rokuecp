@@ -110,6 +110,7 @@ async def test_update(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.apps, List)
+        assert isinstance(response.channels, List)
 
 
 @pytest.mark.asyncio
