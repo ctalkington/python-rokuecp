@@ -129,8 +129,6 @@ class Roku:
 
         if info.get("power-mode") == "PowerOff":
             standby = True
-        elif info.get("power-mode") is None:
-            available = False
 
         updates["available"] = available
         updates["standby"] = standby
