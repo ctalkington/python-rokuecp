@@ -148,7 +148,7 @@ class Roku:
                 tasks.append("channels")
                 futures.append(self._get_tv_channels())
 
-            if app.get("@id") == "tvinput.dtv":
+            if isinstance(app, dict) and app.get("@id") == "tvinput.dtv":
                 tasks.append("channel")
                 futures.append(self._get_tv_channel())
         elif available:
