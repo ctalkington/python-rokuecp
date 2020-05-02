@@ -118,6 +118,9 @@ class Roku:
             "apps": [],
             "channel": None,
             "channels": [],
+            "info": None,
+            "available": True,
+            "standby": False,
         }
         updates["info"] = info = await self._get_device_info()
 
