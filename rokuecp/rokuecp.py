@@ -145,6 +145,7 @@ class Roku:
     async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
         res = await self._request("/query/apps")
+        print(res)
 
         if "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
