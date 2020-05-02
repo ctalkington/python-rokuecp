@@ -30,6 +30,7 @@ class Info:
 
     name: str
     brand: str
+    device_type: str
     model_name: str
     model_number: str
     serial_number: str
@@ -38,9 +39,17 @@ class Info:
     @staticmethod
     def from_dict(data: dict):
         """Return Info object from Roku API response."""
+        device_type = "box"
+
+        if data.get("is-tv"):
+            device_type = "tv"
+        elif data.get("is-stick"):
+            device_type = "stick"
+
         return Info(
             name=data.get("user-device-name", None),
             brand=data.get("vendor-name", "Roku"),
+            device_type=device_type,
             model_name=data.get("model-name", None),
             model_number=data.get("model-number", None),
             serial_number=data.get("serial-number", None),
