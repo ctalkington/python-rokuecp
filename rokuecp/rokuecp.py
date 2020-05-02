@@ -147,7 +147,7 @@ class Roku:
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
 
-    async def _get_apps() -> dict:
+    async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
         res = await self._request("/query/apps")
         
@@ -158,7 +158,7 @@ class Roku:
 
         return res["apps"]["app"]
 
-    async def _get_device_info() -> dict:
+    async def _get_device_info(self) -> dict:
         """Retrieve device info for updates."""
         res = await self._request("/query/device-info")
         
