@@ -20,12 +20,12 @@ class Application:
     def from_dict(data: dict):
         """Return Application object from Roku API response."""
         if "app" in data:
-           app = data["app"]
+            app = data["app"]
         else:
-           app = data
+            app = data
 
         if isinstance(app, str):
-           app = {"#text": app}
+            app = {"#text": app}
 
         return Application(
             app_id=app.get("@id", None),
