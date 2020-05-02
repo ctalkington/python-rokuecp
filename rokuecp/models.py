@@ -19,10 +19,13 @@ class Application:
     @staticmethod
     def from_dict(data: dict):
         """Return Application object from Roku API response."""
-        app = data.get("app", {})
+        if "app" in data:
+           app = data
+        else:
+           app = data.get("app", {})
 
-        if isinstance(app, str):
-            app = {"#text": app}
+           if isinstance(app, str):
+               app = {"#text": app}
 
         return Application(
             app_id=app.get("@id", None),
