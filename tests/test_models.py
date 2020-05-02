@@ -89,7 +89,6 @@ def test_device_tv() -> None:
     assert isinstance(device.channels, List)
     assert len(device.channels) == 2
 
-    assert device.channel
     assert isinstance(device.channel, models.Channel)
 
 
