@@ -148,7 +148,7 @@ class Roku:
                 tasks.append("channels")
                 futures.append(self._get_tv_channels())
 
-            if isinstance(app, dict) and app.get("@id") == "tvinput.dtv":
+            if isinstance(app["app"], dict) and app["app"].get("@id") == "tvinput.dtv":
                 tasks.append("channel")
                 futures.append(self._get_tv_channel())
         elif available:
@@ -182,7 +182,7 @@ class Roku:
         if "active-app" not in res:
             raise RokuError("Roku device returned a malformed result (active-app)")
 
-        return res["active-app"]["app"]
+        return res["active-app"]
 
     async def _get_apps(self) -> dict:
         """Retrieve apps for updates."""
