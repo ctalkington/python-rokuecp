@@ -120,7 +120,9 @@ async def test_private_get_apps(aresponses):
         "/query/apps",
         "GET",
         aresponses.Response(
-            status=200, headers={"Content-Type": "application/xml"}, text="",
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
         ),
     )
 
@@ -138,7 +140,9 @@ async def test_private_get_device_info(aresponses):
         "/query/device-info",
         "GET",
         aresponses.Response(
-            status=200, headers={"Content-Type": "application/xml"}, text="",
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
         ),
     )
 
