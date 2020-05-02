@@ -53,7 +53,6 @@ def test_device() -> None:
     assert device.app
     assert isinstance(device.app, models.Application)
 
-    assert device.channels
     assert isinstance(device.channels, List)
 
     assert device.channel is None
