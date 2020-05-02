@@ -113,47 +113,50 @@ class Roku:
 
     async def update(self) -> Device:
         """Get all information about the device in a single call."""
-        updates = {}
+        updates = {
+            "app": None,
+            "apps": [],
+            "channel": None,
+            "channels": [],
+        }
         updates["info"] = info = await self._get_device_info()
 
+        available = True
         standby = False
 
         if info.get("power-mode") == "PowerOff":
-            available = False
             standby = True
         elif info.get("power-mode") is None:
             available = False
-        else:
-            available = True
 
         updates["available"] = available
         updates["standby"] = standby
 
-        if not available:
-            if self._device is None:
-                self._device = Device(updates)
-            else:
-                self._device.update_from_dict(updates)
+        tasks = []
+        futures = []
 
-        tasks = ["apps"]
-        futures = [
-            self._get_apps(),
-        ]
+        if available and not standby:
+            tasks.append("apps")
+            futures.append(self._get_apps())
 
-        if not standby:
             updates["app"] = app = await self._get_app()
 
-            if app.get("@id") == "tvinput.dtv":
+            if info.get("is-tv", "false") == "true":
                 tasks.append("channels")
                 futures.append(self._get_tv_channels())
 
+            if app.get("@id") == "tvinput.dtv":
                 tasks.append("channel")
                 futures.append(self._get_tv_channel())
+        elif available:
+            tasks.append("apps")
+            futures.append(self._get_apps())
 
-        results = await asyncio.gather(*futures)
+        if len(tasks) > 0:
+            results = await asyncio.gather(*futures)
 
-        for (task, result) in zip(tasks, results):
-            updates[task] = result
+            for (task, result) in zip(tasks, results):
+                updates[task] = result
 
         if self._device is None:
             self._device = Device(updates)
