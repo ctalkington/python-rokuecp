@@ -152,8 +152,8 @@ async def test_update_tv(aresponses):
 
     aresponses.add(
         MATCH_HOST,
-            "/query/active-app",
-            "GET",
+        "/query/active-app",
+        "GET",
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
@@ -174,8 +174,8 @@ async def test_update_tv(aresponses):
 
     aresponses.add(
         MATCH_HOST,
-            "/query/tv-active-channel",
-            "GET",
+        "/query/tv-active-channel",
+        "GET",
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
