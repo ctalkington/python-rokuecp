@@ -204,7 +204,9 @@ class Roku:
         res = await self._request("/query/tv-active-channel")
 
         if "tv-channel" not in res:
-            raise RokuError("Roku device returned a malformed result (tv-active-channel)")
+            raise RokuError(
+                "Roku device returned a malformed result (tv-active-channel)"
+            )
 
         return res["tv-channel"]["channel"]
 
