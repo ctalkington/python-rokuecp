@@ -84,9 +84,7 @@ def test_channel() -> None:
 
 def test_state() -> None:
     """Test the State model."""
-    state = models.State(
-        available=True, standby=False
-    )
+    state = models.State(available=True, standby=False)
 
     assert state
     assert isinstance(state.at, datetime)
