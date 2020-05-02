@@ -167,6 +167,24 @@ class Roku:
 
         return res["device-info"]
 
+    async def _get_tv_channel(self) -> dict:
+        """Retrieve active TV channel for updates."""
+        res = await self._request("/query/tv-active-channel")
+
+        if "tv-channel" not in res:
+            raise RokuError("Roku device returned a malformed result (tv-active-channel)")
+
+        return res["tv-channel"]["channel"]
+
+    async def _get_tv_channels(self) -> dict:
+        """Retrieve TV channels for updates."""
+        res = await self._request("/query/tv-channels")
+
+        if "tv-channels" not in res:
+            raise RokuError("Roku device returned a malformed result (tv-channels)")
+
+        return res["tv-channels"]["channel"]
+
     async def close(self) -> None:
         """Close open client session."""
         if self._session and self._close_session:
