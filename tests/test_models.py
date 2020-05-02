@@ -1,4 +1,6 @@
 """Tests for Roku Models."""
+from datetime import datetime
+
 import pytest
 import rokuecp.models as models
 import xmltodict
@@ -7,6 +9,7 @@ from rokuecp import RokuError
 from . import load_fixture
 
 APPS = xmltodict.parse(load_fixture("apps.xml"))
+CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
 INFO = xmltodict.parse(load_fixture("device-info.xml"))
 INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
 
@@ -64,3 +67,26 @@ def test_application() -> None:
     assert app
     assert app.app_id == "11"
     assert app.name == "Roku Channel Store"
+
+
+def test_channel() -> None:
+    """Test the Channel model."""
+    channel = models.Channel.from_dict(CHANNELS["tv-channels"]["tv-channel"][0])
+
+    assert channel
+    assert channel.name == "Roku Channel Store"
+    assert channel.number == "11"
+    assert channel.channel_type == ""
+    assert channel.program_title == ""
+    assert channel.program_description == ""
+    assert channel.program_rating == ""
+
+
+def test_state() -> None:
+    """Test the State model."""
+    state = models.State(
+        available=True, standby=False
+    )
+
+    assert state
+    assert isinstance(state.at, datetime)
