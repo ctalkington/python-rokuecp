@@ -43,9 +43,7 @@ async def test_xml_request_parse_error(aresponses):
         "/response/xml-parse-error",
         "GET",
         aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text="<status>>",
+            status=200, headers={"Content-Type": "application/xml"}, text="<!status>>",
         ),
     )
 
