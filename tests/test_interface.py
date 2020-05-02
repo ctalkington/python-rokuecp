@@ -48,6 +48,33 @@ async def test_device(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_remote(aresponses):
+    """Test remote is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Home",
+        "POST",
+        aresponses.Response(
+            status=200,
+            text="OK",
+        ),
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.remote("home")
+
+
+@pytest.mark.asyncio
+async def test_remote_invalid_key():
+    """Test remote with invalid key is handled correctly."""
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            await roku.remote("super")
+
+
+@pytest.mark.asyncio
 async def test_update(aresponses):
     """Test update method is handled correctly."""
     aresponses.add(
