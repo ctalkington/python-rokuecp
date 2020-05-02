@@ -214,26 +214,6 @@ async def test_get_apps(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels(aresponses):
-    """Test _get_tv_channels method is handled correctly."""
-    aresponses.add(
-        MATCH_HOST,
-        "/query/tv-channels",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text="<other>value</other>",
-        ),
-    )
-
-    async with ClientSession() as session:
-        client = Roku(HOST, session=session)
-        with pytest.raises(RokuError):
-            assert await client._get_tv_channels()
-
-
-@pytest.mark.asyncio
 async def test_get_device_info(aresponses):
     """Test _get_device_info method is handled correctly."""
     aresponses.add(
@@ -251,3 +231,23 @@ async def test_get_device_info(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_device_info()
+
+
+@pytest.mark.asyncio
+async def test_get_tv_channels(aresponses):
+    """Test _get_tv_channels method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_tv_channels()
