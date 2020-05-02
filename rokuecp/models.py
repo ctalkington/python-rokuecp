@@ -1,7 +1,8 @@
 """Models for Roku."""
 
 from dataclasses import dataclass
-from typing import List
+from datetime import datetime, timezone
+from typing import List, Optional
 
 from .exceptions import RokuError
 
@@ -57,11 +58,47 @@ class Info:
         )
 
 
+@dataclass(frozen=True)
+class Channel:
+    """Object holding all information of TV Channel."""
+
+    name: str
+    number: str
+    channel_type: str
+    hidden: bool
+    program_title: Optional[str] = None
+    program_description: Optional[str] = None
+    program_rating: Optional[str] = None
+
+    @staticmethod
+    def from_dict(data: dict):
+        """Return Channel object from Roku response."""
+        return Channel(
+            name=data.get("name", None),
+            number=data.get("number", None),
+            channel_type=data.get("type", "unknown"),
+            hidden=data.get("user-hidden", "false") == "true",
+            program_title=data.get("program-title", None),
+            program_description=data.get("program-description", None),
+            program_rating=data.get("program-ratings", None),
+        )
+
+
+@dataclass(frozen=True)
+class State:
+    """Object holding all information of device state."""
+
+    available: bool
+    standby: bool
+    at: datetime = datetime.utcnow()
+
+
 class Device:
     """Object holding all information of device."""
 
     info: Info
     apps: List[Application]
+    channels: List[Channel]
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
@@ -77,7 +114,9 @@ class Device:
             self.info = Info.from_dict(data["info"])
 
         if "apps" in data and data["apps"]:
-            apps = [Application.from_dict(app_data) for app_data in data["apps"]]
-            self.apps = apps
+            self.apps = [Application.from_dict(app_data) for app_data in data["apps"]]
+
+        if "channels" in data and data["channels"]:
+            self.channels = [Channel.from_dict(channwl_data) for channel_data in data["channels"]]
 
         return self
