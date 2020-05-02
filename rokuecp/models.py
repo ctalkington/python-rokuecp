@@ -69,6 +69,8 @@ class Channel:
     program_title: Optional[str] = None
     program_description: Optional[str] = None
     program_rating: Optional[str] = None
+    signal_mode: Optional[str] = None
+    signal_strength: Optional[int] = None
 
     @staticmethod
     def from_dict(data: dict):
@@ -81,6 +83,8 @@ class Channel:
             program_title=data.get("program-title", None),
             program_description=data.get("program-description", None),
             program_rating=data.get("program-ratings", None),
+            signal_mode=data.get("signal-mode", None),
+            signal_strength=data.get("signal-strength", None),
         )
 
 
@@ -114,8 +118,7 @@ class Device:
     def update_from_dict(self, data: dict) -> "Device":
         """Return Device object from Roku API response."""
         self.state = State(
-            available=data.get("available", False),
-            standby=data.get("standby", False),
+            available=data.get("available", False), standby=data.get("standby", False),
         )
 
         if "info" in data and data["info"]:
