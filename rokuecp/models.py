@@ -59,6 +59,7 @@ class Device:
         # Check if all elements are in the passed dict, else raise an Error
         if any(k not in data for k in ["info"]):
             raise RokuError("Roku data is incomplete, cannot construct device object")
+
         self.update_from_dict(data)
 
     def update_from_dict(self, data: dict) -> "Device":
