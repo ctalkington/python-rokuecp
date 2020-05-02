@@ -48,7 +48,7 @@ def test_info_tv() -> None:
     info = models.Info.from_dict(INFO_TV["device-info"])
 
     assert info
-    assert info.name == "58\" Onn Roku TV"
+    assert info.name == '58" Onn Roku TV'
     assert info.brand == "Onn"
     assert info.device_type == "tv"
     assert info.model_name == "100005844"
