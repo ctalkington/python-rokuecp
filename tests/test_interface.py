@@ -127,7 +127,7 @@ async def test__get_apps(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-           assert await client._get_apps()
+            assert await client._get_apps()
 
 
 @pytest.mark.asyncio
@@ -145,4 +145,4 @@ async def test__get_device_info(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-           assert await client._get_device_info()
+            assert await client._get_device_info()
