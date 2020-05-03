@@ -166,9 +166,12 @@ class Roku:
 
         return self._device
 
-    async def launch(self, app_id: str, params: dict = {}) -> None:
+    async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
         """Launch application."""
-        params["contentID"] = app_id
+        request_params = {
+            "contentID": app_id,
+            **params if params is not None,
+        }
         await self._request(f"launch/{app_id}", method="POST", params=params)
 
     async def remote(self, key: str) -> None:
