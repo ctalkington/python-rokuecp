@@ -75,6 +75,35 @@ async def test_launch(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_literal(aresponses):
+    """Test literal is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_t",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_h",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_e",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.literal("the")
+
+
+@pytest.mark.asyncio
 async def test_remote(aresponses):
     """Test remote is handled correctly."""
     aresponses.add(
