@@ -38,6 +38,7 @@ class Roku:
         self.host = host
         self.port = port
         self.request_timeout = request_timeout
+        self.scheme = "http"
         self.user_agent = user_agent
 
         if user_agent is None:
@@ -51,10 +52,8 @@ class Roku:
         params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a receiver."""
-        scheme = "http"
-
         url = URL.build(
-            scheme=scheme, host=self.host, port=self.port, path=self.base_path
+            scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
         ).join(URL(uri))
 
         headers = {
@@ -111,6 +110,12 @@ class Roku:
     def device(self) -> Optional[Device]:
         """Return the cached Device object."""
         return self._device
+
+    def app_icon_url(app_id: str) -> str:
+        """Get the URL to the application icon."""
+        return URL.build(
+            scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
+        ).join(f"icon/{app_id}")
 
     async def update(self) -> Device:
         """Get all information about the device in a single call."""
