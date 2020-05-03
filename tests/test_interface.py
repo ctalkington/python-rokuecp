@@ -15,7 +15,7 @@ MATCH_HOST = f"{HOST}:{PORT}"
 ICON_BASE = f"http://{MATCH_HOST}/icon"
 
 @pytest.mark.asyncio
-async def test_app_icon_url(aresponses):
+async def test_app_icon_url():
     """Test app_icon_url is handled correctly."""
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
