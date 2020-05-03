@@ -12,7 +12,14 @@ HOST = "192.168.1.86"
 PORT = 8060
 
 MATCH_HOST = f"{HOST}:{PORT}"
+ICON_BASE = f"http://{MATCH_HOST}/icon"
 
+@pytest.mark.asyncio
+async def test_app_icon_url(aresponses):
+    """Test app_icon_url is handled correctly."""
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        assert roku.app_icon_url("101") == f"{ICON_BASE}/101"
 
 @pytest.mark.asyncio
 async def test_device(aresponses):
