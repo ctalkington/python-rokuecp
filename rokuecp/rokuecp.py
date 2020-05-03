@@ -94,7 +94,7 @@ class Roku:
                 },
             )
 
-        if content_type == "application/xml":
+        if "application/xml" in content_type:
             content = await response.text()
 
             try:
