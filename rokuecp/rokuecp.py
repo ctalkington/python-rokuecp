@@ -177,7 +177,7 @@ class Roku:
             **params,
         }
 
-        await self._request(f"launch/{app_id}", method="POST", params=params)
+        await self._request(f"launch/{app_id}", method="POST", params=request_params)
 
     async def literal(self, text: str) -> None:
         """Send literal text."""
