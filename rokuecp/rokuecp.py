@@ -111,7 +111,7 @@ class Roku:
         """Return the cached Device object."""
         return self._device
 
-    def app_icon_url(app_id: str) -> str:
+    def app_icon_url(self, app_id: str) -> str:
         """Get the URL to the application icon."""
         return URL.build(
             scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
