@@ -59,6 +59,51 @@ async def test_device(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_launch(aresponses):
+    """Test launch is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/launch/101?contentID=101",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+        match_querystring=True,
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.launch("101")
+
+
+@pytest.mark.asyncio
+async def test_literal(aresponses):
+    """Test literal is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_t",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_h",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_e",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.literal("the")
+
+
+@pytest.mark.asyncio
 async def test_remote(aresponses):
     """Test remote is handled correctly."""
     aresponses.add(
@@ -80,6 +125,22 @@ async def test_remote_invalid_key():
         roku = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             await roku.remote("super")
+
+
+@pytest.mark.asyncio
+async def test_tune(aresponses):
+    """Test tune is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/launch/tvinput.dtv?contentID=tvinput.dtv&ch=13.4",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+        match_querystring=True,
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.tune("13.4")
 
 
 @pytest.mark.asyncio

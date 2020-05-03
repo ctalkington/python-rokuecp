@@ -17,7 +17,6 @@ VALID_REMOTE_KEYS = {
     "backspace": "Backspace",
     "search": "Search",
     "enter": "Enter",
-    "literal": "Lit",
     # For devices that support "Find Remote"
     "find_remote": "FindRemote",
     # For Roku TV
