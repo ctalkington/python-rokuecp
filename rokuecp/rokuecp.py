@@ -79,7 +79,7 @@ class Roku:
                 "Error occurred while communicating with device"
             ) from exception
 
-        content_type = response.headers.get("Content-Type")
+        content_type = response.headers.get("Content-Type", "")
 
         if (response.status // 100) in [4, 5]:
             content = await response.read()
