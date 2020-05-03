@@ -2,7 +2,7 @@
 
 Asynchronous Python client for Roku devices using the [External Control Protocol](https://developer.roku.com/docs/developer-program/debugging/external-control-api.md).
 
-## Aboout
+## About
 
 This package allows you to monitor and control Roku devices.
 
