@@ -57,6 +57,7 @@ async def test_device(aresponses):
         assert client.device
         assert isinstance(client.device, models.Device)
 
+
 @pytest.mark.asyncio
 async def test_launch(aresponses):
     """Test launch is handled correctly."""
