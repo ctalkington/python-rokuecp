@@ -115,7 +115,7 @@ class Roku:
         """Get the URL to the application icon."""
         return URL.build(
             scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
-        ).join(f"icon/{app_id}")
+        ).join(URL(f"icon/{app_id}"))
 
     async def update(self) -> Device:
         """Get all information about the device in a single call."""
