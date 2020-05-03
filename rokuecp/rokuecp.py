@@ -166,12 +166,21 @@ class Roku:
 
         return self._device
 
+    async def launch(self, app_id: str, params: dict = {}) -> None:
+        """Launch application."""
+        params["contentID"] = app_id
+        await self._request(f"launch/{app_id}", method="POST", params=params)
+
     async def remote(self, key: str) -> None:
         """Emulate pressing a key on the remote."""
         if not key.lower() in VALID_REMOTE_KEYS:
             raise RokuError(f"Remote key is invalid: {key}")
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+
+    async def tune(self, channel: str) -> None:
+        """Change the channel on TV tuner."""
+        await self.launch("tvinput.dtv", {"ch": channel})
 
     async def _get_active_app(self) -> dict:
         """Retrieve active app for updates."""
