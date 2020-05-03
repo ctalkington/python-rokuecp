@@ -2,6 +2,7 @@
 import asyncio
 from socket import gaierror as SocketGIAEroor
 from typing import Any, Mapping, Optional
+from urllib.parse import quote_plus
 from xml.parsers.expat import ExpatError
 
 import aiohttp
@@ -177,6 +178,12 @@ class Roku:
         }
 
         await self._request(f"launch/{app_id}", method="POST", params=params)
+
+    async def literal(self, text: str) -> None:
+        """Send literal text."""
+        for char in text:
+            encoded = quote_plus(char)
+            await self._request(f"keypress/Lit_{encoded}", method="POST")
 
     async def remote(self, key: str) -> None:
         """Emulate pressing a key on the remote."""
