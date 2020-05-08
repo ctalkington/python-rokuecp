@@ -58,7 +58,7 @@ class Roku:
 
         headers = {
             "User-Agent": self.user_agent,
-            "Accept": "application/xml, text/plain, */*",
+            "Accept": "application/xml, text/xml, text/plain, */*",
         }
 
         if self._session is None:
@@ -94,7 +94,7 @@ class Roku:
                 },
             )
 
-        if "application/xml" in content_type:
+        if "application/xml" in content_type or "text/xml" in content_type:
             content = await response.text()
 
             try:
@@ -207,7 +207,7 @@ class Roku:
         """Retrieve active app for updates."""
         res = await self._request("/query/active-app")
 
-        if "active-app" not in res:
+        if not isinstance(res, dict) or "active-app" not in res:
             raise RokuError("Roku device returned a malformed result (active-app)")
 
         return res["active-app"]
@@ -216,7 +216,7 @@ class Roku:
         """Retrieve apps for updates."""
         res = await self._request("/query/apps")
 
-        if "apps" not in res:
+        if not isinstance(res, dict) or "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
 
         return res["apps"]["app"]
@@ -225,7 +225,7 @@ class Roku:
         """Retrieve device info for updates."""
         res = await self._request("/query/device-info")
 
-        if "device-info" not in res:
+        if not isinstance(res, dict) or "device-info" not in res:
             raise RokuError("Roku device returned a malformed result (device-info)")
 
         return res["device-info"]
@@ -234,7 +234,7 @@ class Roku:
         """Retrieve active TV channel for updates."""
         res = await self._request("/query/tv-active-channel")
 
-        if "tv-channel" not in res:
+        if not isinstance(res, dict) or "tv-channel" not in res:
             raise RokuError(
                 "Roku device returned a malformed result (tv-active-channel)"
             )
@@ -245,7 +245,7 @@ class Roku:
         """Retrieve TV channels for updates."""
         res = await self._request("/query/tv-channels")
 
-        if "tv-channels" not in res:
+        if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
 
         return res["tv-channels"]["channel"]
