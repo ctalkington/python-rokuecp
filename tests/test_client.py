@@ -37,7 +37,7 @@ async def test_xml_request(aresponses):
 
 @pytest.mark.asyncio
 async def test_text_xml_request(aresponses):
-    """Test XML response is handled correctly."""
+    """Test (text) XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
         "/response/text-xml",
