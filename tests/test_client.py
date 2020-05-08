@@ -36,6 +36,28 @@ async def test_xml_request(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_text_xml_request(aresponses):
+    """Test XML response is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/response/text-xml",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "text/xml"},
+            text="<status>OK</status>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        response = await client._request("response/text-xml")
+
+        assert isinstance(response, dict)
+        assert response["status"] == "OK"
+
+
+@pytest.mark.asyncio
 async def test_xml_request_parse_error(aresponses):
     """Test invalid XML response is handled correctly."""
     aresponses.add(
