@@ -254,7 +254,7 @@ async def test_update_power_off(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
-        assert isinstance(response.app, models.Application)
+        assert response.app is None
         assert response.channel is None
 
         assert response.state.available
