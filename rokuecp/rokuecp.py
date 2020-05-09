@@ -116,7 +116,7 @@ class Roku:
         """Get the URL to the application icon."""
         icon_url = URL.build(
             scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
-        ).join(URL(f"icon/{app_id}"))
+        ).join(URL(f"query/icon/{app_id}"))
 
         return str(icon_url)
 
