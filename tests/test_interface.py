@@ -320,9 +320,13 @@ async def test_update_tv(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert isinstance(response.channel, models.Channel)
 
         assert response.state.available
         assert not response.state.standby
+
+        assert len(response.channels) == 2
 
 
 @pytest.mark.asyncio
