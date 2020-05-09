@@ -2,7 +2,7 @@
 import asyncio
 from collections import OrderedDict
 from socket import gaierror as SocketGIAEroor
-from typing import Any, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
 from xml.parsers.expat import ExpatError
 
@@ -256,7 +256,7 @@ class Roku:
             return []
 
         if "number" in res["tv-channels"]["channel"]:
-            returm [res["tv-channels"]["channel"]]
+            return [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
 
