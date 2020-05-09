@@ -143,7 +143,7 @@ class Roku:
         updates["standby"] = standby
 
         tasks = []
-        futures = []
+        futures: List[Any] = []
 
         if available and not standby:
             tasks.append("apps")
