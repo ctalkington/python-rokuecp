@@ -137,9 +137,9 @@ class Device:
 
         self.update_from_dict(data)
 
-    def update_from_dict(self, data: dict) -> "Device":
+    def update_from_dict(self, data: dict, update_state: bool = True) -> "Device":
         """Return Device object from Roku API response."""
-        if "retain_state" not in data:
+        if update_state:
             self.state = State(
                 available=data.get("available", False), standby=data.get("standby", False),
             )
