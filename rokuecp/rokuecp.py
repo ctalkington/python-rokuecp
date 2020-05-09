@@ -120,42 +120,44 @@ class Roku:
 
         return str(icon_url)
 
-    async def update(self) -> Device:
+    async def update(self, full_update: bool = False) -> Device:
         """Get all information about the device in a single call."""
-        updates: dict = {
-            "app": None,
-            "apps": [],
-            "channel": None,
-            "info": None,
-            "available": True,
-            "standby": False,
-        }
+        if self._device is None:
+            full_update = True
+
+        updates: dict = {}
+        updates["info"] = None
+        updates["available"] = True
+        updates["standby"] = False
+        updates["app"] = None
+        updates["channel"] = None
+
+        if full_update:
+            updates["apps"] = []
+            updates["channels"] = []
+
         updates["info"] = info = await self._get_device_info()
 
-        available = True
-        standby = False
-
         if info.get("power-mode") in ("PowerOff", "Headless"):
-            standby = True
-
-        updates["available"] = available
-        updates["standby"] = standby
+            updates["standby"] = True
 
         tasks = []
         futures: List[Any] = []
 
-        if available and not standby:
-            tasks.append("apps")
-            futures.append(self._get_apps())
-
+        if updates["available"] and not updates["standby"]:
             updates["app"] = app = await self._get_active_app()
 
             if isinstance(app["app"], dict) and app["app"].get("@id") == "tvinput.dtv":
                 tasks.append("channel")
                 futures.append(self._get_tv_active_channel())
-        elif available:
+
+        if full_update and updates["available"]:
             tasks.append("apps")
             futures.append(self._get_apps())
+
+            if info.get("is-tv", "false") == "true":
+                tasks.append("channels")
+                futures.append(self._get_tv_channels())
 
         if len(tasks) > 0:
             results = await asyncio.gather(*futures)
@@ -165,23 +167,8 @@ class Roku:
 
         if self._device is None:
             self._device = Device(updates)
-
-            if self._device.info.device_type == "tv":
-                await self.update_tv_channels()
         else:
             self._device.update_from_dict(updates)
-
-        return self._device
-
-    async def update_tv_channels(self) -> Device:
-        """Update the list of available TV channels."""
-        if self._device is None:
-            return await self.update()
-
-        updates = {}
-        updates["channels"] = await self._get_tv_channels()
-
-        self._device.update_from_dict(updates, update_state=False)
 
         return self._device
 
