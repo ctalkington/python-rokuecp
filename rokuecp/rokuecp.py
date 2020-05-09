@@ -151,10 +151,6 @@ class Roku:
 
             updates["app"] = app = await self._get_active_app()
 
-            if info.get("is-tv", "false") == "true":
-                tasks.append("channels")
-                futures.append(self._get_tv_channels())
-
             if isinstance(app["app"], dict) and app["app"].get("@id") == "tvinput.dtv":
                 tasks.append("channel")
                 futures.append(self._get_tv_active_channel())
@@ -170,8 +166,23 @@ class Roku:
 
         if self._device is None:
             self._device = Device(updates)
+
+            if self._device.info.device_type == "tv":
+                await self.update_tv_channels()
         else:
             self._device.update_from_dict(updates)
+
+        return self._device
+
+    async def update_tv_channels(self) -> Device:
+        """Update the list of available TV channels."""
+        if self._device is None:
+            return await self.update()
+
+        updates = {}
+        updates["channels"] = await self._get_tv_channels()
+
+        self._device.update_from_dict(updates, update_state=False)
 
         return self._device
 

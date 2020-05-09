@@ -338,6 +338,97 @@ async def test_update_tv(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_update_tv_channels(aresponses):
+    """Test update_tv_channels method is handled correctly for TVs."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("device-info-tv.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps-tv.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/active-app",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("active-app-tv.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("tv-channels.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("tv-channels-single.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-active-channel",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("tv-active-channel.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        response = await client.update_tv_channels()
+
+        assert response
+        assert isinstance(response.info, models.Info)
+        assert isinstance(response.state, models.State)
+        assert isinstance(response.apps, List)
+        assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert isinstance(response.channel, models.Channel)
+
+        assert response.state.available
+        assert not response.state.standby
+        assert len(response.channels) == 2
+
+        response = await client.update_tv_channels()
+
+        assert isinstance(response.channels, List)
+        assert len(response.channels) == 1
+
+
+@pytest.mark.asyncio
 async def test_get_active_app(aresponses):
     """Test _get_active_app method is handled correctly."""
     aresponses.add(

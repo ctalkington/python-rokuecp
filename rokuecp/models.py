@@ -72,7 +72,7 @@ class Info:
             network_name=data.get("network-name", None),
             serial_number=data.get("serial-number", None),
             version=data.get("software-version", None),
-            ethernet_support=data.get("supports-ethernet", None),
+            ethernet_support=data.get("supports-ethernet", "false") == "true",
             ethernet_mac=data.get("ethernet-mac", None),
             wifi_mac=data.get("wifi-mac", None),
         )
@@ -137,11 +137,13 @@ class Device:
 
         self.update_from_dict(data)
 
-    def update_from_dict(self, data: dict) -> "Device":
+    def update_from_dict(self, data: dict, update_state: bool = True) -> "Device":
         """Return Device object from Roku API response."""
-        self.state = State(
-            available=data.get("available", False), standby=data.get("standby", False),
-        )
+        if update_state:
+            self.state = State(
+                available=data.get("available", False),
+                standby=data.get("standby", False),
+            )
 
         if "info" in data and data["info"]:
             self.info = Info.from_dict(data["info"])
