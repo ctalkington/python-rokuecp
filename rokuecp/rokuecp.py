@@ -248,6 +248,10 @@ class Roku:
         if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
 
+        print(res)
+        if res["tv-channelz"]:
+            return False
+
         if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
             return {}
 
