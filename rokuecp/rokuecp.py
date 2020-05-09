@@ -1,7 +1,8 @@
 """Asynchronous Python client for Roku."""
 import asyncio
+from collections import OrderedDict
 from socket import gaierror as SocketGIAEroor
-from typing import Any, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
 from xml.parsers.expat import ExpatError
 
@@ -142,7 +143,7 @@ class Roku:
         updates["standby"] = standby
 
         tasks = []
-        futures = []
+        futures: List[Any] = []
 
         if available and not standby:
             tasks.append("apps")
@@ -203,7 +204,7 @@ class Roku:
         """Change the channel on TV tuner."""
         await self.launch("tvinput.dtv", {"ch": channel})
 
-    async def _get_active_app(self) -> dict:
+    async def _get_active_app(self) -> OrderedDict:
         """Retrieve active app for updates."""
         res = await self._request("/query/active-app")
 
@@ -212,16 +213,19 @@ class Roku:
 
         return res["active-app"]
 
-    async def _get_apps(self) -> dict:
+    async def _get_apps(self) -> List[OrderedDict]:
         """Retrieve apps for updates."""
         res = await self._request("/query/apps")
 
         if not isinstance(res, dict) or "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
 
+        if isinstance(res["apps"]["app"], OrderedDict):
+            return [res["apps"]["app"]]
+
         return res["apps"]["app"]
 
-    async def _get_device_info(self) -> dict:
+    async def _get_device_info(self) -> OrderedDict:
         """Retrieve device info for updates."""
         res = await self._request("/query/device-info")
 
@@ -230,7 +234,7 @@ class Roku:
 
         return res["device-info"]
 
-    async def _get_tv_active_channel(self) -> dict:
+    async def _get_tv_active_channel(self) -> OrderedDict:
         """Retrieve active TV channel for updates."""
         res = await self._request("/query/tv-active-channel")
 
@@ -241,12 +245,18 @@ class Roku:
 
         return res["tv-channel"]["channel"]
 
-    async def _get_tv_channels(self) -> dict:
+    async def _get_tv_channels(self) -> List[OrderedDict]:
         """Retrieve TV channels for updates."""
         res = await self._request("/query/tv-channels")
 
         if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
+
+        if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
+            return []
+
+        if isinstance(res["tv-channels"]["channel"], OrderedDict):
+            return [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
 

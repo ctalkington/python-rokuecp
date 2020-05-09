@@ -198,9 +198,12 @@ async def test_update(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert response.channel is None
 
         assert response.state.available
         assert not response.state.standby
+        assert len(response.channels) == 0
 
         response = await client.update()
 
@@ -209,9 +212,12 @@ async def test_update(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert response.channel is None
 
         assert response.state.available
         assert not response.state.standby
+        assert len(response.channels) == 0
 
 
 @pytest.mark.asyncio
@@ -248,9 +254,12 @@ async def test_update_power_off(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+        assert response.app is None
+        assert response.channel is None
 
         assert response.state.available
         assert response.state.standby
+        assert len(response.channels) == 0
 
 
 @pytest.mark.asyncio
@@ -320,9 +329,12 @@ async def test_update_tv(aresponses):
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert isinstance(response.channel, models.Channel)
 
         assert response.state.available
         assert not response.state.standby
+        assert len(response.channels) == 2
 
 
 @pytest.mark.asyncio
@@ -363,6 +375,27 @@ async def test_get_apps(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
+
+
+@pytest.mark.asyncio
+async def test_get_apps_single_app(aresponses):
+    """Test _get_apps method is handled correctly with single app."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps-single.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        res = await client._get_apps()
+        assert isinstance(res, List)
+        assert len(res) == 1
 
 
 @pytest.mark.asyncio
@@ -423,3 +456,45 @@ async def test_get_tv_channels(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_tv_channels()
+
+
+@pytest.mark.asyncio
+async def test_get_tv_channels_no_channels(aresponses):
+    """Test _get_tv_channels method is handled correctly with no channels."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("tv-channels-empty.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        res = await client._get_tv_channels()
+        assert isinstance(res, List)
+        assert len(res) == 0
+
+
+@pytest.mark.asyncio
+async def test_get_tv_channels_single_channel(aresponses):
+    """Test _get_tv_channels method is handled correctly with single channel."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("tv-channels-single.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        res = await client._get_tv_channels()
+        assert isinstance(res, List)
+        assert len(res) == 1
