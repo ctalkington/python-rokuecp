@@ -1,5 +1,6 @@
 """Asynchronous Python client for Roku."""
 import asyncio
+from collections import OrderedDict
 from socket import gaierror as SocketGIAEroor
 from typing import Any, Mapping, Optional
 from urllib.parse import quote_plus
@@ -253,6 +254,9 @@ class Roku:
 
         if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
             return {}
+
+        if "number" in res["tv-channels"]["channel"]:
+            return OrderedDict([res["tv-channels"]["channel"]])
 
         return res["tv-channels"]["channel"]
 
