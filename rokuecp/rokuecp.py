@@ -241,14 +241,18 @@ class Roku:
 
         return res["tv-channel"]["channel"]
 
-    async def _get_tv_channels(self) -> dict:
+    async def _get_tv_channels(self) -> List:
         """Retrieve TV channels for updates."""
         res = await self._request("/query/tv-channels")
 
         if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
 
-        if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
+        if (
+            res["tv-channels"] is None
+            or "channel" not in res["tv-channels"]
+            or not isinstance(res["tv-channels"]["channel"])
+        ):
             return []
 
         return res["tv-channels"]["channel"]
