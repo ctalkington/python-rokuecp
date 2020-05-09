@@ -27,7 +27,7 @@ class Roku:
         host: str,
         base_path: str = "/",
         port: int = 8060,
-        request_timeout: int = 8,
+        request_timeout: int = 5,
         session: aiohttp.client.ClientSession = None,
         user_agent: str = None,
     ) -> None:
