@@ -248,6 +248,9 @@ class Roku:
         if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
 
+        if res["tv-channels"] is None or "channel" not in res["tv-channels"]["channel"]:
+            return []
+
         return res["tv-channels"]["channel"]
 
     async def close(self) -> None:
