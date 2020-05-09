@@ -335,9 +335,6 @@ async def test_update_tv(aresponses):
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 2
-        
-        await roku.update_tv_channels()
-        assert len(response.channels) == 1
 
 
 @pytest.mark.asyncio
