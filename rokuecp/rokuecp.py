@@ -213,7 +213,7 @@ class Roku:
 
         return res["active-app"]
 
-    async def _get_apps(self) -> OrderedDict:
+    async def _get_apps(self) -> List[OrderedDict]:
         """Retrieve apps for updates."""
         res = await self._request("/query/apps")
 
@@ -221,7 +221,7 @@ class Roku:
             raise RokuError("Roku device returned a malformed result (apps)")
 
         if res["apps"] is None or "app" not in res["apps"]:
-            return OrderedDict()
+            return []
 
         return res["apps"]["app"]
 
@@ -245,7 +245,7 @@ class Roku:
 
         return res["tv-channel"]["channel"]
 
-    async def _get_tv_channels(self) -> OrderedDict:
+    async def _get_tv_channels(self) -> List[OrderedDict]:
         """Retrieve TV channels for updates."""
         res = await self._request("/query/tv-channels")
 
@@ -253,11 +253,10 @@ class Roku:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
 
         if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
-            return OrderedDict()
+            return []
 
         if "number" in res["tv-channels"]["channel"]:
-            faux = OrderedDict({"channel": [res["tv-channels"]["channel"]]})
-            return faux["channel"]
+            returm [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
 
