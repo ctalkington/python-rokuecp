@@ -338,7 +338,7 @@ async def test_update_tv(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update_tv(aresponses):
+async def test_update_tv_channels(aresponses):
     """Test update method is handled correctly for TVs."""
     aresponses.add(
         MATCH_HOST,
@@ -422,10 +422,10 @@ async def test_update_tv(aresponses):
         assert not response.state.standby
         assert len(response.channels) == 2
         
-        await client.update_tv_channels()
+        response = client.update_tv_channels()
 
-        assert isinstance(client.device.channels, List)
-        assert len(client.device.channels) == 1
+        assert isinstance(response.channels, List)
+        assert len(response.channels) == 1
 
 
 @pytest.mark.asyncio
