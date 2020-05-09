@@ -454,8 +454,8 @@ async def test_get_tv_channels_no_channels(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, dict)
-
+        assert isinstance(res, List)
+        assert len(res) == 0
 
 @pytest.mark.asyncio
 async def test_get_tv_channels_single_channel(aresponses):
@@ -474,5 +474,5 @@ async def test_get_tv_channels_single_channel(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, dict)
+        assert isinstance(res, List)
         assert len(res) == 1
