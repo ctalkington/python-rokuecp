@@ -12,7 +12,7 @@ HOST = "192.168.1.86"
 PORT = 8060
 
 MATCH_HOST = f"{HOST}:{PORT}"
-ICON_BASE = f"http://{MATCH_HOST}/icon"
+ICON_BASE = f"http://{MATCH_HOST}/query/icon"
 
 
 @pytest.mark.asyncio
