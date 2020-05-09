@@ -250,7 +250,7 @@ class Roku:
 
         print(res)
         if res["tv-channelz"]:
-            return False
+            return {}
 
         if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
             return {}
