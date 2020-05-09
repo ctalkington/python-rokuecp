@@ -48,6 +48,7 @@ class Info:
     version: str
     network_type: Optional[str] = None
     network_name: Optional[str] = None
+    ethernet_support: Optional[bool] = None
     ethernet_mac: Optional[str] = None
     wifi_mac: Optional[str] = None
 
@@ -71,6 +72,7 @@ class Info:
             network_name=data.get("network-name", None),
             serial_number=data.get("serial-number", None),
             version=data.get("software-version", None),
+            ethernet_support=data.get("supports-ethernet", None),
             ethernet_mac=data.get("ethernet-mac", None),
             wifi_mac=data.get("wifi-mac", None),
         )
