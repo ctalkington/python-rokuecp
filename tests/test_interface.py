@@ -378,6 +378,27 @@ async def test_get_apps(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_get_apps_single_app(aresponses):
+    """Test _get_apps method is handled correctly with single app."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps-single.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        res = await client._get_apps()
+        assert isinstance(res, List)
+        assert len(res) == 1
+
+
+@pytest.mark.asyncio
 async def test_get_device_info(aresponses):
     """Test _get_device_info method is handled correctly."""
     aresponses.add(
