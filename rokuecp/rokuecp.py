@@ -251,7 +251,7 @@ class Roku:
         if (
             res["tv-channels"] is None
             or "channel" not in res["tv-channels"]
-            or not isinstance(res["tv-channels"]["channel"])
+            or not isinstance(res["tv-channels"]["channel"], List)
         ):
             return []
 
