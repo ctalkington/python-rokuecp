@@ -166,7 +166,9 @@ class Roku:
 
         if self._device is None:
             self._device = Device(updates)
-            await self.update_tv_channels()
+
+            if self._device.info.device_type == "tv":
+                await self.update_tv_channels()
         else:
             self._device.update_from_dict(updates)
 
