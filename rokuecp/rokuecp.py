@@ -179,7 +179,7 @@ class Roku:
         if self._device is None:
             return await self.update()
 
-        updates = {}
+        updates = {"retain_state": True}
         updates["channels"] = await self._get_tv_channels()
 
         self._device.update_from_dict(updates)
