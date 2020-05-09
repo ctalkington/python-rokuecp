@@ -141,7 +141,8 @@ class Device:
         """Return Device object from Roku API response."""
         if update_state:
             self.state = State(
-                available=data.get("available", False), standby=data.get("standby", False),
+                available=data.get("available", False),
+                standby=data.get("standby", False),
             )
 
         if "info" in data and data["info"]:
