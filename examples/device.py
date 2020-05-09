@@ -1,13 +1,13 @@
 # pylint: disable=W0621
-"""Asynchronous Python client for IPP."""
+"""Asynchronous Python client for Roku."""
 import asyncio
 
 from rokuecp import Roku
 
 
 async def main():
-    """Show example of connecting to your IPP print server."""
-    async with Roku("192.168.1.81") as roku:
+    """Show example of connecting to your Roku."""
+    async with Roku("192.168.1.61") as roku:
         # Get Roku Device Info
         device = await roku.update()
         print(device.info)
