@@ -422,7 +422,7 @@ async def test_update_tv_channels(aresponses):
         assert not response.state.standby
         assert len(response.channels) == 2
         
-        response = client.update_tv_channels()
+        response = await client.update_tv_channels()
 
         assert isinstance(response.channels, List)
         assert len(response.channels) == 1
