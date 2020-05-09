@@ -201,7 +201,7 @@ class Roku:
     async def tune(self, channel: str) -> None:
         """Change the channel on TV tuner."""
         await self.launch("tvinput.dtv", {"ch": channel})
-        
+
     async def _get_active_app(self) -> OrderedDict:
         """Retrieve active app for updates."""
         res = await self._request("/query/active-app")
