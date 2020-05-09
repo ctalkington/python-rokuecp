@@ -120,7 +120,7 @@ def test_info_tv() -> None:
     assert info.brand == "Onn"
     assert info.device_type == "tv"
     assert info.network_type == "wifi"
-    assert info.network_name == ""
+    assert info.network_name == "NetworkSSID"
     assert info.model_name == "100005844"
     assert info.model_number == "7820X"
     assert info.serial_number == "YN00H5555555"
