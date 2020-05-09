@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<tv-channels>
+    <channel>
+        <number>1.1</number>
+        <name>WhatsOn</name>
+        <type>air-digital</type>
+        <user-hidden>false</user-hidden>
+    </channel>
+</tv-channels>
