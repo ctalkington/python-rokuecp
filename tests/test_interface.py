@@ -383,7 +383,7 @@ async def test_update_tv_channels(aresponses):
             text=load_fixture("tv-channels.xml"),
         ),
     )
-    
+
     aresponses.add(
         MATCH_HOST,
         "/query/tv-channels",
@@ -421,7 +421,7 @@ async def test_update_tv_channels(aresponses):
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 2
-        
+
         response = await client.update_tv_channels()
 
         assert isinstance(response.channels, List)
