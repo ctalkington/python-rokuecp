@@ -101,6 +101,7 @@ def test_info() -> None:
     assert info.brand == "Roku"
     assert info.device_type == "box"
     assert info.network_type == "ethernet"
+    assert info.network_name is None
     assert info.model_name == "Roku 3"
     assert info.model_number == "4200X"
     assert info.serial_number == "1GU48T017973"
@@ -118,6 +119,7 @@ def test_info_tv() -> None:
     assert info.brand == "Onn"
     assert info.device_type == "tv"
     assert info.network_type == "wifi"
+    assert info.network_name == ""
     assert info.model_name == "100005844"
     assert info.model_number == "7820X"
     assert info.serial_number == "YN00H5555555"
