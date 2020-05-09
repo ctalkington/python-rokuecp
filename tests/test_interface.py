@@ -320,7 +320,7 @@ async def test_update_tv(aresponses):
             text=load_fixture("tv-channels.xml"),
         ),
     )
-
+    
     aresponses.add(
         MATCH_HOST,
         "/query/tv-channels",
@@ -331,7 +331,7 @@ async def test_update_tv(aresponses):
             text=load_fixture("tv-channels-single.xml"),
         ),
     )
-
+    
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client.update()
