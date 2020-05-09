@@ -136,7 +136,7 @@ class Roku:
         available = True
         standby = False
 
-        if info.get("power-mode") == "PowerOff":
+        if info.get("power-mode") in ("PowerOff", "Headless"):
             standby = True
 
         updates["available"] = available
