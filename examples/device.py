@@ -12,7 +12,13 @@ async def main():
         device = await roku.update()
         print(device.info)
 
+        await roku.remote("poweron")
+        await asyncio.sleep(2)
         await roku.remote("home")
+
+        # Open Netflix
+        await asyncio.sleep(2)
+        await roku.launch("12")
 
 
 if __name__ == "__main__":

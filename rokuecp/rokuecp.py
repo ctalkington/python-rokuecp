@@ -195,10 +195,11 @@ class Roku:
 
     async def remote(self, key: str) -> None:
         """Emulate pressing a key on the remote."""
-        if not key.lower() in VALID_REMOTE_KEYS:
+        key_lower = key.lower()
+        if key_lower not in VALID_REMOTE_KEYS:
             raise RokuError(f"Remote key is invalid: {key}")
 
-        await self._request(f"keypress/{VALID_REMOTE_KEYS[key]}", method="POST")
+        await self._request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
 
     async def tune(self, channel: str) -> None:
         """Change the channel on TV tuner."""
