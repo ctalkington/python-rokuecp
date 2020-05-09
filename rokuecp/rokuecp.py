@@ -125,7 +125,7 @@ class Roku:
         if self._device is None:
             full_update = True
 
-        updates = {}
+        updates: dict = {}
         updates["info"] = None
         updates["available"] = True
         updates["standby"] = False
@@ -154,7 +154,7 @@ class Roku:
         if full_update and updates["available"]:
             tasks.append("apps")
             futures.append(self._get_apps())
-            
+
             if info.get("is-tv", "false") == "true":
                 tasks.append("channels")
                 futures.append(self._get_tv_channels())
