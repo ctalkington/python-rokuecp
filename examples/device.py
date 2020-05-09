@@ -17,7 +17,7 @@ async def main():
         await roku.remote("home")
 
         # Open Netflix
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
         await roku.launch("12")
 
 
