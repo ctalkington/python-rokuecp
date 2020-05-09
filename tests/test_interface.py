@@ -423,3 +423,23 @@ async def test_get_tv_channels(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_tv_channels()
+
+
+@pytest.mark.asyncio
+async def test_get_tv_channels_no_data(aresponses):
+    """Test _get_tv_channels method is handled correctly when no data is available."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/tv-channels",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("tv-channels-empty.xml")
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        res = await client._get_tv_channels()
+        assert isinstance(res, List)
