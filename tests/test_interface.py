@@ -435,7 +435,7 @@ async def test_get_tv_channels_no_data(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
-            text=load_fixture("tv-channels-empty.xml")
+            text=load_fixture("tv-channels-empty.xml"),
         ),
     )
 
