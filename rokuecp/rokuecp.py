@@ -221,7 +221,7 @@ class Roku:
             raise RokuError("Roku device returned a malformed result (apps)")
 
         if res["apps"] is None or "app" not in res["apps"]:
-            return {}
+            return OrderedDict()
 
         return res["apps"]["app"]
 
@@ -256,7 +256,7 @@ class Roku:
             return OrderedDict()
 
         if "number" in res["tv-channels"]["channel"]:
-            faux = OrderedDict(("channel": [res["tv-channels"]["channel"]]})
+            faux = OrderedDict({"channel": [res["tv-channels"]["channel"]]})
             return faux["channel"]
 
         return res["tv-channels"]["channel"]
