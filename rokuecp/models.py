@@ -63,7 +63,7 @@ class Info:
         elif data.get("is-stick", "false") == "true":
             device_type = "stick"
 
-        if data.get("supports-ethernet", None) is not None:
+        if data.get("supports-ethernet") is not None:
             supports_ethernet = data.get("supports-ethernet", "false") == "true"
 
         return Info(
