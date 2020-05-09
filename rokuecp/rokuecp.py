@@ -244,7 +244,6 @@ class Roku:
     async def _get_tv_channels(self) -> dict:
         """Retrieve TV channels for updates."""
         res = await self._request("/query/tv-channels")
-        print(res)
 
         if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
