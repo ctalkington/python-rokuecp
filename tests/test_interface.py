@@ -320,7 +320,7 @@ async def test_update_tv(aresponses):
             text=load_fixture("tv-channels.xml"),
         ),
     )
-    
+
     aresponses.add(
         MATCH_HOST,
         "/query/tv-channels",
