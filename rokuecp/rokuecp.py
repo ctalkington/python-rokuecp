@@ -223,6 +223,9 @@ class Roku:
         if res["apps"] is None or "app" not in res["apps"]:
             return []
 
+        if isinstance(res["apps"]["app"], OrderedDict):
+            return [res["apps"]["app"]]
+
         return res["apps"]["app"]
 
     async def _get_device_info(self) -> OrderedDict:
@@ -255,7 +258,7 @@ class Roku:
         if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
             return []
 
-        if "number" in res["tv-channels"]["channel"]:
+        if isinstance(res["tv-channels"]["channel"], OrderedDict):
             return [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
