@@ -439,7 +439,7 @@ async def test_get_tv_channels(aresponses):
 
 @pytest.mark.asyncio
 async def test_get_tv_channels_no_channels(aresponses):
-    """Test _get_tv_channels method is handled correctly when no channels are available."""
+    """Test _get_tv_channels method is handled correctly with no channels."""
     aresponses.add(
         MATCH_HOST,
         "/query/tv-channels",
@@ -459,7 +459,7 @@ async def test_get_tv_channels_no_channels(aresponses):
 
 @pytest.mark.asyncio
 async def test_get_tv_channels_single_channel(aresponses):
-    """Test _get_tv_channels method is handled correctly when single channel is available."""
+    """Test _get_tv_channels method is handled correctly with single channel."""
     aresponses.add(
         MATCH_HOST,
         "/query/tv-channels",
