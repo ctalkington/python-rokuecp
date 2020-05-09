@@ -197,9 +197,6 @@ class Roku:
             raise RokuError(f"Remote key is invalid: {key}")
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
-        
-        if key_lower == "poweroff":
-            await self.update_device_state()
 
     async def tune(self, channel: str) -> None:
         """Change the channel on TV tuner."""
