@@ -457,6 +457,7 @@ async def test_get_tv_channels_no_channels(aresponses):
         assert isinstance(res, List)
         assert len(res) == 0
 
+
 @pytest.mark.asyncio
 async def test_get_tv_channels_single_channel(aresponses):
     """Test _get_tv_channels method is handled correctly with single channel."""
