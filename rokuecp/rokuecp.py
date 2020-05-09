@@ -174,16 +174,17 @@ class Roku:
 
         return self._device
 
-    async def update_tv_channels(self) -> None:
+    async def update_tv_channels(self) -> Device:
         """Update the list of available TV channels."""
         if self._device is None:
-            await self.update()
-            return
+            return await self.update()
 
         updates = {}
         updates["channels"] = await self._get_tv_channels()
 
-        self._device.update_from_dict(updates) 
+        self._device.update_from_dict(updates)
+
+        return self._device
 
     async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
         """Launch application."""
