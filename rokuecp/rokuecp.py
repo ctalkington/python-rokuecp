@@ -219,6 +219,9 @@ class Roku:
         if not isinstance(res, dict) or "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
 
+        if res["apps"] is None or "app" not in res["apps"]:
+            return {}
+
         return res["apps"]["app"]
 
     async def _get_device_info(self) -> dict:
