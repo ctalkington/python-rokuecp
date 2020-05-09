@@ -220,9 +220,6 @@ class Roku:
         if not isinstance(res, dict) or "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
 
-        if res["apps"] is None or "app" not in res["apps"]:
-            return []
-
         if isinstance(res["apps"]["app"], OrderedDict):
             return [res["apps"]["app"]]
 
