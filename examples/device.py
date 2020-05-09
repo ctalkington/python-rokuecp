@@ -12,6 +12,7 @@ async def main():
         device = await roku.update()
         print(device.info)
 
+        await roku.remote("poweron")
         await roku.remote("home")
 
 
