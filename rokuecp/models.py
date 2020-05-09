@@ -46,6 +46,11 @@ class Info:
     model_number: str
     serial_number: str
     version: str
+    network_type: Optional[str] = None
+    network_name: Optional[str] = None
+    ethernet_support: Optional[bool] = None
+    ethernet_mac: Optional[str] = None
+    wifi_mac: Optional[str] = None
 
     @staticmethod
     def from_dict(data: dict):
@@ -63,8 +68,13 @@ class Info:
             device_type=device_type,
             model_name=data.get("model-name", None),
             model_number=data.get("model-number", None),
+            network_type=data.get("network-type", None),
+            network_name=data.get("network-name", None),
             serial_number=data.get("serial-number", None),
             version=data.get("software-version", None),
+            ethernet_support=data.get("supports-ethernet", None),
+            ethernet_mac=data.get("ethernet-mac", None),
+            wifi_mac=data.get("wifi-mac", None),
         )
 
 
