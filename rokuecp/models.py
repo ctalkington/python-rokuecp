@@ -56,7 +56,6 @@ class Info:
     def from_dict(data: dict):
         """Return Info object from Roku API response."""
         device_type = "box"
-        supports_ethernet = None
 
         if data.get("is-tv", "false") == "true":
             device_type = "tv"
