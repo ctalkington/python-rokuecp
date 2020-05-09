@@ -1,7 +1,7 @@
 """Asynchronous Python client for Roku."""
 import asyncio
 from collections import OrderedDict
-from socket import gaierror as SocketGIAEroor
+from socket import gaierror as SocketGIAError
 from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
 from xml.parsers.expat import ExpatError
@@ -75,7 +75,7 @@ class Roku:
             raise RokuConnectionError(
                 "Timeout occurred while connecting to device"
             ) from exception
-        except (aiohttp.ClientError, SocketGIAEroor) as exception:
+        except (aiohttp.ClientError, SocketGIAError) as exception:
             raise RokuConnectionError(
                 "Error occurred while communicating with device"
             ) from exception
