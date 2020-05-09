@@ -180,7 +180,7 @@ class Roku:
         updates["channels"] = await self._get_tv_channels()
 
         if self._device is None:
-            await self.update()
+            self._device = await self.update()
 
         self._device.update_from_dict(updates)
 
