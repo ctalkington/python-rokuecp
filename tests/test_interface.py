@@ -331,7 +331,7 @@ async def test_update_tv(aresponses):
             text=load_fixture("tv-channels-single.xml"),
         ),
     )
-    
+
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client.update()
@@ -347,9 +347,9 @@ async def test_update_tv(aresponses):
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 2
-        
+
         response = await client.update(True)
-        
+
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
