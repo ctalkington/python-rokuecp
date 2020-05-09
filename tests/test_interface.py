@@ -442,4 +442,4 @@ async def test_get_tv_channels_no_data(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, List)
+        assert isinstance(res, dict)
