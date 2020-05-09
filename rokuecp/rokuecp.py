@@ -126,7 +126,6 @@ class Roku:
             "app": None,
             "apps": [],
             "channel": None,
-            "channels": [],
             "info": None,
             "available": True,
             "standby": False,
