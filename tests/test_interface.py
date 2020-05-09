@@ -265,38 +265,50 @@ async def test_update_power_off(aresponses):
 @pytest.mark.asyncio
 async def test_update_tv(aresponses):
     """Test update method is handled correctly for TVs."""
-    aresponses.add(
-        MATCH_HOST,
-        "/query/device-info",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("device-info-tv.xml"),
-        ),
-    )
+    for _ in range(0, 2):
+        aresponses.add(
+            MATCH_HOST,
+            "/query/device-info",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("device-info-tv.xml"),
+            ),
+        )
 
-    aresponses.add(
-        MATCH_HOST,
-        "/query/apps",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("apps-tv.xml"),
-        ),
-    )
+        aresponses.add(
+            MATCH_HOST,
+            "/query/apps",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("apps-tv.xml"),
+            ),
+        )
 
-    aresponses.add(
-        MATCH_HOST,
-        "/query/active-app",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("active-app-tv.xml"),
-        ),
-    )
+        aresponses.add(
+            MATCH_HOST,
+            "/query/active-app",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("active-app-tv.xml"),
+            ),
+        )
+
+        aresponses.add(
+            MATCH_HOST,
+            "/query/tv-active-channel",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("tv-active-channel.xml"),
+            ),
+        )
 
     aresponses.add(
         MATCH_HOST,
@@ -308,18 +320,18 @@ async def test_update_tv(aresponses):
             text=load_fixture("tv-channels.xml"),
         ),
     )
-
+    
     aresponses.add(
         MATCH_HOST,
-        "/query/tv-active-channel",
+        "/query/tv-channels",
         "GET",
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
-            text=load_fixture("tv-active-channel.xml"),
+            text=load_fixture("tv-channels-single.xml"),
         ),
     )
-
+    
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client.update()
@@ -335,81 +347,9 @@ async def test_update_tv(aresponses):
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 2
-
-
-@pytest.mark.asyncio
-async def test_update_tv_channels(aresponses):
-    """Test update_tv_channels method is handled correctly for TVs."""
-    aresponses.add(
-        MATCH_HOST,
-        "/query/device-info",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("device-info-tv.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/apps",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("apps-tv.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/active-app",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("active-app-tv.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/tv-channels",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("tv-channels.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/tv-channels",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("tv-channels-single.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/tv-active-channel",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("tv-active-channel.xml"),
-        ),
-    )
-
-    async with ClientSession() as session:
-        client = Roku(HOST, session=session)
-        response = await client.update_tv_channels()
-
+        
+        response = await client.update(True)
+        
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
@@ -420,11 +360,6 @@ async def test_update_tv_channels(aresponses):
 
         assert response.state.available
         assert not response.state.standby
-        assert len(response.channels) == 2
-
-        response = await client.update_tv_channels()
-
-        assert isinstance(response.channels, List)
         assert len(response.channels) == 1
 
 
