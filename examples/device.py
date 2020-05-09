@@ -12,7 +12,7 @@ async def main():
         device = await roku.update()
         print(device.info)
 
-        await roku.remote("Home")
+        await roku.remote("home")
 
 
 if __name__ == "__main__":
