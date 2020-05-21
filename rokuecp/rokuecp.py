@@ -138,7 +138,7 @@ class Roku:
 
         updates["info"] = info = await self._get_device_info()
 
-        if info.get("power-mode") in ("PowerOff", "Headless"):
+        if info.get("power-mode") != "PowerOn":
             updates["standby"] = True
 
         tasks = []
