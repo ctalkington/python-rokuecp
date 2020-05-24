@@ -196,6 +196,9 @@ class Roku:
         if key_lower not in VALID_REMOTE_KEYS:
             raise RokuError(f"Remote key is invalid: {key}")
 
+        if key_lower == "search":
+            await self._request("search/browse", method="POST")
+
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
 
     async def tune(self, channel: str) -> None:
