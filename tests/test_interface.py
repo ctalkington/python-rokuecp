@@ -137,6 +137,21 @@ async def test_remote_invalid_key():
 
 
 @pytest.mark.asyncio
+async def test_remote_search(aresponses):
+    """Test remote search keypress is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/search/browse",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.remote("search")
+
+
+@pytest.mark.asyncio
 async def test_tune(aresponses):
     """Test tune is handled correctly."""
     aresponses.add(
