@@ -198,6 +198,7 @@ class Roku:
 
         if key_lower == "search":
             await self._request("search/browse", method="POST")
+            return
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
 
