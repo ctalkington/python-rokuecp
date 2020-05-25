@@ -211,9 +211,9 @@ def test_media_state_live() -> None:
     assert state.playing
     assert not state.paused
     assert state.live
-    assert state.duration == 0
-    assert state.position == 0
-    assert state.runtime == 0
+    assert state.duration == 95
+    assert state.position == 73
+    assert state.runtime == 25
 
 
 def test_media_state_pause() -> None:
@@ -226,9 +226,9 @@ def test_media_state_pause() -> None:
     assert not state.playing
     assert state.paused
     assert not state.live
-    assert state.duration == 0
-    assert state.position == 0
-    assert state.runtime == 0
+    assert state.duration == 6496
+    assert state.position == 313
+    assert state.runtime == 15
 
 
 def test_media_state_play() -> None:
@@ -241,9 +241,9 @@ def test_media_state_play() -> None:
     assert state.playing
     assert not state.paused
     assert not state.live
-    assert state.duration == 0
-    assert state.position == 0
-    assert state.runtime == 0
+    assert state.duration == 6496
+    assert state.position == 38
+    assert state.runtime == 15
 
 
 def test_state() -> None:
