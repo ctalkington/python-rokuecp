@@ -431,7 +431,7 @@ async def test_get_apps(aresponses):
         client = Roku(HOST, session=session)
         res = await client._get_apps()
         assert isinstance(res, List)
-        assert len(res) == 6
+        assert len(res) == 8
 
 
 @pytest.mark.asyncio
@@ -511,8 +511,7 @@ async def test_get_media_state(aresponses):
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        with pytest.raises(RokuError):
-            assert await client._get_media_state()
+        assert await client._get_media_state()
 
 
 @pytest.mark.asyncio
