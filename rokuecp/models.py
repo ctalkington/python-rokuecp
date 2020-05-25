@@ -111,10 +111,20 @@ class Channel:
 
 
 @dataclass(frozen=True)
+class MediaState:
+    """Object holding all information of media state."""
+    duration: int
+    paused: bool
+    playing: bool
+    position: int
+    at: datetime = datetime.utcnow()
+
+
+@dataclass(frozen=True)
 class State:
     """Object holding all information of device state."""
 
-    available: bool
+    available: bool 
     standby: bool
     at: datetime = datetime.utcnow()
 
@@ -128,6 +138,7 @@ class Device:
     channels: Optional[List[Channel]] = []
     app: Optional[Application] = None
     channel: Optional[Channel] = None
+    media: Optional[MediaState] = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
@@ -167,5 +178,10 @@ class Device:
 
         if "channel" in data and data["channel"]:
             self.channel = Channel.from_dict(data["channel"])
+
+        if "media" in data and data["media"]:
+            self.media = MediaState.from_dict(data["media"])
+        else:
+            self.media = None
 
         return self
