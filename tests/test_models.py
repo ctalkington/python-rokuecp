@@ -208,7 +208,6 @@ def test_media_state_live() -> None:
     assert state
     assert isinstance(state.at, datetime)
 
-    assert state.playing
     assert not state.paused
     assert state.live
     assert state.duration == 95
@@ -223,7 +222,6 @@ def test_media_state_pause() -> None:
     assert state
     assert isinstance(state.at, datetime)
 
-    assert not state.playing
     assert state.paused
     assert not state.live
     assert state.duration == 6496
@@ -238,7 +236,6 @@ def test_media_state_play() -> None:
     assert state
     assert isinstance(state.at, datetime)
 
-    assert state.playing
     assert not state.paused
     assert not state.live
     assert state.duration == 6496
