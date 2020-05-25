@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 from datetime import datetime
+from math import floor
 from typing import List, Optional
 
 from .exceptions import RokuError
@@ -9,7 +10,7 @@ from .exceptions import RokuError
 
 def _ms_to_sec(ms: str) -> int:
     """Convert millisecond string to seconds integer."""
-    ms = int(ms.replace("ms", "").trim())
+    ms = int(ms.replace("ms", "").strip())
     return floor(ms / 1000)
 
 
