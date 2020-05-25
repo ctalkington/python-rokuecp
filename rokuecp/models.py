@@ -125,7 +125,6 @@ class MediaState:
     live: bool
     paused: bool
     position: int
-    runtime: int
     at: datetime = datetime.utcnow()
 
     @staticmethod
@@ -137,14 +136,12 @@ class MediaState:
 
         duration = data.get("duration", "0")
         position = data.get("position", "0")
-        runtime = data.get("runtime", "0")
 
         return MediaState(
             live=data.get("is_live", "false") == "true",
             paused=state == "pause",
             duration=_ms_to_sec(duration),
             position=_ms_to_sec(position),
-            runtime=_ms_to_sec(runtime),
         )
 
 
