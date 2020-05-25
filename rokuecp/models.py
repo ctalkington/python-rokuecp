@@ -10,8 +10,8 @@ from .exceptions import RokuError
 
 def _ms_to_sec(ms: str) -> int:
     """Convert millisecond string to seconds integer."""
-    ms = int(ms.replace("ms", "").strip())
-    return floor(ms / 1000)
+    msi = int(ms.replace("ms", "").strip())
+    return floor(msi / 1000)
 
 
 @dataclass(frozen=True)
