@@ -148,7 +148,7 @@ class Roku:
         if updates["available"] and not updates["standby"]:
             updates["app"] = app = await self._get_active_app()
 
-            if isinstance(app["app"], dict) and app["app"].get("@id") not in APPS_NO_MEDIA:
+            if isinstance(app["app"], dict) and app["app"].get("@id"):
                 tasks.append("media")
                 futures.append(self._get_media_state())
 
