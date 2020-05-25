@@ -212,7 +212,6 @@ def test_media_state_live() -> None:
     assert state.live
     assert state.duration == 95
     assert state.position == 73
-    assert state.runtime == 25
 
 
 def test_media_state_pause() -> None:
@@ -226,7 +225,6 @@ def test_media_state_pause() -> None:
     assert not state.live
     assert state.duration == 6496
     assert state.position == 313
-    assert state.runtime == 15
 
 
 def test_media_state_play() -> None:
@@ -240,7 +238,6 @@ def test_media_state_play() -> None:
     assert not state.live
     assert state.duration == 6496
     assert state.position == 38
-    assert state.runtime == 15
 
 
 def test_state() -> None:
