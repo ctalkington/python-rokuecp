@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<player error="false" state="play">
+<player error="false" state="pause">
   <plugin bandwidth="10000000 bps" id="74519" name="Pluto TV - It's Free TV"/>
   <format audio="aac_adts" captions="webvtt" container="hls" drm="none" video="mpeg4_10b"/>
   <buffering current="1000" max="1000" target="0"/>
