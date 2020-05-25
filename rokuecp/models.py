@@ -119,6 +119,7 @@ class Channel:
 @dataclass(frozen=True)
 class MediaState:
     """Object holding all information of media state."""
+
     duration: int
     live: bool
     paused: bool
@@ -149,7 +150,7 @@ class MediaState:
 class State:
     """Object holding all information of device state."""
 
-    available: bool 
+    available: bool
     standby: bool
     at: datetime = datetime.utcnow()
 
