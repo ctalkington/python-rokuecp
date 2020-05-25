@@ -1,1 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<player error="false" state="play">
+  <plugin bandwidth="10000000 bps" id="13" name="Prime Video"/>
+  <format audio="eac3" captions="none" drm="none" video="hevc_b"/>
+  <position>31820 ms</position>
+  <is_live>false</is_live>
+</player>
