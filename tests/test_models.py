@@ -194,8 +194,15 @@ a global crime ring."""
     assert channel.signal_strength == -75
 
 
+def test_media_state_close() -> None:
+    """Test the MediaState model with closed media."""
+    state = models.MediaState.from_dict(MEDIA_PLAYER_CLOSE)
+
+    assert state is None
+
+
 def test_media_state_live() -> None:
-    """Test the MediaState model."""
+    """Test the MediaState model with live media."""
     state = models.MediaState.from_dict(MEDIA_PLAYER_PLUTO_LIVE)
 
     assert state
@@ -210,7 +217,7 @@ def test_media_state_live() -> None:
 
 
 def test_media_state_pause() -> None:
-    """Test the MediaState model."""
+    """Test the MediaState model with paused media."""
     state = models.MediaState.from_dict(MEDIA_PLAYER_PLUTO_PAUSE)
 
     assert state
@@ -225,7 +232,7 @@ def test_media_state_pause() -> None:
 
 
 def test_media_state_play() -> None:
-    """Test the MediaState model."""
+    """Test the MediaState model with playing media."""
     state = models.MediaState.from_dict(MEDIA_PLAYER_PLUTO_PLAY)
 
     assert state
