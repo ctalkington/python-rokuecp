@@ -301,6 +301,17 @@ async def test_update_tv(aresponses):
 
         aresponses.add(
             MATCH_HOST,
+            "/query/media-player",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("media-player-close.xml"),
+            ),
+        )
+
+        aresponses.add(
+            MATCH_HOST,
             "/query/tv-active-channel",
             "GET",
             aresponses.Response(
@@ -401,6 +412,8 @@ async def test_get_apps(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
+            assert isinstance(res, List)
+            assert len(res) == 6
 
 
 @pytest.mark.asyncio
@@ -442,6 +455,66 @@ async def test_get_device_info(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_device_info()
+
+
+@pytest.mark.asyncio
+async def test_get_media_state(aresponses):
+    """Test _get_media_state method is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("media-player-pluto-play.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_media_state()
+
+
+@pytest.mark.asyncio
+async def test_get_media_state_close(aresponses):
+    """Test _get_media_state method is handled correctly when closed."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("media-player-close.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_media_state()
+
+
+@pytest.mark.asyncio
+async def test_get_media_state_pause(aresponses):
+    """Test _get_media_state method is handled correctly when paused."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("media-player-pluto-pause.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_media_state()
 
 
 @pytest.mark.asyncio
