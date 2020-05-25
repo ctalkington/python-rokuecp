@@ -515,6 +515,26 @@ async def test_get_media_state_close(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_get_media_state_invalid(aresponses):
+    """Test _get_media_state method is handled correctly with invalid data."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<other>value</other>",
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuError):
+            assert await client._get_media_state()
+
+
+@pytest.mark.asyncio
 async def test_get_media_state_live(aresponses):
     """Test _get_media_state method is handled correctly with live media."""
     aresponses.add(
