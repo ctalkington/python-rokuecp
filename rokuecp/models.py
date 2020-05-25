@@ -133,6 +133,9 @@ class MediaState:
     def from_dict(data: dict):
         """Return MediaStste object from Roku response."""
         state = data.get("@state", None)
+        if state not in ("play", "pause"):
+            return None
+
         duration = data.get("duration", "0")
         position = data.get("position", "0")
         runtime = data.get("runtime", "0")
