@@ -384,6 +384,25 @@ async def test_get_active_app(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
+            text=load_fixture("active-app-amazon.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        assert await client._get_active_app()
+
+
+@pytest.mark.asyncio
+async def test_get_active_app_invalid(aresponses):
+    """Test _get_active_app method is handled correctly with invalid data."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/active-app",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
             text="<other>value</other>",
         ),
     )
@@ -404,6 +423,27 @@ async def test_get_apps(aresponses):
         aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        res = await client._get_apps()
+        assert isinstance(res, List)
+        assert len(res) == 6
+
+
+@pytest.mark.asyncio
+async def test_get_apps_invalid(aresponses):
+    """Test _get_apps method is handled correctly with invalid data."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
             text="<other>value</other>",
         ),
     )
@@ -412,8 +452,6 @@ async def test_get_apps(aresponses):
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
-            assert isinstance(res, List)
-            assert len(res) == 6
 
 
 @pytest.mark.asyncio
