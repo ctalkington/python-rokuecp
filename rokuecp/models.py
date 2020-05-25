@@ -7,6 +7,12 @@ from typing import List, Optional
 from .exceptions import RokuError
 
 
+def _ms_to_sec(ms: str) -> int:
+    """Convert millisecond string to seconds integer."""
+    ms = int(ms.replace("ms", "").trim())
+    return floor(ms / 1000)
+
+
 @dataclass(frozen=True)
 class Application:
     """Object holding application information from Roku."""
@@ -114,10 +120,29 @@ class Channel:
 class MediaState:
     """Object holding all information of media state."""
     duration: int
+    live: bool
     paused: bool
     playing: bool
     position: int
+    runtime: int
     at: datetime = datetime.utcnow()
+
+    @staticmethod
+    def from_dict(data: dict):
+        """Return MediaStste object from Roku response."""
+        state = data.get("@state", None)
+        duration = data.get("duration", "0")
+        position = data.get("position", "0")
+        runtime = data.get("runtime", "0")
+
+        return MediaState(
+            live=data.get("is_live", "false") == "true",
+            paused=state == "pause",
+            playing=state == "play",
+            duration=_ms_to_sec(duration),
+            position=_ms_to_sec(position),
+            runtime=_ms_to_sec(runtime),
+        )
 
 
 @dataclass(frozen=True)
@@ -181,7 +206,5 @@ class Device:
 
         if "media" in data and data["media"]:
             self.media = MediaState.from_dict(data["media"])
-        else:
-            self.media = None
 
         return self
