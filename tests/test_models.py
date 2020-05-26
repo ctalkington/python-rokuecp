@@ -10,18 +10,24 @@ from rokuecp import RokuError
 from . import load_fixture
 
 ACTIVE_APP_NETFLIX = xmltodict.parse(load_fixture("active-app-netflix.xml"))
+ACTIVE_APP_PLUTO = xmltodict.parse(load_fixture("active-app-pluto.xml"))
 ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-tvinput-dtv.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
 DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+MEDIA_PLAYER_CLOSE = xmltodict.parse(load_fixture("media-player-close.xml"))
+MEDIA_PLAYER_PLUTO_LIVE = xmltodict.parse(load_fixture("media-player-pluto-live.xml"))
+MEDIA_PLAYER_PLUTO_PAUSE = xmltodict.parse(load_fixture("media-player-pluto-pause.xml"))
+MEDIA_PLAYER_PLUTO_PLAY = xmltodict.parse(load_fixture("media-player-pluto-play.xml"))
 TV_ACTIVE_CHANNEL = xmltodict.parse(load_fixture("tv-active-channel.xml"))
 TV_CHANNELS = xmltodict.parse(load_fixture("tv-channels.xml"))
 
 DEVICE = {
     "info": DEVICE_INFO["device-info"],
     "apps": APPS["apps"]["app"],
-    "app": ACTIVE_APP_NETFLIX["active-app"],
+    "app": ACTIVE_APP_PLUTO["active-app"],
+    "media": MEDIA_PLAYER_PLUTO_PLAY["player"],
     "available": True,
     "standby": False,
 }
@@ -55,6 +61,9 @@ def test_device() -> None:
     assert device.app
     assert isinstance(device.app, models.Application)
 
+    assert device.media
+    assert isinstance(device.media, models.MediaState)
+
     assert isinstance(device.channels, List)
     assert len(device.channels) == 0
 
@@ -85,6 +94,8 @@ def test_device_tv() -> None:
     assert device.app
     assert isinstance(device.app, models.Application)
     assert device.app.app_id == "tvinput.dtv"
+
+    assert device.media is None
 
     assert isinstance(device.channels, List)
     assert len(device.channels) == 2
@@ -181,6 +192,52 @@ a global crime ring."""
     assert channel.program_rating == "TV-14-D-V"
     assert channel.signal_mode == "480i"
     assert channel.signal_strength == -75
+
+
+def test_media_state_close() -> None:
+    """Test the MediaState model with closed media."""
+    state = models.MediaState.from_dict(MEDIA_PLAYER_CLOSE["player"])
+
+    assert state is None
+
+
+def test_media_state_live() -> None:
+    """Test the MediaState model with live media."""
+    state = models.MediaState.from_dict(MEDIA_PLAYER_PLUTO_LIVE["player"])
+
+    assert state
+    assert isinstance(state.at, datetime)
+
+    assert not state.paused
+    assert state.live
+    assert state.duration == 95
+    assert state.position == 73
+
+
+def test_media_state_pause() -> None:
+    """Test the MediaState model with paused media."""
+    state = models.MediaState.from_dict(MEDIA_PLAYER_PLUTO_PAUSE["player"])
+
+    assert state
+    assert isinstance(state.at, datetime)
+
+    assert state.paused
+    assert not state.live
+    assert state.duration == 6496
+    assert state.position == 313
+
+
+def test_media_state_play() -> None:
+    """Test the MediaState model with playing media."""
+    state = models.MediaState.from_dict(MEDIA_PLAYER_PLUTO_PLAY["player"])
+
+    assert state
+    assert isinstance(state.at, datetime)
+
+    assert not state.paused
+    assert not state.live
+    assert state.duration == 6496
+    assert state.position == 38
 
 
 def test_state() -> None:

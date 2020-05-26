@@ -131,6 +131,7 @@ class Roku:
         updates["standby"] = False
         updates["app"] = None
         updates["channel"] = None
+        updates["media"] = None
 
         if full_update:
             updates["apps"] = []
@@ -146,6 +147,10 @@ class Roku:
 
         if updates["available"] and not updates["standby"]:
             updates["app"] = app = await self._get_active_app()
+
+            if isinstance(app["app"], dict) and app["app"].get("@id"):
+                tasks.append("media")
+                futures.append(self._get_media_state())
 
             if isinstance(app["app"], dict) and app["app"].get("@id") == "tvinput.dtv":
                 tasks.append("channel")
@@ -235,6 +240,15 @@ class Roku:
             raise RokuError("Roku device returned a malformed result (device-info)")
 
         return res["device-info"]
+
+    async def _get_media_state(self) -> OrderedDict:
+        """Retrieve media state for updates."""
+        res = await self._request("/query/media-player")
+
+        if not isinstance(res, dict) or "player" not in res:
+            raise RokuError("Roku device returned a malformed result (player)")
+
+        return res["player"]
 
     async def _get_tv_active_channel(self) -> OrderedDict:
         """Retrieve active TV channel for updates."""

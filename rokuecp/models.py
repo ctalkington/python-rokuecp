@@ -2,9 +2,16 @@
 
 from dataclasses import dataclass
 from datetime import datetime
+from math import floor
 from typing import List, Optional
 
 from .exceptions import RokuError
+
+
+def _ms_to_sec(ms: str) -> int:
+    """Convert millisecond string to seconds integer."""
+    msi = int(ms.replace("ms", "").strip())
+    return floor(msi / 1000)
 
 
 @dataclass(frozen=True)
@@ -111,6 +118,34 @@ class Channel:
 
 
 @dataclass(frozen=True)
+class MediaState:
+    """Object holding all information of media state."""
+
+    duration: int
+    live: bool
+    paused: bool
+    position: int
+    at: datetime = datetime.utcnow()
+
+    @staticmethod
+    def from_dict(data: dict):
+        """Return MediaStste object from Roku response."""
+        state = data.get("@state", None)
+        if state not in ("play", "pause"):
+            return None
+
+        duration = data.get("duration", "0")
+        position = data.get("position", "0")
+
+        return MediaState(
+            live=data.get("is_live", "false") == "true",
+            paused=state == "pause",
+            duration=_ms_to_sec(duration),
+            position=_ms_to_sec(position),
+        )
+
+
+@dataclass(frozen=True)
 class State:
     """Object holding all information of device state."""
 
@@ -128,6 +163,7 @@ class Device:
     channels: Optional[List[Channel]] = []
     app: Optional[Application] = None
     channel: Optional[Channel] = None
+    media: Optional[MediaState] = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
@@ -167,5 +203,8 @@ class Device:
 
         if "channel" in data and data["channel"]:
             self.channel = Channel.from_dict(data["channel"])
+
+        if "media" in data and data["media"]:
+            self.media = MediaState.from_dict(data["media"])
 
         return self
