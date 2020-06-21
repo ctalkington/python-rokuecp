@@ -1,17 +1,12 @@
 """Asynchronous Python client for Roku."""
 import asyncio
 from collections import OrderedDict
-from socket import gaierror as SocketGIAError
 from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
-from xml.parsers.expat import ExpatError
 
-import aiohttp
-import async_timeout
-import xmltodict
+from aiohttp.client import ClientSession
 from yarl import URL
 
-from .__version__ import __version__
 from .client import Client
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
@@ -29,7 +24,7 @@ class Roku(Client):
         base_path: str = "/",
         port: int = 8060,
         request_timeout: int = 5,
-        session: aiohttp.client.ClientSession = None,
+        session: ClientSession = None,
         user_agent: str = None,
     ) -> None:
         """Initialize connection with receiver."""
