@@ -144,6 +144,22 @@ async def test_remote_search(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_search(aresponses):
+    """Test search is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/search/browse?keyword=test",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
+        match_querystring=True,
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.search("test")
+
+
+@pytest.mark.asyncio
 async def test_tune(aresponses):
     """Test tune is handled correctly."""
     aresponses.add(
