@@ -137,6 +137,14 @@ class Roku(Client):
 
         await self._request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
 
+    async def search(self, keyword: str) -> None:
+        """Emulate opening search and entering keyword."""
+        request_params = {
+            "keyword": keyword,
+        }
+
+        await self.launch("search/browse", method="POST", params=request_params)
+
     async def tune(self, channel: str) -> None:
         """Change the channel on TV tuner."""
         await self.launch("tvinput.dtv", {"ch": channel})
