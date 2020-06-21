@@ -1,7 +1,7 @@
 """Asynchronous Python client for Roku."""
 import asyncio
 from collections import OrderedDict
-from typing import Any, List, Mapping, Optional
+from typing import Any, List, Optional
 from urllib.parse import quote_plus
 
 from aiohttp.client import ClientSession
@@ -9,7 +9,7 @@ from yarl import URL
 
 from .client import Client
 from .const import VALID_REMOTE_KEYS
-from .exceptions import RokuConnectionError, RokuError
+from .exceptions import RokuError
 from .models import Device
 
 
