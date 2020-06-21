@@ -16,6 +16,13 @@ ICON_BASE = f"http://{MATCH_HOST}/query/icon"
 
 
 @pytest.mark.asyncio
+async def test_loop():
+    """Test loop usage is handled correctly."""
+    async with Roku(HOST) as roku:
+        assert isinstance(roku, Roku)
+
+
+@pytest.mark.asyncio
 async def test_app_icon_url():
     """Test app_icon_url is handled correctly."""
     async with ClientSession() as session:
