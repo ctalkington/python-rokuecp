@@ -248,7 +248,7 @@ async def test_update(aresponses):
 @pytest.mark.asyncio
 async def test_update_app_pluto(aresponses):
     """Test update method is handled correctly with pluto app."""
-    for _ in range(0, 2):
+    for _ in range(0, 3):
         aresponses.add(
             MATCH_HOST,
             "/query/device-info",
@@ -414,6 +414,7 @@ async def test_update_power_off(aresponses):
         assert isinstance(response.channels, List)
         assert response.app is None
         assert response.channel is None
+        assert response.media is None
 
         assert response.state.available
         assert response.state.standby
@@ -501,6 +502,7 @@ async def test_update_tv(aresponses):
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert isinstance(response.channel, models.Channel)
+        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
@@ -515,6 +517,7 @@ async def test_update_tv(aresponses):
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert isinstance(response.channel, models.Channel)
+        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
