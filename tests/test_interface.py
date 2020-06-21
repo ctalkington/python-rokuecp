@@ -246,6 +246,100 @@ async def test_update(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_update_app_pluto(aresponses):
+    """Test update method is handled correctly."""
+    for _ in range(0, 2):
+        aresponses.add(
+            MATCH_HOST,
+            "/query/device-info",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("device-info.xml"),
+            ),
+        )
+
+        aresponses.add(
+            MATCH_HOST,
+            "/query/apps",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("apps.xml"),
+            ),
+        )
+
+        aresponses.add(
+            MATCH_HOST,
+            "/query/active-app",
+            "GET",
+            aresponses.Response(
+                status=200,
+                headers={"Content-Type": "application/xml"},
+                text=load_fixture("active-app-pluto.xml"),
+            ),
+        )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("media-player-pluto-pause.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("media-player-pluto-play.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        response = await client.update()
+
+        assert response
+        assert isinstance(response.info, models.Info)
+        assert isinstance(response.media, models.MediaState)
+        assert isinstance(response.state, models.State)
+        assert isinstance(response.apps, List)
+        assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert response.channel is None
+        assert response.media is None
+
+        assert response.state.available
+        assert not response.state.standby
+        assert len(response.channels) == 0
+
+        response = await client.update()
+
+        assert response
+        assert isinstance(response.info, models.Info)
+        assert isinstance(response.media, models.MediaState)
+        assert isinstance(response.state, models.State)
+        assert isinstance(response.apps, List)
+        assert isinstance(response.channels, List)
+        assert isinstance(response.app, models.Application)
+        assert response.channel is None
+        assert response.media is None
+
+        assert response.state.available
+        assert not response.state.standby
+        assert len(response.channels) == 0
+
+
+@pytest.mark.asyncio
 async def test_update_power_off(aresponses):
     """Test update method is handled correctly when power is off."""
     aresponses.add(
