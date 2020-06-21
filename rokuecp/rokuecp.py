@@ -143,7 +143,7 @@ class Roku(Client):
             "keyword": keyword,
         }
 
-        await self.launch("search/browse", method="POST", params=request_params)
+        await self._request("search/browse", method="POST", params=request_params)
 
     async def tune(self, channel: str) -> None:
         """Change the channel on TV tuner."""
