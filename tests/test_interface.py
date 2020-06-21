@@ -223,6 +223,7 @@ async def test_update(aresponses):
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
+        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
@@ -237,6 +238,7 @@ async def test_update(aresponses):
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
+        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
@@ -319,17 +321,6 @@ async def test_update_tv(aresponses):
                 status=200,
                 headers={"Content-Type": "application/xml"},
                 text=load_fixture("active-app-tv.xml"),
-            ),
-        )
-
-        aresponses.add(
-            MATCH_HOST,
-            "/query/media-player",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("media-player-close.xml"),
             ),
         )
 
