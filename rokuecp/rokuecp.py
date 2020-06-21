@@ -19,7 +19,7 @@ from .models import Device
 
 
 class Roku(Client):
-    """Main class for handling connections with Roku."""
+    """Main class for Python API."""
 
     _device: Optional[Device] = None
 
