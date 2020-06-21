@@ -1,9 +1,7 @@
 """Asynchronous Python client for Roku."""
 import asyncio
-from collections import OrderedDict
 from socket import gaierror as SocketGIAError
-from typing import Any, List, Mapping, Optional
-from urllib.parse import quote_plus
+from typing import Any, Mapping, Optional
 from xml.parsers.expat import ExpatError
 
 import aiohttp
