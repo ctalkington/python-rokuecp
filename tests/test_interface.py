@@ -246,41 +246,40 @@ async def test_update(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update_app_pluto(aresponses):
+async def test_update_media_state(aresponses):
     """Test update method is handled correctly with pluto app."""
-    for _ in range(0, 3):
-        aresponses.add(
-            MATCH_HOST,
-            "/query/device-info",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("device-info.xml"),
-            ),
-        )
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("device-info.xml"),
+        ),
+    )
 
-        aresponses.add(
-            MATCH_HOST,
-            "/query/apps",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("apps.xml"),
-            ),
-        )
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps.xml"),
+        ),
+    )
 
-        aresponses.add(
-            MATCH_HOST,
-            "/query/active-app",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("active-app-pluto.xml"),
-            ),
-        )
+    aresponses.add(
+        MATCH_HOST,
+        "/query/active-app",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("active-app-pluto.xml"),
+        ),
+    )
 
     aresponses.add(
         MATCH_HOST,
@@ -290,28 +289,6 @@ async def test_update_app_pluto(aresponses):
             status=200,
             headers={"Content-Type": "application/xml"},
             text=load_fixture("media-player-pluto-play.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/media-player",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("media-player-pluto-pause.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
-        "/query/media-player",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("media-player-pluto-live.xml"),
         ),
     )
 
@@ -336,46 +313,6 @@ async def test_update_app_pluto(aresponses):
         assert not response.media.paused
         assert response.media.duration == 6496
         assert response.media.position == 38
-
-        response = await client.update()
-
-        assert response
-        assert isinstance(response.info, models.Info)
-        assert isinstance(response.media, models.MediaState)
-        assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
-        assert isinstance(response.app, models.Application)
-        assert response.channel is None
-
-        assert response.state.available
-        assert not response.state.standby
-        assert len(response.channels) == 0
-
-        assert not response.media.live
-        assert response.media.paused
-        assert response.media.duration == 6496
-        assert response.media.position == 313
-
-        response = await client.update()
-
-        assert response
-        assert isinstance(response.info, models.Info)
-        assert isinstance(response.media, models.MediaState)
-        assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
-        assert isinstance(response.app, models.Application)
-        assert response.channel is None
-
-        assert response.state.available
-        assert not response.state.standby
-        assert len(response.channels) == 0
-
-        assert response.media.live
-        assert not response.media.paused
-        assert response.media.duration == 95
-        assert response.media.position == 73
 
 
 @pytest.mark.asyncio
