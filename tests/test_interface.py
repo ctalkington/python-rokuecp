@@ -247,7 +247,7 @@ async def test_update(aresponses):
 
 @pytest.mark.asyncio
 async def test_update_app_pluto(aresponses):
-    """Test update method is handled correctly."""
+    """Test update method is handled correctly with pluto app."""
     for _ in range(0, 2):
         aresponses.add(
             MATCH_HOST,
@@ -316,11 +316,15 @@ async def test_update_app_pluto(aresponses):
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
-        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 0
+
+        assert not response.media.live
+        assert response.media.paused
+        assert response.media.duration == 6496
+        assert response.media.position == 313
 
         response = await client.update()
 
@@ -332,11 +336,15 @@ async def test_update_app_pluto(aresponses):
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
-        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 0
+
+        assert not response.media.live
+        assert not response.media.paused
+        assert response.media.duration == 6496
+        assert response.media.position == 313
 
 
 @pytest.mark.asyncio
