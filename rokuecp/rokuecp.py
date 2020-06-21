@@ -82,7 +82,7 @@ class Roku(Client):
             if isinstance(app["app"], dict):
                 app_id = app["app"].get("@id")
 
-            if app_id and app_id[:6] != "tvinput":
+            if app_id and app_id[:7] != "tvinput":
                 tasks.append("media")
                 futures.append(self._get_media_state())
 
