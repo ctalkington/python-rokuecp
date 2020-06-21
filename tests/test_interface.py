@@ -374,8 +374,8 @@ async def test_update_app_pluto(aresponses):
 
         assert response.media.live
         assert not response.media.paused
-        assert response.media.duration == 6496
-        assert response.media.position == 313
+        assert response.media.duration == 95
+        assert response.media.position == 73
 
 
 @pytest.mark.asyncio
