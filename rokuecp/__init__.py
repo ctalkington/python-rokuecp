@@ -1,2 +1,3 @@
 """Asynchronous Python client for Roku."""
-from .rokuecp import Roku, RokuConnectionError, RokuError  # noqa
+from .exceptions import RokuConnectionError, RokuError  # noqa
+from .rokuecp import Client, Roku  # noqa
