@@ -436,16 +436,21 @@ async def test_update_standby(aresponses):
 
         assert response
         assert isinstance(response.info, models.Info)
+        assert isinstance(response.media, models.MediaState)
         assert isinstance(response.state, models.State)
         assert isinstance(response.apps, List)
         assert isinstance(response.channels, List)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
-        assert response.media is None
 
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 0
+
+        assert not response.media.live
+        assert not response.media.paused
+        assert response.media.duration == 6496
+        assert response.media.position == 38
 
         response = await client.update()
 
