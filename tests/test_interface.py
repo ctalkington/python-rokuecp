@@ -359,6 +359,49 @@ async def test_update_power_off(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_update_standby(aresponses):
+    """Test update method is handled correctly when device is in standby."""
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("device-info-standby.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps.xml"),
+        ),
+    )
+
+    async with ClientSession() as session:
+        client = Roku(HOST, session=session)
+        response = await client.update()
+
+        assert response
+        assert isinstance(response.info, models.Info)
+        assert isinstance(response.state, models.State)
+        assert isinstance(response.apps, List)
+        assert isinstance(response.channels, List)
+        assert response.app is None
+        assert response.channel is None
+        assert response.media is None
+
+        assert response.state.available
+        assert response.state.standby
+        assert len(response.channels) == 0
+
+
+@pytest.mark.asyncio
 async def test_update_tv(aresponses):
     """Test update method is handled correctly for TVs."""
     for _ in range(0, 2):
