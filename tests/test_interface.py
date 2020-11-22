@@ -374,17 +374,6 @@ async def test_update_standby(aresponses):
 
     aresponses.add(
         MATCH_HOST,
-        "/query/device-info",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("device-info-standby.xml"),
-        ),
-    )
-
-    aresponses.add(
-        MATCH_HOST,
         "/query/apps",
         "GET",
         aresponses.Response(
@@ -402,6 +391,28 @@ async def test_update_standby(aresponses):
             status=200,
             headers={"Content-Type": "application/xml"},
             text=load_fixture("active-app-pluto.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/media-player",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("media-player-pluto-play.xml"),
+        ),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("device-info-standby.xml"),
         ),
     )
 
