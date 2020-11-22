@@ -178,39 +178,41 @@ async def test_tune(aresponses):
 @pytest.mark.asyncio
 async def test_update(aresponses):
     """Test update method is handled correctly."""
-    for _ in range(0, 2):
-        aresponses.add(
-            MATCH_HOST,
-            "/query/device-info",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("device-info.xml"),
-            ),
-        )
+    aresponses.add(
+        MATCH_HOST,
+        "/query/device-info",
+        "GET",
+         aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("device-info.xml"),
+        ),
+        repeat=2,
+    )
 
-        aresponses.add(
-            MATCH_HOST,
-            "/query/apps",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("apps.xml"),
-            ),
-        )
+    aresponses.add(
+        MATCH_HOST,
+        "/query/apps",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("apps.xml"),
+        ),
+        repeat=2,
+    )
 
-        aresponses.add(
-            MATCH_HOST,
-            "/query/active-app",
-            "GET",
-            aresponses.Response(
-                status=200,
-                headers={"Content-Type": "application/xml"},
-                text=load_fixture("active-app-roku.xml"),
-            ),
-        )
+    aresponses.add(
+        MATCH_HOST,
+        "/query/active-app",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text=load_fixture("active-app-roku.xml"),
+        ),
+        repeat=2,
+    )
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
@@ -381,6 +383,7 @@ async def test_update_standby(aresponses):
             headers={"Content-Type": "application/xml"},
             text=load_fixture("apps.xml"),
         ),
+        repeat=2,
     )
 
     aresponses.add(
