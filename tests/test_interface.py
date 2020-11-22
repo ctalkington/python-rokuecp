@@ -182,7 +182,7 @@ async def test_update(aresponses):
         MATCH_HOST,
         "/query/device-info",
         "GET",
-         aresponses.Response(
+        aresponses.Response(
             status=200,
             headers={"Content-Type": "application/xml"},
             text=load_fixture("device-info.xml"),
