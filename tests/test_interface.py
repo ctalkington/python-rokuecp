@@ -419,17 +419,6 @@ async def test_update_standby(aresponses):
         ),
     )
 
-    aresponses.add(
-        MATCH_HOST,
-        "/query/active-app",
-        "GET",
-        aresponses.Response(
-            status=200,
-            headers={"Content-Type": "application/xml"},
-            text=load_fixture("active-app-roku.xml"),
-        ),
-    )
-
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client.update()
