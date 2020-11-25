@@ -58,6 +58,7 @@ class Info:
     ethernet_support: Optional[bool] = None
     ethernet_mac: Optional[str] = None
     wifi_mac: Optional[str] = None
+    supports_private_listening: Optional[bool] = None
     headphones_connected: Optional[bool] = None
 
     @staticmethod
@@ -83,6 +84,7 @@ class Info:
             ethernet_support=data.get("supports-ethernet", "false") == "true",
             ethernet_mac=data.get("ethernet-mac", None),
             wifi_mac=data.get("wifi-mac", None),
+            supports_private_listening=data.get("supports-private-listening", "false") == "true",
             headphones_connected=data.get("headphones-connected", "false") == "true",
         )
 
