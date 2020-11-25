@@ -119,6 +119,8 @@ def test_info() -> None:
     assert info.ethernet_support
     assert info.ethernet_mac == "b0:a7:37:96:4d:fa"
     assert info.wifi_mac == "b0:a7:37:96:4d:fb"
+    assert not info.supports_private_listening
+    assert not info.headphones_connected
     assert info.version == "7.5.0"
 
 
@@ -138,6 +140,8 @@ def test_info_tv() -> None:
     assert info.ethernet_support
     assert info.ethernet_mac == "d4:3a:2e:07:fd:cb"
     assert info.wifi_mac == "d8:13:99:f8:b0:c6"
+    assert info.supports_private_listening
+    assert not info.headphones_connected
     assert info.version == "9.2.0"
 
 
