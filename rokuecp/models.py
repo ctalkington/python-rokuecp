@@ -200,11 +200,17 @@ class Device:
 
         if "app" in data and data["app"]:
             self.app = Application.from_dict(data["app"])
+        elif "app" in data:
+            self.app = None
 
         if "channel" in data and data["channel"]:
             self.channel = Channel.from_dict(data["channel"])
+        elif "channel" in data:
+            self.channel = None
 
         if "media" in data and data["media"]:
             self.media = MediaState.from_dict(data["media"])
+        elif "media" in data:
+            self.media = None
 
         return self
