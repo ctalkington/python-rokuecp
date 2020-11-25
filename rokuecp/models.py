@@ -84,8 +84,12 @@ class Info:
             ethernet_support=data.get("supports-ethernet", "false") == "true",
             ethernet_mac=data.get("ethernet-mac", None),
             wifi_mac=data.get("wifi-mac", None),
-            supports_private_listening=data.get("supports-private-listening", "false") == "true",
-            headphones_connected=data.get("headphones-connected", "false") == "true",
+            supports_private_listening=data.get(
+                "supports-private-listening", "false"
+            ) == "true",
+            headphones_connected=data.get(
+                "headphones-connected", "false"
+            ) == "true",
         )
 
 
