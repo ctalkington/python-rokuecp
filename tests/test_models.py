@@ -110,6 +110,7 @@ def test_info() -> None:
     assert info
     assert info.name == "My Roku 3"
     assert info.brand == "Roku"
+    assert info.device_location is None
     assert info.device_type == "box"
     assert info.network_type == "ethernet"
     assert info.network_name is None
@@ -131,6 +132,7 @@ def test_info_tv() -> None:
     assert info
     assert info.name == '58" Onn Roku TV'
     assert info.brand == "Onn"
+    assert info.device_location == "Living room"
     assert info.device_type == "tv"
     assert info.network_type == "wifi"
     assert info.network_name == "NetworkSSID"
