@@ -49,6 +49,7 @@ class Info:
     name: str
     brand: str
     device_type: str
+    device_location: str
     model_name: str
     model_number: str
     serial_number: str
@@ -77,6 +78,7 @@ class Info:
             name=data.get("user-device-name", None),
             brand=data.get("vendor-name", "Roku"),
             device_type=device_type,
+            device_location=data.get("user-device-location", None),
             model_name=data.get("model-name", None),
             model_number=data.get("model-number", None),
             network_type=data.get("network-type", None),
