@@ -200,6 +200,29 @@ a global crime ring."""
     assert channel.signal_strength == -75
 
 
+def test_channel_active_tv_signal_stength_non_numeric() -> None:
+    """Test the Channel model with active TV channel and non-numeric signal strength."""
+    active_channel = {
+        **TV_ACTIVE_CHANNEL["tv-channel"]["channel"],
+        "signal-strength": "n/a",
+    }
+
+    channel = models.Channel.from_dict(active_channel)
+    description = """The team will travel all around the world in order to shut down
+a global crime ring."""
+
+    assert channel
+    assert channel.name == "getTV"
+    assert channel.number == "14.3"
+    assert channel.channel_type == "air-digital"
+    assert not channel.hidden
+    assert channel.program_title == "Airwolf"
+    assert channel.program_description == description.replace("\n", " ")
+    assert channel.program_rating == "TV-14-D-V"
+    assert channel.signal_mode == "480i"
+    assert channel.signal_strength is None
+
+
 def test_media_state_close() -> None:
     """Test the MediaState model with closed media."""
     state = models.MediaState.from_dict(MEDIA_PLAYER_CLOSE["player"])
