@@ -201,7 +201,7 @@ a global crime ring."""
 
 
 def test_channel_active_tv_signal_stength_non_numeric() -> None:
-    """Test the Channel model with active TV channel with non-numeric signal strength."""
+    """Test the Channel model with active TV channel and non-numeric signal strength."""
     active_channel = {
         **TV_ACTIVE_CHANNEL["tv-channel"]["channel"],
         "signal-strength": "n/a",
