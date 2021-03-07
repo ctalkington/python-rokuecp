@@ -114,7 +114,7 @@ class Channel:
 
         if strength is not None:
             try:
-                strength = int(strengtb)
+                strength = int(strength)
             except ValueError:
                 strength = None
 
