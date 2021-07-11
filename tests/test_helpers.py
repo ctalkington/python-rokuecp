@@ -2,7 +2,6 @@
 from socket import gaierror as SocketGIAError
 
 import pytest
-
 from rokuecp import RokuConnectionError
 from rokuecp.helpers import is_ip_address, resolve_hostname
 
