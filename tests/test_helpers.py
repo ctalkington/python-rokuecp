@@ -4,6 +4,8 @@ import pytest
 from rokuecp import RokuConnectionError
 from rokuecp.helpers import is_ip_address, resolve_hostname
 
+MOCK_HOSTNAME = "192.168.1.2"
+
 
 def test_is_ip_address() -> None:
     """Test the is_ip_address helper."""
@@ -13,8 +15,12 @@ def test_is_ip_address() -> None:
 
 def test_resolve_hostname() -> None:
     """Test the resolve_hostname helper."""
-    assert resolve_hostname("roku.local") == "192.168.1.2"
-
+    with patch(
+        "rokuecp.helpers.gethostbyname", return_value=MOCK_HOSTNAME
+    ) as mock_gethostbyname:
+        assert resolve_hostname("roku.local") == MOCK_HOSTNAME
+        assert len(mock_gethostbyname.mock_calls) == 1
+          
     with pytest.raises(RokuConnectionError):
         resolve_hostname("roku.local")
 
