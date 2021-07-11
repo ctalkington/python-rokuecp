@@ -1,7 +1,6 @@
 """Asynchronous Python client for Roku."""
 import asyncio
-from ip_address import ip_address
-from socket import gaierror as SocketGIAError, gethostbyname
+from socket import gaierror as SocketGIAError
 from typing import Any, Mapping, Optional
 from xml.parsers.expat import ExpatError
 
@@ -12,6 +11,7 @@ from yarl import URL
 
 from .__version__ import __version__
 from .exceptions import RokuConnectionError, RokuError
+from .helpers import is_ip_address, resolve_hostname
 
 
 class Client:
@@ -48,8 +48,8 @@ class Client:
         params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a receiver."""
-        if not self.is_ip_address(self.host):
-            self.host = self.resolve_hostname(self.host)
+        if not is_ip_address(self.host):
+            self.host = resolve_hostname(self.host)
 
         url = URL.build(
             scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
@@ -109,24 +109,6 @@ class Client:
         """Close open client session."""
         if self._session and self._close_session:
             await self._session.close()
-
-    def is_ip_address(host: str) -> bool:
-        """Determine if host is an IP Address."""
-        try:
-            ip_address(host)
-        except ValueError:
-            return False
-
-        return True
-
-    def resolve_hostname(host: str) -> str:
-        """Resolve hostname to IP Address."""
-        try:
-            return socket.gethostbyname(host)
-        except SocketGIAError as exception:
-            RokuConnectionError(
-                f"Error occurred while resolving hostname: {host}"
-            ) from exception 
 
     async def __aenter__(self) -> "Client":
         """Async enter."""
