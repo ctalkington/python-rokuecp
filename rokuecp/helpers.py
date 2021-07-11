@@ -14,6 +14,7 @@ def is_ip_address(host: str) -> bool:
 
     return True
 
+
 def resolve_hostname(host: str) -> str:
     """Resolve hostname to IP Address."""
     try:
