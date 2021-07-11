@@ -12,7 +12,6 @@ from yarl import URL
 
 from .__version__ import __version__
 from .exceptions import RokuConnectionError, RokuError
-from .helpers import is_ip, resolve_hostname
 
 class Client:
     """Main class for handling connections with Roku."""
