@@ -19,6 +19,6 @@ def resolve_hostname(host: str) -> str:
     try:
         return gethostbyname(host)
     except SocketGIAError as exception:
-        RokuConnectionError(
+        raise RokuConnectionError(
             f"Error occurred while resolving hostname: {host}"
         ) from exception
