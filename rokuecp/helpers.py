@@ -1,7 +1,7 @@
 """Helpers for Roku Client."""
+from ip_address import ip_address
 from socket import gaierror as SocketGIAError
 from socket import gethostbyname
-from ip_address import ip_address
 
 from .exceptions import RokuConnectionError
 
