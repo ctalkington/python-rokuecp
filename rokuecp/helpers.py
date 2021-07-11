@@ -12,7 +12,7 @@ def is_ip_address(host: str) -> bool:
     except ValueError:
         return False
 
-   return True
+    return True
 
 def resolve_hostname(host: str) -> str:
     """Resolve hostname to IP Address."""
@@ -21,4 +21,4 @@ def resolve_hostname(host: str) -> str:
     except SocketGIAError as exception:
         RokuConnectionError(
             f"Error occurred while resolving hostname: {host}"
-       ) from exception
+        ) from exception
