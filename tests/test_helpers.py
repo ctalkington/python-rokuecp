@@ -1,4 +1,6 @@
 """Tests for Roku Client Helpers."""
+from socket import gaierror as SocketGIAError
+
 import pytest
 
 from rokuecp import RokuConnectionError
@@ -15,12 +17,15 @@ def test_is_ip_address() -> None:
 
 def test_resolve_hostname() -> None:
     """Test the resolve_hostname helper."""
-    with patch(
+    with pytest.mock.patch(
         "rokuecp.helpers.gethostbyname", return_value=MOCK_HOSTNAME
     ) as mock_gethostbyname:
         assert resolve_hostname("roku.local") == MOCK_HOSTNAME
         assert len(mock_gethostbyname.mock_calls) == 1
           
     with pytest.raises(RokuConnectionError):
-        resolve_hostname("roku.local")
+        with pytest.mock.patch(
+            "rokuecp.helpers.gethostbyname", side_effect=SocketGIAError()
+        ):
+            resolve_hostname("roku.local")
 
