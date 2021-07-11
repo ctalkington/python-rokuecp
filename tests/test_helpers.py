@@ -1,8 +1,8 @@
-"""Tests for Roku Helpers."""
+"""Tests for Roku Client Helpers."""
 import pytest
-from rokuecp import RokuConnectionError
 
-from .helpers import is_ip_address, resolve_hostname
+from rokuecp import RokuConnectionError
+from rokuecp.helpers import is_ip_address, resolve_hostname
 
 
 def test_is_ip_address() -> None:
@@ -14,3 +14,7 @@ def test_is_ip_address() -> None:
 def test_resolve_hostname() -> None:
     """Test the resolve_hostname helper."""
     assert resolve_hostname("roku.local") == "192.168.1.2"
+
+    with pytest.raises(RokuConnectionError):
+        resolve_hostname("roku.local")
+
