@@ -2,6 +2,7 @@
 import asyncio
 from socket import gaierror as SocketGIAError
 
+import mock
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Client
@@ -206,7 +207,7 @@ async def test_resolve_hostname(aresponses) -> None:
     async with ClientSession() as session:
         client = Client(HOSTNAME, session=session)
 
-        with pytest.mock.patch(
+        with mock.patch(
             "rokuecp.helpers.gethostbyname", return_value=HOST
         ) as mock_gethostbyname:
             assert await client._request("support/hostname")
@@ -220,7 +221,7 @@ async def test_resolve_hostname_error() -> None:
     async with ClientSession() as session:
         client = Client(HOSTNAME, session=session)
 
-        with pytest.raises(RokuConnectionError), pytest.mock.patch(
+        with pytest.raises(RokuConnectionError), mock.patch(
             "rokuecp.helpers.gethostbyname", side_effect=SocketGIAError()
         ) as mock_gethostbyname:
             await client._request("hostname")
