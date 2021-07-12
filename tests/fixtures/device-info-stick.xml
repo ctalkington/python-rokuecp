@@ -7,6 +7,7 @@
     <model-number>3800R</model-number>
     <model-name>Roku Streaming Stick</model-name>
     <model-region>US</model-region>
+    <is-stick>true</is-stick>
     <supports-ethernet>false</supports-ethernet>
     <wifi-mac>b0:a7:37:96:4d:fb</wifi-mac>
     <ethernet-mac></ethernet-mac>
