@@ -128,7 +128,7 @@ def test_info() -> None:
 
 def test_info_stick() -> None:
     """Test the Info model with Roku Stick."""
-    info = models.Info.from_dict(DEVICE_INFO["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO_STICK["device-info"])
 
     assert info
     assert info.name == "My Roku Stick"
