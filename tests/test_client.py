@@ -160,7 +160,7 @@ async def test_timeout(aresponses):
 async def test_client_error():
     """Test HTTP client error."""
     async with ClientSession() as session:
-        client = Client("#", session=session)
+        client = Client(HOST, session=session)
         with pytest.raises(RokuConnectionError):
             assert await client._request("client/error", method="ABC")
 
