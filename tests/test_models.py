@@ -177,7 +177,7 @@ def test_info_tv_d803x() -> None:
 
     assert info
     assert info.name == '42" Onn Roku TV'
-    assert info.brand == "Onn"
+    assert info.brand == "onn."
     assert info.device_location is None
     assert info.device_type == "tv"
     assert info.network_type == "wifi"
