@@ -137,7 +137,6 @@ def test_info_stick() -> None:
     assert info.device_type == "stick"
     assert info.network_type == "wifi"
     assert info.network_name == "NetworkSSID"
-    assert info.network_name is None
     assert info.model_name == "Roku Stick"
     assert info.model_number == "3500X"
     assert info.serial_number == "2L647N055555"
