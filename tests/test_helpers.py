@@ -1,10 +1,10 @@
 """Tests for Roku Client Helpers."""
 from socket import gaierror as SocketGIAError
+from unittest.mock import patch
 
 import pytest
 from rokuecp import RokuConnectionError
 from rokuecp.helpers import is_ip_address, resolve_hostname
-from unittest.mock import patch
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.2"
