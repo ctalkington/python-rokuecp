@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<device-info>
+<udn>02706107-7801-107a-8035-b0a7376aec35</udn>
+<serial-number>2L647N055555</serial-number>
+<device-id>2L647N055555</device-id>
+<advertising-id>fd19d26a-730e-5ad4-adc6-dd186b697be5</advertising-id>
+<vendor-name>Roku</vendor-name>
+<model-name>Roku Stick</model-name>
+<model-number>3500X</model-number>
+<model-region>US</model-region>
+<is-tv>false</is-tv>
+<is-stick>true</is-stick>
+<ui-resolution>720p</ui-resolution>
+<supports-ethernet>false</supports-ethernet>
+<wifi-mac>b0:a7:37:6a:ec:2d</wifi-mac>
+<wifi-driver>aardvark</wifi-driver>
+<has-wifi-extender>false</has-wifi-extender>
+<has-wifi-5G-support>true</has-wifi-5G-support>
+<can-use-wifi-extender>false</can-use-wifi-extender>
+<network-type>wifi</network-type>
+<network-name>NetworkSSID</network-name>
+<friendly-device-name>Roku Stick - 2L647N055555</friendly-device-name>
+<friendly-model-name>Roku Stick</friendly-model-name>
+<default-device-name>Roku Stick - 2L647N055555</default-device-name>
+<user-device-name>My Roku Stick</user-device-name>
+<user-device-location/>
+<build-number>09A.00E04209A</build-number>
+<software-version>10.0.0</software-version>
+<software-build>4209</software-build>
+<secure-device>true</secure-device>
+<language>en</language>
+<country>US</country>
+<locale>en_US</locale>
+<time-zone-auto>true</time-zone-auto>
+<time-zone>US/Central</time-zone>
+<time-zone-name>United States/Central</time-zone-name>
+<time-zone-tz>America/Chicago</time-zone-tz>
+<time-zone-offset>-300</time-zone-offset>
+<clock-format>12-hour</clock-format>
+<uptime>157</uptime>
+<power-mode>PowerOn</power-mode>
+<supports-suspend>false</supports-suspend>
+<supports-find-remote>true</supports-find-remote>
+<find-remote-is-possible>false</find-remote-is-possible>
+<supports-audio-guide>false</supports-audio-guide>
+<supports-rva>false</supports-rva>
+<developer-enabled>false</developer-enabled>
+<keyed-developer-id/>
+<search-enabled>false</search-enabled>
+<search-channels-enabled>false</search-channels-enabled>
+<voice-search-enabled>false</voice-search-enabled>
+<notifications-enabled>false</notifications-enabled>
+<notifications-first-use>true</notifications-first-use>
+<supports-private-listening>false</supports-private-listening>
+<headphones-connected>false</headphones-connected>
+<supports-ecs-textedit>true</supports-ecs-textedit>
+<supports-ecs-microphone>true</supports-ecs-microphone>
+<supports-wake-on-wlan>false</supports-wake-on-wlan>
+<supports-airplay>false</supports-airplay>
+<has-play-on-roku>false</has-play-on-roku>
+<has-mobile-screensaver>false</has-mobile-screensaver>
+<support-url>roku.com/support</support-url>
+</device-info>
