@@ -1,12 +1,12 @@
 """Tests for Roku."""
 import asyncio
 from socket import gaierror as SocketGIAError
+from unittest.mock import patch
 
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Client
 from rokuecp.exceptions import RokuConnectionError, RokuError
-from unittest.mock import patch
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
