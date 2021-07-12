@@ -145,7 +145,7 @@ def test_info_stick() -> None:
     assert info.wifi_mac == "b0:a7:37:6a:ec:2d"
     assert not info.supports_private_listening
     assert not info.headphones_connected
-    assert info.version == "7.5.0"
+    assert info.version == "10.0.0"
 
 
 def test_info_tv() -> None:
