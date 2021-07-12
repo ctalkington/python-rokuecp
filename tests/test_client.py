@@ -1,11 +1,14 @@
 """Tests for Roku."""
 import asyncio
+from socket import gaierror as SocketGIAError
+from unittest.mock import patch
 
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Client
 from rokuecp.exceptions import RokuConnectionError, RokuError
 
+HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
 PORT = 8060
 
@@ -192,3 +195,38 @@ async def test_http_error500(aresponses):
         client = Client(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._request("http/500")
+
+
+@pytest.mark.asyncio
+async def test_resolve_hostname(aresponses) -> None:
+    """Test that hostnames are resolved before request."""
+    aresponses.add(
+        MATCH_HOST,
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    async with ClientSession() as session:
+        client = Client(HOSTNAME, session=session)
+
+        with patch(
+            "rokuecp.helpers.gethostbyname", return_value=HOST
+        ) as mock_gethostbyname:
+            assert await client._request("support/hostname")
+
+        assert len(mock_gethostbyname.mock_calls) == 1
+
+
+@pytest.mark.asyncio
+async def test_resolve_hostname_error() -> None:
+    """Test that hostname resolution errors are handled."""
+    async with ClientSession() as session:
+        client = Client(HOSTNAME, session=session)
+
+        with pytest.raises(RokuConnectionError), patch(
+            "rokuecp.helpers.gethostbyname", side_effect=SocketGIAError()
+        ) as mock_gethostbyname:
+            await client._request("hostname")
+
+        assert len(mock_gethostbyname.mock_calls) == 1

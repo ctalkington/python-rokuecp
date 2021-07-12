@@ -11,6 +11,7 @@ from yarl import URL
 
 from .__version__ import __version__
 from .exceptions import RokuConnectionError, RokuError
+from .helpers import is_ip_address, resolve_hostname
 
 
 class Client:
@@ -47,6 +48,9 @@ class Client:
         params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a receiver."""
+        if not is_ip_address(self.host):
+            self.host = resolve_hostname(self.host)
+
         url = URL.build(
             scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
         ).join(URL(uri))
