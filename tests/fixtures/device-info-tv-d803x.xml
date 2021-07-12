@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<device-info>
+<udn>280001c0-0000-1001-8084-d4abcd2f5c95</udn>
+<serial-number>X00755550DCH</serial-number>
+<device-id>S06F45550DCH</device-id>
+<advertising-id>440efbd5-2269-537b-9487-a5f873ce7c8d</advertising-id>
+<vendor-name>onn.</vendor-name>
+<model-name>100018254</model-name>
+<model-number>D803X</model-number>
+<model-region>US</model-region>
+<is-tv>true</is-tv>
+<is-stick>false</is-stick>
+<screen-size>42</screen-size>
+<panel-id>2</panel-id>
+<ui-resolution>720p</ui-resolution>
+<tuner-type>ATSC</tuner-type>
+<supports-ethernet>false</supports-ethernet>
+<wifi-mac>d4:ab:cd:2f:6b:55</wifi-mac>
+<wifi-driver>realtek</wifi-driver>
+<has-wifi-extender>false</has-wifi-extender>
+<has-wifi-5G-support>true</has-wifi-5G-support>
+<can-use-wifi-extender>true</can-use-wifi-extender>
+<network-type>wifi</network-type>
+<network-name>NetworkSSID</network-name>
+<friendly-device-name>42" Onn Roku TV</friendly-device-name>
+<friendly-model-name>onn. Roku TV</friendly-model-name>
+<default-device-name>onn. Roku TV - X00755550DCH</default-device-name>
+<user-device-name>42" Onn Roku TV</user-device-name>
+<user-device-location/>
+<build-number>C4A.00E04209A</build-number>
+<software-version>10.0.0</software-version>
+<software-build>4209</software-build>
+<secure-device>true</secure-device>
+<language>en</language>
+<country>US</country>
+<locale>en_US</locale>
+<time-zone-auto>true</time-zone-auto>
+<time-zone>US/Central</time-zone>
+<time-zone-name>United States/Central</time-zone-name>
+<time-zone-tz>America/Chicago</time-zone-tz>
+<time-zone-offset>-300</time-zone-offset>
+<clock-format>12-hour</clock-format>
+<uptime>430208</uptime>
+<power-mode>PowerOn</power-mode>
+<supports-suspend>true</supports-suspend>
+<supports-find-remote>false</supports-find-remote>
+<supports-audio-guide>true</supports-audio-guide>
+<supports-rva>true</supports-rva>
+<developer-enabled>false</developer-enabled>
+<keyed-developer-id/>
+<search-enabled>true</search-enabled>
+<search-channels-enabled>true</search-channels-enabled>
+<voice-search-enabled>true</voice-search-enabled>
+<notifications-enabled>true</notifications-enabled>
+<notifications-first-use>false</notifications-first-use>
+<supports-private-listening>true</supports-private-listening>
+<supports-private-listening-dtv>true</supports-private-listening-dtv>
+<supports-warm-standby>true</supports-warm-standby>
+<headphones-connected>false</headphones-connected>
+<supports-ecs-textedit>true</supports-ecs-textedit>
+<supports-ecs-microphone>true</supports-ecs-microphone>
+<supports-wake-on-wlan>true</supports-wake-on-wlan>
+<supports-airplay>true</supports-airplay>
+<has-play-on-roku>true</has-play-on-roku>
+<has-mobile-screensaver>false</has-mobile-screensaver>
+<support-url>https://www.onntvsupport.com/</support-url>
+<grandcentral-version>5.4.54</grandcentral-version>
+<trc-version>3.0</trc-version>
+<trc-channel-version>4.2.3</trc-channel-version>
+<davinci-version>2.8.20</davinci-version>
+</device-info>
