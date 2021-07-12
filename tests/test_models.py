@@ -15,6 +15,7 @@ ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-tvinput-dtv.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
+DEVICE_INFO_STICK = xmltodict.parse(load_fixture("device-info-stick.xml"))
 DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
 MEDIA_PLAYER_CLOSE = xmltodict.parse(load_fixture("media-player-close.xml"))
 MEDIA_PLAYER_PLUTO_LIVE = xmltodict.parse(load_fixture("media-player-pluto-live.xml"))
@@ -125,8 +126,30 @@ def test_info() -> None:
     assert info.version == "7.5.0"
 
 
+def test_info_stick() -> None:
+    """Test the Info model with Roku Stick."""
+    info = models.Info.from_dict(DEVICE_INFO["device-info"])
+
+    assert info
+    assert info.name == "My Roku Stick"
+    assert info.brand == "Roku"
+    assert info.device_location is None
+    assert info.device_type == "stick"
+    assert info.network_type == "wifi"
+    assert info.network_name is None
+    assert info.model_name == "Roku Streaming Stick"
+    assert info.model_number == "3800R"
+    assert info.serial_number == "1GU48T017973"
+    assert not info.ethernet_support
+    assert not info.ethernet_mac
+    assert info.wifi_mac == "b0:a7:37:96:4d:fb"
+    assert not info.supports_private_listening
+    assert not info.headphones_connected
+    assert info.version == "7.5.0"
+
+
 def test_info_tv() -> None:
-    """Test the Info model."""
+    """Test the Info model with TV."""
     info = models.Info.from_dict(DEVICE_INFO_TV["device-info"])
 
     assert info
