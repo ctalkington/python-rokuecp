@@ -16,7 +16,8 @@ APPS = xmltodict.parse(load_fixture("apps.xml"))
 APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
 DEVICE_INFO_3500X = xmltodict.parse(load_fixture("device-info-3500x.xml"))
-DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
+DEVICE_INFO_7820X = xmltodict.parse(load_fixture("device-info-7820x.xml"))
+DEVICE_INFO_D803X = xmltodict.parse(load_fixture("device-info-d803x.xml"))
 MEDIA_PLAYER_CLOSE = xmltodict.parse(load_fixture("media-player-close.xml"))
 MEDIA_PLAYER_PLUTO_LIVE = xmltodict.parse(load_fixture("media-player-pluto-live.xml"))
 MEDIA_PLAYER_PLUTO_PAUSE = xmltodict.parse(load_fixture("media-player-pluto-pause.xml"))
@@ -148,9 +149,9 @@ def test_info_stick_3500x() -> None:
     assert info.version == "10.0.0"
 
 
-def test_info_tv() -> None:
+def test_info_tv_7820x() -> None:
     """Test the Info model with TV."""
-    info = models.Info.from_dict(DEVICE_INFO_TV["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO_7820X["device-info"])
 
     assert info
     assert info.name == '58" Onn Roku TV'
@@ -168,6 +169,28 @@ def test_info_tv() -> None:
     assert info.supports_private_listening
     assert not info.headphones_connected
     assert info.version == "9.2.0"
+
+
+def test_info_tv_d803x() -> None:
+    """Test the Info model with TV model D803X."""
+    info = models.Info.from_dict(DEVICE_INFO_7820X["device-info"])
+
+    assert info
+    assert info.name == '42" Onn Roku TV'
+    assert info.brand == "Onn"
+    assert info.device_location is None
+    assert info.device_type == "tv"
+    assert info.network_type == "wifi"
+    assert info.network_name == "NetworkSSID"
+    assert info.model_name == "100018254"
+    assert info.model_number == "D803X"
+    assert info.serial_number == "X00755550DCH"
+    assert not info.ethernet_support
+    assert info.ethernet_mac is None
+    assert info.wifi_mac == "d4:ab:cd:2f:6b:55"
+    assert info.supports_private_listening
+    assert not info.headphones_connected
+    assert info.version == "10.0.0"
 
 
 def test_application() -> None:
