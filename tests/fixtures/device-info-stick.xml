@@ -19,10 +19,10 @@
 <can-use-wifi-extender>false</can-use-wifi-extender>
 <network-type>wifi</network-type>
 <network-name>NetworkSSID</network-name>
-<friendly-device-name>My Roku Stick</friendly-device-name>
+<friendly-device-name>Roku Stick - 2L647N055555</friendly-device-name>
 <friendly-model-name>Roku Stick</friendly-model-name>
 <default-device-name>Roku Stick - 2L647N055555</default-device-name>
-<user-device-name/>
+<user-device-name>My Roku Stick</user-device-name>
 <user-device-location/>
 <build-number>09A.00E04209A</build-number>
 <software-version>10.0.0</software-version>
