@@ -162,7 +162,7 @@ async def test_client_error():
     async with ClientSession() as session:
         client = Client("#", session=session)
         with pytest.raises(RokuConnectionError):
-            assert await client._request("client/error")
+            assert await client._request("client/error", method="ABC")
 
 
 @pytest.mark.asyncio
