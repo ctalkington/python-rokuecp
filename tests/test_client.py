@@ -201,7 +201,7 @@ async def test_http_error500(aresponses):
 async def test_resolve_hostname(aresponses) -> None:
     """Test that hostnames are resolved before request."""
     aresponses.add(
-        HOST, "/support/hostname", "GET", aresponses.Response(status=200, text="OK"),
+        MATCH_HOST, "/support/hostname", "GET", aresponses.Response(status=200, text="OK"),
     )
 
     async with ClientSession() as session:
