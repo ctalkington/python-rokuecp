@@ -35,7 +35,7 @@ DEVICE = {
 }
 
 DEVICE_TV = {
-    "info": DEVICE_INFO_TV["device-info"],
+    "info": DEVICE_INFO_7820X["device-info"],
     "apps": APPS_TV["apps"]["app"],
     "app": ACTIVE_APP_TV["active-app"],
     "channels": TV_CHANNELS["tv-channels"]["channel"],
