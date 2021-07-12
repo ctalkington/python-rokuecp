@@ -136,13 +136,14 @@ def test_info_stick() -> None:
     assert info.device_location is None
     assert info.device_type == "stick"
     assert info.network_type == "wifi"
+    assert info.network_name == "NetworkSSID"
     assert info.network_name is None
-    assert info.model_name == "Roku Streaming Stick"
-    assert info.model_number == "3800R"
-    assert info.serial_number == "1GU48T017973"
+    assert info.model_name == "Roku Stick"
+    assert info.model_number == "3500X"
+    assert info.serial_number == "2L647N055555"
     assert not info.ethernet_support
-    assert not info.ethernet_mac
-    assert info.wifi_mac == "b0:a7:37:96:4d:fb"
+    assert info.ethernet_mac is None
+    assert info.wifi_mac == "b0:a7:37:6a:ec:2d"
     assert not info.supports_private_listening
     assert not info.headphones_connected
     assert info.version == "7.5.0"
