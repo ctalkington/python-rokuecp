@@ -25,7 +25,5 @@ def test_resolve_hostname() -> None:
         assert len(mock_gethostbyname.mock_calls) == 1
 
     with pytest.raises(RokuConnectionError):
-        with mock.patch(
-            "rokuecp.helpers.gethostbyname", side_effect=SocketGIAError()
-        ):
+        with mock.patch("rokuecp.helpers.gethostbyname", side_effect=SocketGIAError()):
             resolve_hostname(HOSTNAME)
