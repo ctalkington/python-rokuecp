@@ -173,7 +173,7 @@ def test_info_tv_7820x() -> None:
 
 def test_info_tv_d803x() -> None:
     """Test the Info model with TV model D803X."""
-    info = models.Info.from_dict(DEVICE_INFO_7820X["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO_D803X["device-info"])
 
     assert info
     assert info.name == '42" Onn Roku TV'
