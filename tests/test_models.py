@@ -15,7 +15,7 @@ ACTIVE_APP_TV = xmltodict.parse(load_fixture("active-app-tvinput-dtv.xml"))
 APPS = xmltodict.parse(load_fixture("apps.xml"))
 APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
-DEVICE_INFO_STICK = xmltodict.parse(load_fixture("device-info-stick.xml"))
+DEVICE_INFO_3500X = xmltodict.parse(load_fixture("device-info-3500x.xml"))
 DEVICE_INFO_TV = xmltodict.parse(load_fixture("device-info-tv.xml"))
 MEDIA_PLAYER_CLOSE = xmltodict.parse(load_fixture("media-player-close.xml"))
 MEDIA_PLAYER_PLUTO_LIVE = xmltodict.parse(load_fixture("media-player-pluto-live.xml"))
@@ -126,9 +126,9 @@ def test_info() -> None:
     assert info.version == "7.5.0"
 
 
-def test_info_stick() -> None:
+def test_info_stick_3500x() -> None:
     """Test the Info model with Roku Stick."""
-    info = models.Info.from_dict(DEVICE_INFO_STICK["device-info"])
+    info = models.Info.from_dict(DEVICE_INFO_3500X["device-info"])
 
     assert info
     assert info.name == "My Roku Stick"
