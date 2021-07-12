@@ -150,7 +150,7 @@ def test_info_stick_3500x() -> None:
 
 
 def test_info_tv_7820x() -> None:
-    """Test the Info model with TV."""
+    """Test the Info model with TV model 7820X."""
     info = models.Info.from_dict(DEVICE_INFO_7820X["device-info"])
 
     assert info
