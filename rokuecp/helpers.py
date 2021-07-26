@@ -17,7 +17,7 @@ def is_ip_address(host: str) -> bool:
 
 
 def resolve_hostname(host: str) -> str:
-    """Resolve hostname to IP Address."""
+    """Resolve hostname to IP Address (asynchronously)."""
     try:
         return gethostbyname(host)
     except SocketGIAError as exception:
