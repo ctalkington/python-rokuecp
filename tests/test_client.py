@@ -1,12 +1,13 @@
 """Tests for Roku."""
 import asyncio
-from socket import gaierror as SocketGIAError
 from unittest.mock import patch
 
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Client
 from rokuecp.exceptions import RokuConnectionError, RokuError
+from tests import patch_resolver_loop
+from tests.async_mock import AsyncMock
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
@@ -162,7 +163,7 @@ async def test_client_error():
     async with ClientSession() as session:
         client = Client("#", session=session)
         with pytest.raises(RokuConnectionError), patch(
-            "rokuecp.helpers.gethostbyname", return_value="#"
+            "rokuecp.client.resolve_hostname", new=AsyncMock(return_value="#")
         ):
             assert await client._request("client/error", method="ABC")
 
@@ -210,14 +211,9 @@ async def test_resolve_hostname(aresponses) -> None:
     )
 
     async with ClientSession() as session:
-        client = Client(HOSTNAME, session=session)
-
-        with patch(
-            "rokuecp.helpers.gethostbyname", return_value=HOST
-        ) as mock_gethostbyname:
+        with patch_resolver_loop([HOST]):
+            client = Client(HOSTNAME, session=session)
             assert await client._request("support/hostname")
-
-        assert len(mock_gethostbyname.mock_calls) == 1
 
 
 @pytest.mark.asyncio
@@ -226,9 +222,5 @@ async def test_resolve_hostname_error() -> None:
     async with ClientSession() as session:
         client = Client(HOSTNAME, session=session)
 
-        with pytest.raises(RokuConnectionError), patch(
-            "rokuecp.helpers.gethostbyname", side_effect=SocketGIAError()
-        ) as mock_gethostbyname:
-            await client._request("hostname")
-
-        assert len(mock_gethostbyname.mock_calls) == 1
+        with pytest.raises(RokuConnectionError), patch_resolver_loop():
+            await client._request("support/hostname-error")
