@@ -1,13 +1,12 @@
 """Tests for Roku."""
 import asyncio
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Client
 from rokuecp.exceptions import RokuConnectionError, RokuError
 from tests import patch_resolver_loop
-from unittest.mock import AsyncMock
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
