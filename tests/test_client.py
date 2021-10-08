@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 from rokuecp import Client
 from rokuecp.exceptions import RokuConnectionError, RokuError
 from tests import patch_resolver_loop
-from tests.async_mock import AsyncMock
+from unittest.mock import AsyncMock
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
