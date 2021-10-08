@@ -2,7 +2,7 @@ categories:
   - title: "Breaking Changes"
     labels:
       - "breaking-change"
-  - title: "Features/Enhancements"
+  - title: "Features"
     labels:
       - "new-feature"
       - "enhancement"
