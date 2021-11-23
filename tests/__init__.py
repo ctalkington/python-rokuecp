@@ -31,9 +31,9 @@ def load_fixture(filename):
         return fptr.read()
 
 
-def patch_resolver_loop(hosts: Optional[List[Any]] = None):
+def mock_resolver_loop(hosts: Optional[List[Any]] = None):
     """Mock the threaded resolver."""
     loop = Mock()
     loop.getaddrinfo = fake_addrinfo(hosts)
 
-    return patch("rokuecp.resolver.asyncio.get_running_loop", return_value=loop)
+    return loop
