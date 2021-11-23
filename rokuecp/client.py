@@ -65,7 +65,7 @@ class Client:
             self._close_session = True
 
         try:
-            with async_timeout.timeout(self.request_timeout):
+            async with async_timeout.timeout(self.request_timeout):
                 response = await self._session.request(
                     method, url, data=data, params=params, headers=headers,
                 )
