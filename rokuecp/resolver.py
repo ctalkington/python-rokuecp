@@ -1,5 +1,5 @@
 """DNS Resolver for Roku Client based on aiohttp logic."""
-import asyncio
+from asyncio import get_running_loop
 import socket
 from typing import Any, Dict, List
 
@@ -9,7 +9,7 @@ class ThreadedResolver:
 
     def __init__(self) -> None:
         """Initialize threaded resolver."""
-        self._loop = asyncio.get_running_loop()
+        self._loop = get_running_loop()
 
     def get_loop(self):
         """Return the running loop."""
