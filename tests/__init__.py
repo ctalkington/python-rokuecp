@@ -31,7 +31,7 @@ def load_fixture(filename):
         return fptr.read()
 
 
-def mock_resolver_loop(hosts: Optional[List[Any]] = None):
+def patch_resolver_loop(hosts: Optional[List[Any]] = None):
     """Mock the threaded resolver."""
     loop = Mock()
     loop.getaddrinfo = fake_addrinfo(hosts)
