@@ -36,4 +36,4 @@ def patch_resolver_loop(hosts: Optional[List[Any]] = None):
     loop = Mock()
     loop.getaddrinfo = fake_addrinfo(hosts)
 
-    return patch("rokuecp.resolver.asyncio.get_running_loop", return_value=loop)
+    return patch("rokuecp.resolver.get_running_loop", return_value=loop)

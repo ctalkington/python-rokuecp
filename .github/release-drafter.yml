@@ -1,21 +1,48 @@
 categories:
   - title: "Breaking Changes"
     labels:
-      - "breaking change"
+      - "breaking-change"
   - title: "Features"
     labels:
+      - "new-feature"
       - "enhancement"
+      - "refactor"
+      - "performance"
   - title: "Bug Fixes"
     labels:
       - "bug"
+      - "bugfix"
   - title: "Maintenance"
     labels:
-      - "ci/cd"
+      - "ci"
       - "dependencies"
       - "maintenance"
       - "tooling"
+  - title: "Documentation"
+    labels:
+      - "documentation"
 change-template: "- $TITLE (#$NUMBER)"
 name-template: "$NEXT_PATCH_VERSION"
 tag-template: "$NEXT_PATCH_VERSION"
+version-resolver:
+  major:
+    labels:
+      - "major"
+      - "breaking-change"
+  minor:
+    labels:
+      - "minor"
+      - "new-feature"
+  patch:
+    labels:
+      - "bugfix"
+      - "chore"
+      - "ci"
+      - "dependencies"
+      - "documentation"
+      - "enhancement"
+      - "performance"
+      - "refactor"
+  default: patch
 template: |
   $CHANGES
