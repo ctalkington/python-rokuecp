@@ -194,7 +194,7 @@ def test_info_tv_d803x() -> None:
     assert not info.ethernet_support
     assert info.ethernet_mac is None
     assert info.wifi_mac == "d4:ab:cd:2f:6b:55"
-    assert not info.supports_airplay
+    assert info.supports_airplay
     assert not info.supports_find_remote
     assert info.supports_private_listening
     assert not info.headphones_connected
