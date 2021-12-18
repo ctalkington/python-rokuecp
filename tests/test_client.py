@@ -163,7 +163,7 @@ async def test_client_error():
     async with ClientSession() as session:
         client = Roku("#", session=session)
         with pytest.raises(RokuConnectionError), patch(
-            "rokuecp.client.resolve_hostname", new=AsyncMock(return_value="#")
+            "rokuecp.rokuecp.resolve_hostname", new=AsyncMock(return_value="#")
         ):
             assert await client._request("client/error", method="ABC")
 
