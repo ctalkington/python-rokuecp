@@ -19,6 +19,7 @@ from .exceptions import RokuConnectionError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
+
 @dataclass
 class Roku:
     """Main class for Python API."""
@@ -27,7 +28,7 @@ class Roku:
     base_path: str = "/"
     port: int = 8060
     request_timeout: int = 5
-    session: ClientSession = None 
+    session: ClientSession = None
     user_agent: Optional[str] = None
 
     _close_session: bool = False
@@ -38,7 +39,7 @@ class Roku:
 
     def __post_init__(self):
         """Initialize connection parameters."""
-        if not is_ip_address(host):
+        if not is_ip_address(self.host):
             self._dns_lookup = True
 
         if self.user_agent is None:
