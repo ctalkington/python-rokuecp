@@ -38,7 +38,7 @@ class Roku(Client):
     def __post_init__(self):
         """Initialize connection parameters."""
         if not is_ip_address(host):
-            self._dns_lookup = False
+            self._dns_lookup = True
 
         if self.user_agent is None:
             self.user_agent = f"PythonRokuECP/{__version__}"
