@@ -34,6 +34,7 @@ class Roku:
     _dns_lookup: bool = False
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
     _device: Optional[Device] = None
+    _scheme: str = "http"
 
     def __post_init__(self):
         """Initialize connection parameters."""
@@ -61,7 +62,7 @@ class Roku:
                 self._dns_cache["ip_address"] = host
 
         url = URL.build(
-            scheme=self.scheme, host=host, port=self.port, path=self.base_path
+            scheme=self._scheme, host=host, port=self.port, path=self.base_path
         ).join(URL(uri))
 
         headers = {
@@ -70,12 +71,12 @@ class Roku:
         }
 
         if self._session is None:
-            self._session = ClientSession()
+            self.session = ClientSession()
             self._close_session = True
 
         try:
             async with async_timeout.timeout(self.request_timeout):
-                response = await self._session.request(
+                response = await self.session.request(
                     method, url, data=data, params=params, headers=headers,
                 )
         except asyncio.TimeoutError as exception:
@@ -122,7 +123,7 @@ class Roku:
     def app_icon_url(self, app_id: str) -> str:
         """Get the URL to the application icon."""
         icon_url = URL.build(
-            scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
+            scheme=self._scheme, host=self.host, port=self.port, path=self.base_path
         ).join(URL(f"query/icon/{app_id}"))
 
         return str(icon_url)
