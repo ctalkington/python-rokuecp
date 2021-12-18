@@ -1,11 +1,13 @@
 """Asynchronous Python client for Roku."""
 import asyncio
+from contextlib import suppress
 from socket import gaierror as SocketGIAError
 from typing import Any, Mapping, Optional
 from xml.parsers.expat import ExpatError
 
 import aiohttp
 import async_timeout
+from cachetools import TTLCache
 import xmltodict
 from yarl import URL
 
@@ -16,6 +18,8 @@ from .helpers import is_ip_address, resolve_hostname
 
 class Client:
     """Main class for handling connections with Roku."""
+
+    _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
 
     def __init__(
         self,
@@ -48,11 +52,16 @@ class Client:
         params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a receiver."""
-        if not is_ip_address(self.host):
-            self.host = await resolve_hostname(self.host)
+        host = self.host
+        if not is_ip_address(host):
+            try:
+                host = self._dns_cache["ip_address"]
+            catch KeyError:
+                host = self.resolve_hostname(host)
+                self._dns_cache = {"ip_address": host};
 
         url = URL.build(
-            scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
+            scheme=self.scheme, host=host, port=self.port, path=self.base_path
         ).join(URL(uri))
 
         headers = {
