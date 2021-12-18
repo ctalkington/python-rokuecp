@@ -57,7 +57,7 @@ class Client:
     ) -> Any:
         """Handle a request to a receiver."""
         host = self.host
-        if self.dns_lookup:
+        if self._dns_lookup:
             try:
                 host = self._dns_cache["ip_address"]
             except KeyError:
