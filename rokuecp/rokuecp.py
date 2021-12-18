@@ -28,12 +28,12 @@ class Roku(Client):
     port: int = 8060
     request_timeout: int = 5
     session: ClientSession = None 
-    user_agent: str | None = None,
+    user_agent: Optional[str] = None,
 
     _close_session: bool = False
     _dns_lookup: bool = False
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
-    _device: Device | None = None
+    _device: Optional[Device]= None
 
     def __post_init__(self):
         """Initialize connection parameters."""
