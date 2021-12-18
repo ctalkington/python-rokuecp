@@ -70,7 +70,7 @@ class Roku:
             "Accept": "application/xml, text/xml, text/plain, */*",
         }
 
-        if self._session is None:
+        if self.session is None:
             self.session = ClientSession()
             self._close_session = True
 
@@ -298,8 +298,8 @@ class Roku:
 
     async def close_session(self) -> None:
         """Close open client session."""
-        if self._session and self._close_session:
-            await self._session.close()
+        if self.session and self._close_session:
+            await self.session.close()
 
     async def __aenter__(self) -> "Roku":
         """Async enter."""
