@@ -56,7 +56,7 @@ class Client:
         if not is_ip_address(host):
             try:
                 host = self._dns_cache["ip_address"]
-            catch KeyError:
+            except KeyError:
                 host = self.resolve_hostname(host)
                 self._dns_cache = {"ip_address": host};
 
