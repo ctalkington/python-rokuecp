@@ -22,7 +22,7 @@ from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
 @dataclass
-class Roku():
+class Roku:
     """Main class for Python API."""
 
     host: str
