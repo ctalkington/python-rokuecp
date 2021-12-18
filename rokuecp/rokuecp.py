@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import OrderedDict
+from dataclasses import dataclass
 from socket import gaierror as SocketGIAError
 from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
@@ -15,14 +16,13 @@ from cachetools import TTLCache
 from yarl import URL
 
 from .__version__ import __version__
-from .client import Client
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
-
-class Roku(Client):
+@dataclass
+class Roku():
     """Main class for Python API."""
 
     host: str
