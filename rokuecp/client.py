@@ -20,7 +20,7 @@ class Client:
 
     _close_session: bool
     _dns_lookup: bool
-    _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
+    _dns_cache: TTLCache
     _session: aiohttp.client.ClientSession
 
     def __init__(
@@ -35,6 +35,7 @@ class Client:
         """Initialize connection with device."""
         self._session = session
         self._close_session = False
+        self._dns_cache = TTLCache(maxsize=16, ttl=7200)
         self._dns_lookup = is_ip_address(host)
 
         self.base_path = base_path
