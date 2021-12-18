@@ -6,8 +6,8 @@ from xml.parsers.expat import ExpatError
 
 import aiohttp
 import async_timeout
-from cachetools import TTLCache
 import xmltodict
+from cachetools import TTLCache
 from yarl import URL
 
 from .__version__ import __version__
