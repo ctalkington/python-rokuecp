@@ -1,6 +1,5 @@
 """Asynchronous Python client for Roku."""
 import asyncio
-from contextlib import suppress
 from socket import gaierror as SocketGIAError
 from typing import Any, Mapping, Optional
 from xml.parsers.expat import ExpatError
@@ -19,7 +18,10 @@ from .helpers import is_ip_address, resolve_hostname
 class Client:
     """Main class for handling connections with Roku."""
 
+    _close_session: bool
+    _dns_lookup: bool
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
+    _session: aiohttp.client.ClientSession
 
     def __init__(
         self,
@@ -33,6 +35,7 @@ class Client:
         """Initialize connection with device."""
         self._session = session
         self._close_session = False
+        self._dns_lookup = is_ip_address(host)
 
         self.base_path = base_path
         self.host = host
@@ -53,7 +56,7 @@ class Client:
     ) -> Any:
         """Handle a request to a receiver."""
         host = self.host
-        if not is_ip_address(host):
+        if dns_lookup:
             try:
                 host = self._dns_cache["ip_address"]
             except KeyError:
