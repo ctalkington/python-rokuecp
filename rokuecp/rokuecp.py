@@ -1,6 +1,4 @@
 """Asynchronous Python client for Roku."""
-from __future__ import annotations
-
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -30,12 +28,12 @@ class Roku:
     port: int = 8060
     request_timeout: int = 5
     session: ClientSession = None 
-    user_agent: Optional[str] = None,
+    user_agent = None,
 
     _close_session: bool = False
     _dns_lookup: bool = False
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
-    _device: Optional[Device]= None
+    _device = None
 
     def __post_init__(self):
         """Initialize connection parameters."""
