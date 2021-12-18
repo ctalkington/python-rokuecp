@@ -7,6 +7,7 @@ from xml.parsers.expat import ExpatError
 import aiohttp
 import async_timeout
 import xmltodict
+from cachetools import TTLCache
 from yarl import URL
 
 from .__version__ import __version__
@@ -16,6 +17,11 @@ from .helpers import is_ip_address, resolve_hostname
 
 class Client:
     """Main class for handling connections with Roku."""
+
+    _close_session: bool
+    _dns_lookup: bool
+    _dns_cache: TTLCache
+    _session: aiohttp.client.ClientSession
 
     def __init__(
         self,
@@ -29,6 +35,8 @@ class Client:
         """Initialize connection with device."""
         self._session = session
         self._close_session = False
+        self._dns_cache = TTLCache(maxsize=16, ttl=7200)
+        self._dns_lookup = is_ip_address(host) is False
 
         self.base_path = base_path
         self.host = host
@@ -48,11 +56,17 @@ class Client:
         params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a receiver."""
-        if not is_ip_address(self.host):
-            self.host = await resolve_hostname(self.host)
+        host = self.host
+
+        if self._dns_lookup:
+            try:
+                host = self._dns_cache["ip_address"]
+            except KeyError:
+                host = await resolve_hostname(self.host)
+                self._dns_cache["ip_address"] = host
 
         url = URL.build(
-            scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
+            scheme=self.scheme, host=host, port=self.port, path=self.base_path
         ).join(URL(uri))
 
         headers = {
