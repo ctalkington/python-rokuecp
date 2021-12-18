@@ -36,7 +36,7 @@ class Client:
         self._session = session
         self._close_session = False
         self._dns_cache = TTLCache(maxsize=16, ttl=7200)
-        self._dns_lookup = is_ip_address(host)
+        self._dns_lookup = is_ip_address(host) === False
 
         self.base_path = base_path
         self.host = host
@@ -57,6 +57,7 @@ class Client:
     ) -> Any:
         """Handle a request to a receiver."""
         host = self.host
+
         if self._dns_lookup:
             try:
                 host = self._dns_cache["ip_address"]
