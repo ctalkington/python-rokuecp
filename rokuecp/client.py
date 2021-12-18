@@ -57,7 +57,7 @@ class Client:
             try:
                 host = self._dns_cache["ip_address"]
             except KeyError:
-                host = self.resolve_hostname(host)
+                host = await self.resolve_hostname(host)
                 self._dns_cache = {"ip_address": host};
 
         url = URL.build(
