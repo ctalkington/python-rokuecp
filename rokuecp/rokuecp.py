@@ -1,41 +1,120 @@
 """Asynchronous Python client for Roku."""
 import asyncio
 from collections import OrderedDict
-from typing import Any, List, Optional
+from dataclasses import dataclass
+from socket import gaierror as SocketGIAError
+from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
+from xml.parsers.expat import ExpatError
 
-from aiohttp.client import ClientSession
+import async_timeout
+import xmltodict
+from aiohttp.client import ClientError, ClientSession
+from cachetools import TTLCache
 from yarl import URL
 
-from .client import Client
+from .__version__ import __version__
 from .const import VALID_REMOTE_KEYS
-from .exceptions import RokuError
+from .exceptions import RokuConnectionError, RokuError
+from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
 
-class Roku(Client):
+@dataclass
+class Roku:
     """Main class for Python API."""
 
-    _device: Optional[Device] = None
+    host: str
+    base_path: str = "/"
+    port: int = 8060
+    request_timeout: int = 5
+    session: ClientSession = None
+    user_agent: Optional[str] = None
 
-    def __init__(
+    _close_session: bool = False
+    _dns_lookup: bool = False
+    _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
+    _device: Optional[Device] = None
+    _scheme: str = "http"
+
+    def __post_init__(self):
+        """Initialize connection parameters."""
+        if not is_ip_address(self.host):
+            self._dns_lookup = True
+
+        if self.user_agent is None:
+            self.user_agent = f"PythonRokuECP/{__version__}"
+
+    async def _request(
         self,
-        host: str,
-        base_path: str = "/",
-        port: int = 8060,
-        request_timeout: int = 5,
-        session: ClientSession = None,
-        user_agent: str = None,
-    ) -> None:
-        """Initialize connection with receiver."""
-        super().__init__(
-            host=host,
-            base_path=base_path,
-            port=port,
-            request_timeout=request_timeout,
-            session=session,
-            user_agent=user_agent,
-        )
+        uri: str = "",
+        method: str = "GET",
+        data: Optional[Any] = None,
+        params: Optional[Mapping[str, str]] = None,
+    ) -> Any:
+        """Handle a request to a receiver."""
+        host = self.host
+
+        if self._dns_lookup:
+            try:
+                host = self._dns_cache["ip_address"]
+            except KeyError:
+                host = await resolve_hostname(self.host)
+                self._dns_cache["ip_address"] = host
+
+        url = URL.build(
+            scheme=self._scheme, host=host, port=self.port, path=self.base_path
+        ).join(URL(uri))
+
+        headers = {
+            "User-Agent": self.user_agent,
+            "Accept": "application/xml, text/xml, text/plain, */*",
+        }
+
+        if self.session is None:
+            self.session = ClientSession()
+            self._close_session = True
+
+        try:
+            async with async_timeout.timeout(self.request_timeout):
+                response = await self.session.request(
+                    method, url, data=data, params=params, headers=headers,
+                )
+        except asyncio.TimeoutError as exception:
+            raise RokuConnectionError(
+                "Timeout occurred while connecting to device"
+            ) from exception
+        except (ClientError, SocketGIAError) as exception:
+            raise RokuConnectionError(
+                "Error occurred while communicating with device"
+            ) from exception
+
+        content_type = response.headers.get("Content-Type", "")
+
+        if (response.status // 100) in [4, 5]:
+            content = await response.read()
+            response.close()
+
+            raise RokuError(
+                f"HTTP {response.status}",
+                {
+                    "content-type": content_type,
+                    "message": content.decode("utf8"),
+                    "status-code": response.status,
+                },
+            )
+
+        if "application/xml" in content_type or "text/xml" in content_type:
+            content = await response.text()
+
+            try:
+                data = xmltodict.parse(content)
+            except (ExpatError, IndexError) as error:
+                raise RokuError from error
+
+            return data
+
+        return await response.text()
 
     @property
     def device(self) -> Optional[Device]:
@@ -45,7 +124,7 @@ class Roku(Client):
     def app_icon_url(self, app_id: str) -> str:
         """Get the URL to the application icon."""
         icon_url = URL.build(
-            scheme=self.scheme, host=self.host, port=self.port, path=self.base_path
+            scheme=self._scheme, host=self.host, port=self.port, path=self.base_path
         ).join(URL(f"query/icon/{app_id}"))
 
         return str(icon_url)
@@ -217,6 +296,11 @@ class Roku(Client):
             return [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
+
+    async def close_session(self) -> None:
+        """Close open client session."""
+        if self.session and self._close_session:
+            await self.session.close()
 
     async def __aenter__(self) -> "Roku":
         """Async enter."""
