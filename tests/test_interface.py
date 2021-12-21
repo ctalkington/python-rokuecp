@@ -3,6 +3,7 @@ from typing import List
 
 import pytest
 from aiohttp import ClientSession
+
 from rokuecp import Roku, RokuError, models
 
 from . import load_fixture
