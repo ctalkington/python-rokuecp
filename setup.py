@@ -42,7 +42,10 @@ setup(
     description="Asynchronous Python client for Roku (ECP).",
     include_package_data=True,
     install_requires=list(
-        val.strip() for val in open("requirements.txt", encoding="utf-8")  # pylint: disable=consider-using-with
+        val.strip()
+        for val in open(  # pylint: disable=consider-using-with
+            "requirements.txt", encoding="utf-8"
+        )
     ),
     keywords=["roku", "api", "async", "client", "ecp"],
     license="MIT license",
