@@ -18,7 +18,7 @@ def read(*parts):
     """Read file."""
     filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), *parts)
     sys.stdout.write(filename)
-    with open(filename, encoding="utf-8", mode="rt") as fp:
+    with open(filename, encoding="utf-8") as fp:
         return fp.read()
 
 
