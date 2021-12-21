@@ -3,6 +3,7 @@ import asyncio
 
 import pytest
 from aiohttp import ClientSession
+
 from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
 from tests import patch_resolver_loop
