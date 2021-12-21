@@ -22,7 +22,7 @@ def read(*parts):
         return fp.read()
 
 
-with open("README.md") as readme_file:
+with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
 setup(
@@ -41,7 +41,7 @@ setup(
     ],
     description="Asynchronous Python client for Roku (ECP).",
     include_package_data=True,
-    install_requires=list(val.strip() for val in open("requirements.txt")),
+    install_requires=list(val.strip() for val in open("requirements.txt", encoding="utf-8")),
     keywords=["roku", "api", "async", "client", "ecp"],
     license="MIT license",
     long_description_content_type="text/markdown",
