@@ -4,7 +4,7 @@ repos:
     rev: 21.12b0
     hooks:
       - id: black
-        args: [--safe, --quiet, --target-version, py38]
+        args: [--safe, --quiet, --target-version, py37]
   - repo: https://github.com/asottile/blacken-docs
     rev: v1.12.0
     hooks:
