@@ -81,7 +81,10 @@ async def test_xml_request_parse_error(aresponses):
 async def test_text_request(aresponses):
     """Test non XML response is handled correctly."""
     aresponses.add(
-        MATCH_HOST, "/response/text", "GET", aresponses.Response(status=200, text="OK"),
+        MATCH_HOST,
+        "/response/text",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
     )
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
@@ -114,7 +117,10 @@ async def test_internal_session(aresponses):
 async def test_post_request(aresponses):
     """Test POST requests are handled correctly."""
     aresponses.add(
-        MATCH_HOST, "/method/post", "POST", aresponses.Response(status=200, text="OK")
+        MATCH_HOST,
+        "/method/post",
+        "POST",
+        aresponses.Response(status=200, text="OK"),
     )
 
     async with ClientSession() as session:
@@ -147,7 +153,12 @@ async def test_timeout(aresponses):
         await asyncio.sleep(2)
         return aresponses.Response(body="Timeout!")
 
-    aresponses.add(MATCH_HOST, "/timeout", "GET", response_handler)
+    aresponses.add(
+       MATCH_HOST,
+       "/timeout",
+       "GET",
+       response_handler,
+    )
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session, request_timeout=1)
