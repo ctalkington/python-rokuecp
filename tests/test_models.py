@@ -3,9 +3,9 @@ from datetime import datetime
 from typing import List
 
 import pytest
-import rokuecp.models as models
 import xmltodict
-from rokuecp import RokuError
+
+from rokuecp import RokuError, models
 
 from . import load_fixture
 
