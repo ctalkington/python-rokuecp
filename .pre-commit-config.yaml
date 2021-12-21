@@ -1,10 +1,5 @@
 ---
 repos:
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v2.29.0
-    hooks:
-      - id: pyupgrade
-        args: [--py38-plus]
   - repo: https://github.com/ambv/black
     rev: 19.10b0
     hooks:
@@ -60,7 +55,7 @@ repos:
       - id: yamllint
         exclude: ^\.github/workflows/*\.yml$
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.1.0
+    rev: v2.29.0
     hooks:
       - id: pyupgrade
-        args: [--py36-plus]
+        args: [--py38-plus]
