@@ -6,7 +6,7 @@ repos:
       - id: black
         args: [--safe, --quiet, --target-version, py38]
   - repo: https://github.com/asottile/blacken-docs
-    rev: v1.8.0
+    rev: v1.12.0
     hooks:
       - id: blacken-docs
         additional_dependencies: [black==21.12b0]
@@ -29,7 +29,7 @@ repos:
       - id: detect-private-key
       - id: forbid-new-submodules
   - repo: https://github.com/pre-commit/pre-commit
-    rev: v2.7.0
+    rev: v2.16.0
     hooks:
       - id: validate_manifest
   - repo: https://github.com/PyCQA/isort
@@ -50,7 +50,7 @@ repos:
       - id: flake8
         additional_dependencies: ["flake8-docstrings"]
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.24.2
+    rev: v1.26.3
     hooks:
       - id: yamllint
         exclude: ^\.github/workflows/*\.yml$
