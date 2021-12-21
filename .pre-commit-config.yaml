@@ -37,15 +37,15 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/pycqa/pylint
-    rev: pylint-2.6.0
+    rev: pylint-2.12.2
     hooks:
       - id: pylint
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.782
+    rev: v0.920
     hooks:
       - id: mypy
   - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.8.3
+    rev: 4.0.1
     hooks:
       - id: flake8
         additional_dependencies: ["flake8-docstrings"]
