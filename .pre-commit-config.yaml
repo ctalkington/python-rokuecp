@@ -44,6 +44,7 @@ repos:
     rev: v0.920
     hooks:
       - id: mypy
+        additional_dependencies: ["types-cachetools"]
   - repo: https://gitlab.com/pycqa/flake8
     rev: 4.0.1
     hooks:
