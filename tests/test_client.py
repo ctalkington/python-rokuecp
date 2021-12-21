@@ -1,10 +1,9 @@
 """Tests for Roku."""
 import asyncio
-from unittest.mock import AsyncMock, patch
 
 import pytest
 from aiohttp import ClientSession
-from rokuecp import Client
+from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
 from tests import patch_resolver_loop
 
@@ -31,7 +30,7 @@ async def test_xml_request(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         response = await client._request("response/xml")
 
         assert isinstance(response, dict)
@@ -53,7 +52,7 @@ async def test_text_xml_request(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         response = await client._request("response/text-xml")
 
         assert isinstance(response, dict)
@@ -73,7 +72,7 @@ async def test_xml_request_parse_error(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._request("response/xml-parse-error")
 
@@ -85,7 +84,7 @@ async def test_text_request(aresponses):
         MATCH_HOST, "/response/text", "GET", aresponses.Response(status=200, text="OK"),
     )
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         response = await client._request("response/text")
         assert response == "OK"
 
@@ -104,7 +103,7 @@ async def test_internal_session(aresponses):
         ),
     )
 
-    async with Client(HOST) as client:
+    async with Roku(HOST) as client:
         response = await client._request("response/xml")
 
         assert isinstance(response, dict)
@@ -119,7 +118,7 @@ async def test_post_request(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         response = await client._request("method/post", method="POST")
         assert response == "OK"
 
@@ -135,7 +134,7 @@ async def test_request_port(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(host=HOST, port=NON_STANDARD_PORT, session=session)
+        client = Roku(host=HOST, port=NON_STANDARD_PORT, session=session)
         response = await client._request("support/port")
         assert response == "OK"
 
@@ -151,7 +150,7 @@ async def test_timeout(aresponses):
     aresponses.add(MATCH_HOST, "/timeout", "GET", response_handler)
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session, request_timeout=1)
+        client = Roku(HOST, session=session, request_timeout=1)
         with pytest.raises(RokuConnectionError):
             assert await client._request("timeout")
 
@@ -160,10 +159,8 @@ async def test_timeout(aresponses):
 async def test_client_error():
     """Test HTTP client error."""
     async with ClientSession() as session:
-        client = Client("#", session=session)
-        with pytest.raises(RokuConnectionError), patch(
-            "rokuecp.client.resolve_hostname", new=AsyncMock(return_value="#")
-        ):
+        client = Roku("#", session=session)
+        with pytest.raises(RokuConnectionError), patch_resolver_loop(["#"]):
             assert await client._request("client/error", method="ABC")
 
 
@@ -178,7 +175,7 @@ async def test_http_error404(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._request("http/404")
 
@@ -194,7 +191,7 @@ async def test_http_error500(aresponses):
     )
 
     async with ClientSession() as session:
-        client = Client(HOST, session=session)
+        client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._request("http/500")
 
@@ -211,7 +208,7 @@ async def test_resolve_hostname(aresponses) -> None:
 
     async with ClientSession() as session:
         with patch_resolver_loop([HOST]):
-            client = Client(HOSTNAME, session=session)
+            client = Roku(HOSTNAME, session=session)
             assert await client._request("support/hostname")
 
 
@@ -219,7 +216,7 @@ async def test_resolve_hostname(aresponses) -> None:
 async def test_resolve_hostname_error() -> None:
     """Test that hostname resolution errors are handled."""
     async with ClientSession() as session:
-        client = Client(HOSTNAME, session=session)
+        client = Roku(HOSTNAME, session=session)
 
         with pytest.raises(RokuConnectionError), patch_resolver_loop():
             await client._request("support/hostname-error")
