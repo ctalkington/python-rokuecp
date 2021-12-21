@@ -67,7 +67,9 @@ async def test_xml_request_parse_error(aresponses):
         "/response/xml-parse-error",
         "GET",
         aresponses.Response(
-            status=200, headers={"Content-Type": "application/xml"}, text="<!status>>",
+            status=200,
+            headers={"Content-Type": "application/xml"},
+            text="<!status>>",
         ),
     )
 
@@ -154,10 +156,10 @@ async def test_timeout(aresponses):
         return aresponses.Response(body="Timeout!")
 
     aresponses.add(
-       MATCH_HOST,
-       "/timeout",
-       "GET",
-       response_handler,
+        MATCH_HOST,
+        "/timeout",
+        "GET",
+        response_handler,
     )
 
     async with ClientSession() as session:
