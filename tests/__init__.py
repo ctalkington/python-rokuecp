@@ -2,7 +2,11 @@
 import os
 import socket
 from typing import Any, Awaitable, Callable, List, Optional
-from unittest.mock import AsyncMock, Mock, patch
+from unittest.mock import Mock, patch
+
+import pytest
+
+from .async_test import AsyncMock
 
 
 def fake_addrinfo(
