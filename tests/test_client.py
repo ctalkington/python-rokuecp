@@ -224,5 +224,5 @@ async def test_resolve_hostname_error(resolver) -> None:
     async with ClientSession() as session:
         client = Roku(HOSTNAME, session=session)
 
-        # with pytest.raises(RokuConnectionError):
-        await client._request("support/hostname-error")
+        with pytest.raises(RokuConnectionError):
+            await client._request("support/hostname-error")
