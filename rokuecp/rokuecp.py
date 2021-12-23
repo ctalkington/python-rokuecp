@@ -85,6 +85,7 @@ class Roku:
                 "Timeout occurred while connecting to device"
             ) from exception
         except (ClientError, SocketGIAError) as exception:
+            print exception
             raise RokuConnectionError(
                 "Error occurred while communicating with device"
             ) from exception
