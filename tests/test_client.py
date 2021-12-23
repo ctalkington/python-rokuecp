@@ -3,10 +3,12 @@ import asyncio
 from socket import gaierror as SocketGIAError
 
 import pytest
-from aiohttp import ClientSession
+from aiohttp import ClientError, ClientSession
 from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
 from tests import fake_addrinfo_results
+
+from .async_mock import AsyncMock
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
@@ -162,9 +164,11 @@ async def test_client_error(resolver):
     resolver.return_value = fake_addrinfo_results(["#"])
 
     async with ClientSession() as session:
-        client = Roku("#", session=session)
-        # with pytest.raises(RokuConnectionError):
-        assert await client._request("client/error", method="ABC")
+        session.request = AsyncMock(side_effect=ClientError)
+
+        client = Roku(HOST, session=session)
+        with pytest.raises(RokuConnectionError):
+            assert await client._request("client/error", method="ABC")
 
 
 @pytest.mark.asyncio
