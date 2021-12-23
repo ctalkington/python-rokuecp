@@ -5,7 +5,7 @@ import pytest
 from aiohttp import ClientSession
 from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
-from tests import patch_resolver_loop
+from tests import fake_addrinfo_results, patch_resolver_loop
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
@@ -158,7 +158,7 @@ async def test_timeout(aresponses):
 @pytest.mark.asyncio
 async def test_client_error(resolver):
     """Test HTTP client error."""
-    resolver.return_value = ["#"]
+    resolver.return_value = fake_addrinfo_results(["#"])
 
     async with ClientSession() as session:
         client = Roku("#", session=session)
