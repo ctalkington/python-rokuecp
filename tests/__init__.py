@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from .async_test import AsyncMock
+from .async_mock import AsyncMock
 
 
 def fake_addrinfo(
