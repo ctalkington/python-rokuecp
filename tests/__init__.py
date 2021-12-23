@@ -4,10 +4,6 @@ import socket
 from typing import Any, Awaitable, Callable, List, Optional
 from unittest.mock import Mock, patch
 
-import pytest
-
-from .async_mock import AsyncMock
-
 
 def fake_addrinfo(
     hosts: Optional[List[Any]] = None, family: int = socket.AF_INET
@@ -41,14 +37,3 @@ def patch_resolver_loop(hosts: Optional[List[Any]] = None):
     loop.getaddrinfo = fake_addrinfo(hosts)
 
     return patch("rokuecp.resolver.get_running_loop", return_value=loop)
-
-
-@pytest.fixture(name="resolver")
-def resolver_fixture():
-    """Mock the threaded resolver."""
-    resolver = AsyncMock(return_value=[])
-    loop = Mock()
-    loop.getaddrinfo = resolver
-
-    with patch("rokuecp.resolver.get_running_loop", return_value=loop):
-        yield resolver
