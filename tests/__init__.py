@@ -24,9 +24,7 @@ def fake_addrinfo(
     return fake
 
 
-def fake_addrinfo_results(
-    hosts: List[Any], family: int = socket.AF_INET
-) -> List[Any]:
+def fake_addrinfo_results(hosts: List[Any], family: int = socket.AF_INET) -> List[Any]:
     """Resolve hostname for mocked testing."""
     return list([(family, None, None, None, [h, 0]) for h in hosts])
 
