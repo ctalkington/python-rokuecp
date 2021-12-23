@@ -156,13 +156,14 @@ async def test_timeout(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_client_error():
+async def test_client_error(resolver):
     """Test HTTP client error."""
+    resolver.return_value = ["#"]
+
     async with ClientSession() as session:
         client = Roku("#", session=session)
-        # pytest.raises(RokuConnectionError)
-        with patch_resolver_loop(["#"]):
-            assert await client._request("client/error", method="ABC")
+        # with pytest.raises(RokuConnectionError)
+        assert await client._request("client/error", method="ABC")
 
 
 @pytest.mark.asyncio
