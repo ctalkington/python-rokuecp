@@ -159,10 +159,8 @@ async def test_timeout(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_client_error(resolver):
+async def test_client_error():
     """Test HTTP client error."""
-    resolver.return_value = fake_addrinfo_results(["#"])
-
     async with ClientSession() as session:
         session.request = AsyncMock(side_effect=ClientError)
 
