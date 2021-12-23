@@ -1,11 +1,12 @@
 """Tests for Roku."""
 import asyncio
+from socket import gaierror as SocketGIAError
 
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
-from tests import fake_addrinfo_results, patch_resolver_loop
+from tests import fake_addrinfo_results
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.86"
@@ -162,8 +163,8 @@ async def test_client_error(resolver):
 
     async with ClientSession() as session:
         client = Roku("#", session=session)
-        # with pytest.raises(RokuConnectionError)
-        assert await client._request("client/error", method="ABC")
+        with pytest.raises(RokuConnectionError)
+            assert await client._request("client/error", method="ABC")
 
 
 @pytest.mark.asyncio
@@ -199,8 +200,10 @@ async def test_http_error500(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname(aresponses) -> None:
+async def test_resolve_hostname(aresponses, resolver) -> None:
     """Test that hostnames are resolved before request."""
+    resolver.return_value = fake_addrinfo_results([HOST])
+
     aresponses.add(
         MATCH_HOST,
         "/support/hostname",
@@ -209,16 +212,17 @@ async def test_resolve_hostname(aresponses) -> None:
     )
 
     async with ClientSession() as session:
-        with patch_resolver_loop([HOST]):
-            client = Roku(HOSTNAME, session=session)
-            assert await client._request("support/hostname")
+        client = Roku(HOSTNAME, session=session)
+        assert await client._request("support/hostname")
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname_error() -> None:
+async def test_resolve_hostname_error(resolver) -> None:
     """Test that hostname resolution errors are handled."""
+    resolver.side_effect = SocketGIAError
+
     async with ClientSession() as session:
         client = Roku(HOSTNAME, session=session)
 
-        with pytest.raises(RokuConnectionError), patch_resolver_loop():
+        with pytest.raises(RokuConnectionError):
             await client._request("support/hostname-error")
