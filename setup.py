@@ -18,11 +18,11 @@ def read(*parts):
     """Read file."""
     filename = os.path.join(os.path.abspath(os.path.dirname(__file__)), *parts)
     sys.stdout.write(filename)
-    with open(filename, encoding="utf-8", mode="rt") as fp:
+    with open(filename, encoding="utf-8") as fp:
         return fp.read()
 
 
-with open("README.md") as readme_file:
+with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
 setup(
@@ -34,7 +34,6 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3",
@@ -42,7 +41,12 @@ setup(
     ],
     description="Asynchronous Python client for Roku (ECP).",
     include_package_data=True,
-    install_requires=list(val.strip() for val in open("requirements.txt")),
+    install_requires=list(
+        val.strip()
+        for val in open(  # pylint: disable=consider-using-with
+            "requirements.txt", encoding="utf-8"
+        )
+    ),
     keywords=["roku", "api", "async", "client", "ecp"],
     license="MIT license",
     long_description_content_type="text/markdown",

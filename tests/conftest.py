@@ -1,9 +1,7 @@
 """Setup pytest."""
-from unittest.mock import Mock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
-
-from .async_mock import AsyncMock
 
 
 @pytest.fixture(name="resolver")

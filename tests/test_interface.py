@@ -2,9 +2,9 @@
 from typing import List
 
 import pytest
-import rokuecp.models as models
 from aiohttp import ClientSession
-from rokuecp import Roku, RokuError
+
+from rokuecp import Roku, RokuError, models
 
 from . import load_fixture
 
@@ -94,15 +94,24 @@ async def test_launch(aresponses):
 async def test_literal(aresponses):
     """Test literal is handled correctly."""
     aresponses.add(
-        MATCH_HOST, "/keypress/Lit_t", "POST", aresponses.Response(status=200),
+        MATCH_HOST,
+        "/keypress/Lit_t",
+        "POST",
+        aresponses.Response(status=200),
     )
 
     aresponses.add(
-        MATCH_HOST, "/keypress/Lit_h", "POST", aresponses.Response(status=200),
+        MATCH_HOST,
+        "/keypress/Lit_h",
+        "POST",
+        aresponses.Response(status=200),
     )
 
     aresponses.add(
-        MATCH_HOST, "/keypress/Lit_e", "POST", aresponses.Response(status=200),
+        MATCH_HOST,
+        "/keypress/Lit_e",
+        "POST",
+        aresponses.Response(status=200),
     )
 
     async with ClientSession() as session:
@@ -114,7 +123,10 @@ async def test_literal(aresponses):
 async def test_remote(aresponses):
     """Test remote is handled correctly."""
     aresponses.add(
-        MATCH_HOST, "/keypress/Home", "POST", aresponses.Response(status=200),
+        MATCH_HOST,
+        "/keypress/Home",
+        "POST",
+        aresponses.Response(status=200),
     )
 
     async with ClientSession() as session:
@@ -135,7 +147,10 @@ async def test_remote_invalid_key():
 async def test_remote_search(aresponses):
     """Test remote search keypress is handled correctly."""
     aresponses.add(
-        MATCH_HOST, "/search/browse", "POST", aresponses.Response(status=200),
+        MATCH_HOST,
+        "/search/browse",
+        "POST",
+        aresponses.Response(status=200),
     )
 
     async with ClientSession() as session:

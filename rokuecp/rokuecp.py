@@ -78,7 +78,11 @@ class Roku:
         try:
             async with async_timeout.timeout(self.request_timeout):
                 response = await self.session.request(
-                    method, url, data=data, params=params, headers=headers,
+                    method,
+                    url,
+                    data=data,
+                    params=params,
+                    headers=headers,
                 )
         except asyncio.TimeoutError as exception:
             raise RokuConnectionError(
