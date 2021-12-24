@@ -3,7 +3,6 @@ from ipaddress import ip_address
 from socket import gaierror as SocketGIAError
 
 import pytest
-
 from rokuecp.exceptions import RokuConnectionError
 from rokuecp.helpers import is_ip_address, resolve_hostname
 
