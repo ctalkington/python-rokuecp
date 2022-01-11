@@ -194,12 +194,18 @@ class Roku:
 
         return self._device
 
-    async def play_video(self, app_id: str, params: Optional[dict] = None):
+    async def play_video(self, video_url: str, params: Optional[dict] = None):
         """Play video via PlayOnRoku channel."""
         if params is None:
             params = {}
 
-        await self._request(f"input/{app_id}", method="POST", params=params)
+        request_params = {
+            "t": "v",
+            "u": video_url,
+            **params,
+        }
+
+        await self._request(f"input/15985", method="POST", params=request_params)
 
     async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
         """Launch application."""
