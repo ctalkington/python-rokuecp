@@ -97,7 +97,7 @@ async def test_play_video(aresponses):
 
     aresponses.add(
         MATCH_HOST,
-        f"/input/15985",
+        "/input/15985",
         "POST",
         aresponses.Response(status=200),
     )
