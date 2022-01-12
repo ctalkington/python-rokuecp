@@ -82,7 +82,6 @@ async def test_launch(aresponses):
         "/launch/101",
         "POST",
         aresponses.Response(status=200),
-        match_querystring=True,
     )
 
     aresponses.add(
