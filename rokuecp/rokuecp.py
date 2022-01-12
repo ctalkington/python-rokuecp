@@ -5,7 +5,7 @@ import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
 from socket import gaierror as SocketGIAError
-from typing import Any, List, Mapping
+from typing import Any, List, Mapping, Optional
 from urllib.parse import quote_plus
 from xml.parsers.expat import ExpatError
 
@@ -31,12 +31,12 @@ class Roku:
     port: int = 8060
     request_timeout: int = 5
     session: ClientSession = None
-    user_agent: str | None = None
+    user_agent: Optional[str] = None
 
     _close_session: bool = False
     _dns_lookup: bool = False
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
-    _device: Device | None = None
+    _device: Optional[Device] = None
     _scheme: str = "http"
 
     def __post_init__(self):
@@ -51,8 +51,8 @@ class Roku:
         self,
         uri: str = "",
         method: str = "GET",
-        data: Any | None = None,
-        params: Mapping[str, str] | None = None,
+        data: Optional[Any] = None,
+        params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a receiver."""
         host = self.host
@@ -123,7 +123,7 @@ class Roku:
         return await response.text()
 
     @property
-    def device(self) -> Device | None:
+    def device(self) -> Optional[Device]:
         """Return the cached Device object."""
         return self._device
 
@@ -209,7 +209,7 @@ class Roku:
 
         await self._request("input/15985", method="POST", params=request_params)
 
-    async def launch(self, app_id: str, params: dict | None = None) -> None:
+    async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
         """Launch application."""
         if params is None:
             params = {}
