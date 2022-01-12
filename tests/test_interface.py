@@ -79,7 +79,15 @@ async def test_launch(aresponses):
     """Test launch is handled correctly."""
     aresponses.add(
         MATCH_HOST,
-        "/launch/101?contentID=101",
+        "/launch/101",
+        "POST",
+        aresponses.Response(status=200),
+        match_querystring=True,
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/launch/101?contentID=deeplink",
         "POST",
         aresponses.Response(status=200),
         match_querystring=True,
@@ -88,6 +96,7 @@ async def test_launch(aresponses):
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         await roku.launch("101")
+        await roku.launch("101", "deeplink")
 
 
 @pytest.mark.asyncio
