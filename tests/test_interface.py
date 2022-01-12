@@ -99,10 +99,9 @@ async def test_play_video(aresponses):
 
     aresponses.add(
         MATCH_HOST,
-        f"/input/15985?t=v&u={video_url_quote}",
+        f"/input/15985",
         "POST",
         aresponses.Response(status=200),
-        match_querystring=True,
     )
 
     async with ClientSession() as session:
