@@ -208,16 +208,14 @@ class Roku:
         await self._request("input/15985", method="POST", params=request_params)
 
     async def launch(self, app_id: str, content_id: Optional[str] = None, params: Optional[dict] = None) -> None:
-        """Launch application."""
+        """Launch application with deeplink support."""
         if params is None:
             params = {}
 
-        request_params = {
-            "contentID": content_id if content_id is not None,
-            **params,
-        }
+        if content_id is not None:
+            params["contentID"] = content_id
 
-        await self._request(f"launch/{app_id}", method="POST", params=request_params)
+        await self._request(f"launch/{app_id}", method="POST", params=params)
 
     async def literal(self, text: str) -> None:
         """Send literal text."""
