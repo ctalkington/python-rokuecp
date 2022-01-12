@@ -104,7 +104,7 @@ async def test_play_video(aresponses):
 
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
-        assert await roku.play_video(video_url)
+        await roku.play_video(video_url)
 
 
 @pytest.mark.asyncio
