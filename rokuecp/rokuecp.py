@@ -5,7 +5,7 @@ import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
 from socket import gaierror as SocketGIAError
-from typing import Any, List, Mapping, Optional
+from typing import Any, List, Mapping
 from urllib.parse import quote_plus
 from xml.parsers.expat import ExpatError
 
