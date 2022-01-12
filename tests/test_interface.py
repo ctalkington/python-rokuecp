@@ -95,7 +95,7 @@ async def test_launch(aresponses):
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         await roku.launch("101")
-        await roku.launch("102", "deeplink")
+        await roku.launch("102", {"contentID": "deeplink"})
 
 
 @pytest.mark.asyncio
