@@ -1,4 +1,6 @@
 """Asynchronous Python client for Roku."""
+from future import annotations
+
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -29,12 +31,12 @@ class Roku:
     port: int = 8060
     request_timeout: int = 5
     session: ClientSession = None
-    user_agent: Optional[str] = None
+    user_agent: str | None = None
 
     _close_session: bool = False
     _dns_lookup: bool = False
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
-    _device: Optional[Device] = None
+    _device: Device | None = None
     _scheme: str = "http"
 
     def __post_init__(self):
@@ -49,8 +51,8 @@ class Roku:
         self,
         uri: str = "",
         method: str = "GET",
-        data: Optional[Any] = None,
-        params: Optional[Mapping[str, str]] = None,
+        data: Any | None = None,
+        params: Mapping[str, str] | None = None,
     ) -> Any:
         """Handle a request to a receiver."""
         host = self.host
@@ -121,7 +123,7 @@ class Roku:
         return await response.text()
 
     @property
-    def device(self) -> Optional[Device]:
+    def device(self) -> Device | None:
         """Return the cached Device object."""
         return self._device
 
@@ -210,10 +212,14 @@ class Roku:
     async def launch(
         self,
         app_id: str,
-        content_id: Optional[str] = None,
-        params: Optional[dict] = None
+        content_id: str | dict | None = None,
+        params: dict | None = None,
     ) -> None:
         """Launch application with deeplink support."""
+        if isinstance(content_id, dict):
+            params = content_id
+            content_id = None
+
         if params is None:
             params = {}
 
