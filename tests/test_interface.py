@@ -91,6 +91,22 @@ async def test_launch(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_play_video(aresponses):
+    """Test play_video is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/input/15985?t=v&http%3A%2F%2Fexample.com%2Fvideo.mp4",
+        "POST",
+        aresponses.Response(status=200),
+        match_querystring=True,
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.play_video("http://example.com/video.mp4")
+
+
+@pytest.mark.asyncio
 async def test_literal(aresponses):
     """Test literal is handled correctly."""
     aresponses.add(
