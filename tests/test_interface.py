@@ -204,7 +204,7 @@ async def test_tune(aresponses):
     """Test tune is handled correctly."""
     aresponses.add(
         MATCH_HOST,
-        "/launch/tvinput.dtv?contentID=tvinput.dtv&ch=13.4",
+        "/launch/tvinput.dtv?ch=13.4",
         "POST",
         aresponses.Response(status=200, text="OK"),
         match_querystring=True,
