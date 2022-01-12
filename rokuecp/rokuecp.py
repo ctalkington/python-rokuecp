@@ -207,13 +207,13 @@ class Roku:
 
         await self._request("input/15985", method="POST", params=request_params)
 
-    async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
+    async def launch(self, app_id: str, content_id: Optional[str] = None, params: Optional[dict] = None) -> None:
         """Launch application."""
         if params is None:
             params = {}
 
         request_params = {
-            "contentID": app_id,
+            "contentID": content_id if content_id is not None,
             **params,
         }
 
