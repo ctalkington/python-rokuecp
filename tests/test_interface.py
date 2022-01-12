@@ -1,6 +1,5 @@
 """Tests for Roku."""
 from typing import List
-from urllib.parse import quote_plus
 
 import pytest
 from aiohttp import ClientSession
@@ -95,7 +94,6 @@ async def test_launch(aresponses):
 async def test_play_video(aresponses):
     """Test play_video is handled correctly."""
     video_url = "http://example.com/video.mp4"
-    video_url_quote = quote_plus(video_url)
 
     aresponses.add(
         MATCH_HOST,
