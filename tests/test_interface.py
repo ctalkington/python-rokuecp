@@ -95,7 +95,7 @@ async def test_play_video(aresponses):
     """Test play_video is handled correctly."""
     aresponses.add(
         MATCH_HOST,
-        "/input/15985?t=v&http%3A%2F%2Fexample.com%2Fvideo.mp4",
+        "/input/15985?t=v&u=http%3A%2F%2Fexample.com%2Fvideo.mp4",
         "POST",
         aresponses.Response(status=200),
         match_querystring=True,
