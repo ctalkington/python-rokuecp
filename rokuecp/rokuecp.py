@@ -212,12 +212,7 @@ class Roku:
         if params is None:
             params = {}
 
-        request_params = {
-            "contentID": app_id,
-            **params,
-        }
-
-        await self._request(f"launch/{app_id}", method="POST", params=request_params)
+        await self._request(f"launch/{app_id}", method="POST", params=params)
 
     async def literal(self, text: str) -> None:
         """Send literal text."""
