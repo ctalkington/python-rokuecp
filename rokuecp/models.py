@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from math import floor
-from typing import List
+from typing import Any
 
 from .exceptions import RokuError
 
@@ -180,8 +180,8 @@ class Device:
 
     info: Info
     state: State
-    apps: List[Application] | None = []
-    channels: List[Channel] | None = []
+    apps:  list[Application] | None = []
+    channels: list[Channel] | None = []
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None
