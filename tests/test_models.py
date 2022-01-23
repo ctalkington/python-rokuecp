@@ -107,7 +107,7 @@ def test_device_tv() -> None:
 
 def test_device_as_dict() -> None:
     """Test the dictionary version of Device."""
-    device = models.Device(DEVICE)
+    device = models.Device(DEVICE_TV)
     assert device
 
     device_dict = device.as_dict()
@@ -124,7 +124,8 @@ def test_device_as_dict() -> None:
     assert device_dict["app"]
     assert isinstance(device_dict["app"], dict)
 
-    assert device_dict["channel"] is None
+    assert device_dict["channel"]
+    assert isinstance(device_dict["channel"], dict)
 
     assert device_dict["media"]
     assert isinstance(device_dict["media"], dict)
