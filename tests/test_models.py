@@ -67,7 +67,7 @@ def test_device() -> None:
     assert isinstance(device.media, models.MediaState)
 
     assert isinstance(device.channels, List)
-    assert len(device.channels) == 10
+    assert len(device.channels) == 0
 
     assert device.channel is None
 
@@ -119,7 +119,7 @@ def test_device_as_dict() -> None:
     assert isinstance(device_dict["state"], dict)
 
     assert isinstance(device_dict["apps"], List)
-    assert len(device_dict["apps"]) == 8
+    assert len(device_dict["apps"]) == 10
 
     assert device_dict["app"]
     assert isinstance(device_dict["app"], dict)
