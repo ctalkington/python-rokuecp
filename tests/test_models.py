@@ -114,6 +114,8 @@ def test_device_as_dict() -> None:
     assert device_dict
     assert isinstance(device_dict, dict)
 
+    assert isinstance(device_dict["info"], dict)
+
     assert isinstance(device_dict["apps"], List)
     assert len(device_dict["apps"]) == 8
 
