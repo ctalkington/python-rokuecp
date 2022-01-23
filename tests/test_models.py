@@ -1,6 +1,6 @@
 """Tests for Roku Models."""
 from datetime import datetime
-from typing import List
+from typing import Any, List
 
 import pytest
 import xmltodict
@@ -110,10 +110,11 @@ def test_device_to_dict() -> None:
     device = models.Device(DEVICE)
     assert device
 
-    device_dict = device.to_dict()
+    device_dict = device.as_dict()
     assert device_dict
     assert isinstance(device_dict, dict)
 
+    assert device_dict["apps"]
     assert isinstance(device_dict["apps"], List)
     assert len(device_dict["apps"]) == 0
 
@@ -125,6 +126,7 @@ def test_device_to_dict() -> None:
     assert device_dict["media"]
     assert isinstance(device_dict["media"], dict)
     
+    assert device_dict["channels"]
     assert isinstance(device_dict["channels"], List)
     assert len(device_dict["channels"]) == 0
 
