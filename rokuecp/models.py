@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from math import floor
-from typing import Any, List
+from typing import List
 
 from .exceptions import RokuError
 
@@ -25,7 +25,7 @@ class Application:
     screensaver: bool
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> Application:
         """Return Application object from Roku API response."""
         if "app" in data:
             app = data["app"]
@@ -66,7 +66,7 @@ class Info:
     headphones_connected: bool | None = None
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> Info:
         """Return Info object from Roku API response."""
         device_type = "box"
 
@@ -115,7 +115,7 @@ class Channel:
     signal_strength: int | None = None
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> Channel:
         """Return Channel object from Roku response."""
         strength = data.get("signal-strength", None)
 
@@ -149,7 +149,7 @@ class MediaState:
     at: datetime = datetime.utcnow()
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> MediaState:
         """Return MediaStste object from Roku response."""
         state = data.get("@state", None)
         if state not in ("play", "pause"):
@@ -226,7 +226,7 @@ class Device:
             "media": media,
         }
 
-    def update_from_dict(self, data: dict, update_state: bool = True) -> "Device":
+    def update_from_dict(self, data: dict, update_state: bool = True) -> Device:
         """Return Device object from Roku API response."""
         if update_state:
             self.state = State(
