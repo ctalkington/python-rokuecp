@@ -1,9 +1,10 @@
 """Models for Roku."""
+from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from math import floor
-from typing import List, Optional
+from typing import Any
 
 from .exceptions import RokuError
 
@@ -24,7 +25,7 @@ class Application:
     screensaver: bool
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> Application:
         """Return Application object from Roku API response."""
         if "app" in data:
             app = data["app"]
@@ -54,18 +55,18 @@ class Info:
     model_number: str
     serial_number: str
     version: str
-    network_type: Optional[str] = None
-    network_name: Optional[str] = None
-    ethernet_support: Optional[bool] = None
-    ethernet_mac: Optional[str] = None
-    wifi_mac: Optional[str] = None
-    supports_airplay: Optional[bool] = None
-    supports_find_remote: Optional[bool] = None
-    supports_private_listening: Optional[bool] = None
-    headphones_connected: Optional[bool] = None
+    network_type: str | None = None
+    network_name: str | None = None
+    ethernet_support: bool | None = None
+    ethernet_mac: str | None = None
+    wifi_mac: str | None = None
+    supports_airplay: bool | None = None
+    supports_find_remote: bool | None = None
+    supports_private_listening: bool | None = None
+    headphones_connected: bool | None = None
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> Info:
         """Return Info object from Roku API response."""
         device_type = "box"
 
@@ -107,14 +108,14 @@ class Channel:
     number: str
     channel_type: str
     hidden: bool
-    program_title: Optional[str] = None
-    program_description: Optional[str] = None
-    program_rating: Optional[str] = None
-    signal_mode: Optional[str] = None
-    signal_strength: Optional[int] = None
+    program_title: str | None = None
+    program_description: str | None = None
+    program_rating: str | None = None
+    signal_mode: str | None = None
+    signal_strength: int | None = None
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> Channel:
         """Return Channel object from Roku response."""
         strength = data.get("signal-strength", None)
 
@@ -148,7 +149,7 @@ class MediaState:
     at: datetime = datetime.utcnow()
 
     @staticmethod
-    def from_dict(data: dict):
+    def from_dict(data: dict) -> MediaState | None:
         """Return MediaStste object from Roku response."""
         state = data.get("@state", None)
         if state not in ("play", "pause"):
@@ -179,11 +180,11 @@ class Device:
 
     info: Info
     state: State
-    apps: Optional[List[Application]] = []
-    channels: Optional[List[Channel]] = []
-    app: Optional[Application] = None
-    channel: Optional[Channel] = None
-    media: Optional[MediaState] = None
+    apps: list[Application] | None = []
+    channels: list[Channel] | None = []
+    app: Application | None = None
+    channel: Channel | None = None
+    media: MediaState | None = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
@@ -193,7 +194,39 @@ class Device:
 
         self.update_from_dict(data)
 
-    def update_from_dict(self, data: dict, update_state: bool = True) -> "Device":
+    def as_dict(self) -> dict[str, Any]:
+        """Return dictionary version of this device."""
+        apps = None
+        if self.apps is not None:
+            apps = [asdict(app) for app in self.apps]
+
+        channels = None
+        if self.channels is not None:
+            channels = [asdict(channel) for channel in self.channels]
+
+        app = None
+        if self.app is not None:
+            app = asdict(self.app)
+
+        channel = None
+        if self.channel is not None:
+            channel = asdict(self.channel)
+
+        media = None
+        if self.media is not None:
+            media = asdict(self.media)
+
+        return {
+            "info": asdict(self.info),
+            "state": asdict(self.state),
+            "apps": apps,
+            "channels": channels,
+            "app": app,
+            "channel": channel,
+            "media": media,
+        }
+
+    def update_from_dict(self, data: dict, update_state: bool = True) -> Device:
         """Return Device object from Roku API response."""
         if update_state:
             self.state = State(
