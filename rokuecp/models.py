@@ -198,23 +198,23 @@ class Device:
         apps = None
         if self.apps is not None:
             apps = [
-                app.asdict() for app in self.apps
+                dataclass.asdict(app) for app in self.apps
             ]
 
         channels = None
         if self.channels is not None:
             channels = [
-                channel.asdict() for channel in self.channels
+                dataclass.asdict(channel) for channel in self.channels
             ]
 
         return {
-            "info": self.info.asdict(),
-            "state": self.state.asdict(),
+            "info": dataclass.asdict(self.info),
+            "state": dataclass.asdict(self.state),
             "apps": apps,
             "channels": channels,
-            "app": self.app.asdict() if self.app is not None else None,
-            "channel": self.channel.asdict() if self.channel is not None else None,
-            "media": self.media.asdict() if self.media is not None else None,
+            "app": dataclass.asdict(self.app) if self.app is not None else None,
+            "channel": dataclass.asdict(self.channel) if self.channel is not None else None,
+            "media": dataclass.asdict(self.media) if self.media is not None else None,
         }
 
     def update_from_dict(self, data: dict, update_state: bool = True) -> "Device":
