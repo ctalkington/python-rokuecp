@@ -1,9 +1,10 @@
 """Models for Roku."""
+from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
 from math import floor
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from .exceptions import RokuError
 
