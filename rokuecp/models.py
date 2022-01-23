@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from math import floor
-from typing import Any, List, Optional
+from typing import Any, List
 
 from .exceptions import RokuError
 
@@ -55,15 +55,15 @@ class Info:
     model_number: str
     serial_number: str
     version: str
-    network_type: Optional[str] = None
-    network_name: Optional[str] = None
-    ethernet_support: Optional[bool] = None
-    ethernet_mac: Optional[str] = None
-    wifi_mac: Optional[str] = None
-    supports_airplay: Optional[bool] = None
-    supports_find_remote: Optional[bool] = None
-    supports_private_listening: Optional[bool] = None
-    headphones_connected: Optional[bool] = None
+    network_type: str | None = None
+    network_name: str | None = None
+    ethernet_support: bool | None = None
+    ethernet_mac: str | None = None
+    wifi_mac: str | None = None
+    supports_airplay: bool | None = None
+    supports_find_remote: bool | None = None
+    supports_private_listening: bool | None = None
+    headphones_connected: bool | None = None
 
     @staticmethod
     def from_dict(data: dict):
@@ -108,11 +108,11 @@ class Channel:
     number: str
     channel_type: str
     hidden: bool
-    program_title: Optional[str] = None
-    program_description: Optional[str] = None
-    program_rating: Optional[str] = None
-    signal_mode: Optional[str] = None
-    signal_strength: Optional[int] = None
+    program_title: str | None = None
+    program_description: str | None = None
+    program_rating: str | None = None
+    signal_mode: str | None = None
+    signal_strength: int | None = None
 
     @staticmethod
     def from_dict(data: dict):
@@ -180,11 +180,11 @@ class Device:
 
     info: Info
     state: State
-    apps: Optional[List[Application]] = []
-    channels: Optional[List[Channel]] = []
-    app: Optional[Application] = None
-    channel: Optional[Channel] = None
-    media: Optional[MediaState] = None
+    apps: List[Application] | None = []
+    channels: List[Channel] | None = []
+    app: Application | None = None
+    channel: Channel | None = None
+    media: MediaState | None = None
 
     def __init__(self, data: dict):
         """Initialize an empty Roku device class."""
