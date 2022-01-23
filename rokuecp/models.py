@@ -15,7 +15,7 @@ def _ms_to_sec(ms: str) -> int:
     return floor(msi / 1000)
 
 
-@dataclass(frozen=True)
+@dataclass
 class Application:
     """Object holding application information from Roku."""
 
@@ -43,7 +43,7 @@ class Application:
         )
 
 
-@dataclass(frozen=True)
+@dataclass
 class Info:
     """Object holding device information from Roku."""
 
@@ -100,7 +100,7 @@ class Info:
         )
 
 
-@dataclass(frozen=True)
+@dataclass
 class Channel:
     """Object holding all information of TV Channel."""
 
@@ -138,7 +138,7 @@ class Channel:
         )
 
 
-@dataclass(frozen=True)
+@dataclass
 class MediaState:
     """Object holding all information of media state."""
 
@@ -166,7 +166,7 @@ class MediaState:
         )
 
 
-@dataclass(frozen=True)
+@dataclass
 class State:
     """Object holding all information of device state."""
 
