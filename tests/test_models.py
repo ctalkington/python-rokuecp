@@ -1,6 +1,6 @@
 """Tests for Roku Models."""
 from datetime import datetime
-from typing import Any, List
+from typing import List
 
 import pytest
 import xmltodict
