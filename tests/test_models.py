@@ -107,31 +107,45 @@ def test_device_tv() -> None:
 
 def test_device_as_dict() -> None:
     """Test the dictionary version of Device."""
+    device = models.Device(DEVICE)
+    assert device
+
+    device_dict = device.as_dict()
+    assert device_dict
+    assert isinstance(device_dict, dict)
+    assert isinstance(device_dict["info"], dict)
+    assert isinstance(device_dict["state"], dict)
+    assert isinstance(device_dict["apps"], List)
+    assert len(device_dict["apps"]) == 8
+    assert device_dict["app"]
+    assert isinstance(device_dict["app"], dict)
+    assert device_dict["channel"]
+    assert isinstance(device_dict["channel"], dict)
+    assert device_dict["media"]
+    assert isinstance(device_dict["media"], dict)
+    assert isinstance(device_dict["channels"], List)
+    assert len(device_dict["channels"]) == 0
+
+
+def test_device_tv_as_dict() -> None:
+    """Test the dictionary version of Device."""
     device = models.Device(DEVICE_TV)
     assert device
 
     device_dict = device.as_dict()
     assert device_dict
     assert isinstance(device_dict, dict)
-
     assert isinstance(device_dict["info"], dict)
-
     assert isinstance(device_dict["state"], dict)
-
     assert isinstance(device_dict["apps"], List)
     assert len(device_dict["apps"]) == 10
-
     assert device_dict["app"]
     assert isinstance(device_dict["app"], dict)
-
     assert device_dict["channel"]
     assert isinstance(device_dict["channel"], dict)
-
-    assert device_dict["media"]
-    assert isinstance(device_dict["media"], dict)
-
+    assert device_dict["media"] is None
     assert isinstance(device_dict["channels"], List)
-    assert len(device_dict["channels"]) == 0
+    assert len(device_dict["channels"]) == 2
 
 
 def test_info() -> None:
