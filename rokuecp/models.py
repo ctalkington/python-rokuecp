@@ -193,6 +193,30 @@ class Device:
 
         self.update_from_dict(data)
 
+    def as_dict(self) -> dict[str, Any]:
+        """Return dictionary version of this device."""
+        apps = None
+        if self.apps is not None:
+            apps = [
+                app.asdict() for app in self.apps
+            ]
+
+        channels = None
+        if self.channels is not None:
+            channels = [
+                channel.asdict() for channel in self.channels
+            ]
+
+        return {
+            "info": self.info.asdict(),
+            "state": self.state.asdict(),
+            "apps": apps,
+            "channels": channels,
+            "app": self.app.asdict() if self.app is not None else None,
+            "channel": self.channel.asdict() if self.channel is not None else None,
+            "media": self.media.asdict() if self.media is not None else None,
+        }
+
     def update_from_dict(self, data: dict, update_state: bool = True) -> "Device":
         """Return Device object from Roku API response."""
         if update_state:
