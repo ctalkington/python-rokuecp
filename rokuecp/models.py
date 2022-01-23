@@ -180,7 +180,7 @@ class Device:
 
     info: Info
     state: State
-    apps:  list[Application] | None = []
+    apps: list[Application] | None = []
     channels: list[Channel] | None = []
     app: Application | None = None
     channel: Channel | None = None
