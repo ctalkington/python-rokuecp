@@ -105,6 +105,30 @@ def test_device_tv() -> None:
     assert isinstance(device.channel, models.Channel)
 
 
+def test_device_to_dict() -> None:
+    """Test the dictionary version of Device."""
+    device = models.Device(DEVICE)
+    assert device
+
+    device_dict = device.to_dict()
+    assert device_dict
+    assert isinstance(device_dict, dict)
+
+    assert isinstance(device_dict["apps"], List)
+    assert len(device_dict["apps"]) == 0
+
+    assert device_dict["app"]
+    assert isinstance(device_dict["app"], dict)
+
+    assert device_dict["channel"] is None
+
+    assert device_dict["media"]
+    assert isinstance(device_dict["media"], dict)
+    
+    assert isinstance(device_dict["channels"], List)
+    assert len(device_dict["channels"]) == 0
+
+
 def test_info() -> None:
     """Test the Info model."""
     info = models.Info.from_dict(DEVICE_INFO["device-info"])
