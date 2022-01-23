@@ -149,7 +149,7 @@ class MediaState:
     at: datetime = datetime.utcnow()
 
     @staticmethod
-    def from_dict(data: dict) -> MediaState:
+    def from_dict(data: dict) -> MediaState | None:
         """Return MediaStste object from Roku response."""
         state = data.get("@state", None)
         if state not in ("play", "pause"):
