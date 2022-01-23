@@ -1,7 +1,7 @@
 """Models for Roku."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import datetime
 from math import floor
 from typing import Any, List, Optional
@@ -198,27 +198,27 @@ class Device:
         """Return dictionary version of this device."""
         apps = None
         if self.apps is not None:
-            apps = [dataclass.asdict(app) for app in self.apps]
+            apps = [asdict(app) for app in self.apps]
 
         channels = None
         if self.channels is not None:
-            channels = [dataclass.asdict(channel) for channel in self.channels]
+            channels = [asdict(channel) for channel in self.channels]
 
         app = None
         if self.app is not None:
-            app = dataclass.asdict(self.app)
+            app = asdict(self.app)
 
         channel = None
         if self.channel is not None:
-            channel = dataclass.asdict(self.channel)
+            channel = asdict(self.channel)
 
         media = None
         if self.media is not None:
-            media = dataclass.asdict(self.media)
+            media = asdict(self.media)
 
         return {
-            "info": dataclass.asdict(self.info),
-            "state": dataclass.asdict(self.state),
+            "info": asdict(self.info),
+            "state": asdict(self.state),
             "apps": apps,
             "channels": channels,
             "app": app,
