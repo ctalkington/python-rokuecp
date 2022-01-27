@@ -64,7 +64,11 @@ class Roku:
                 self._dns_cache["ip_address"] = host
 
         url = URL.build(
-            scheme=self._scheme, host=host, port=self.port, path=self.base_path
+            scheme=self._scheme,
+            host=host,
+            port=self.port,
+            path=self.base_path,
+            encoded=encoded,
         ).join(URL(uri))
 
         headers = {
@@ -84,7 +88,6 @@ class Roku:
                     data=data,
                     params=params,
                     headers=headers,
-                    encoded=encoded,
                 )
         except asyncio.TimeoutError as exception:
             raise RokuConnectionError(
