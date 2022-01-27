@@ -4,7 +4,7 @@ from collections import OrderedDict
 from dataclasses import dataclass
 from socket import gaierror as SocketGIAError
 from typing import Any, List, Mapping, Optional
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
 import async_timeout
@@ -194,7 +194,7 @@ class Roku:
 
         return self._device
 
-    async def play_video(self, video_url: str, params: Optional[dict] = None):
+    async def play_on_roku(self, video_url: str, params: Optional[dict] = None):
         """Play video via PlayOnRoku channel."""
         if params is None:
             params = {}
@@ -205,7 +205,8 @@ class Roku:
             **params,
         }
 
-        await self._request("input/15985", method="POST", params=request_params)
+        params = urlencode(request_params)
+        await self._request(f"input/15985?{params}", method="POST", encoded=true)
 
     async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
         """Launch application."""
