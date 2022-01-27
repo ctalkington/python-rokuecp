@@ -51,6 +51,7 @@ class Roku:
         method: str = "GET",
         data: Optional[Any] = None,
         params: Optional[Mapping[str, str]] = None,
+        encoded: bool = False,
     ) -> Any:
         """Handle a request to a receiver."""
         host = self.host
@@ -83,6 +84,7 @@ class Roku:
                     data=data,
                     params=params,
                     headers=headers,
+                    encoded=encoded,
                 )
         except asyncio.TimeoutError as exception:
             raise RokuConnectionError(
@@ -205,8 +207,8 @@ class Roku:
             **params,
         }
 
-        params = urlencode(request_params)
-        await self._request(f"input/15985?{params}", method="POST", encoded=true)
+        encoded = urlencode(request_params)
+        await self._request(f"input/15985?{encoded}", method="POST", encoded=True)
 
     async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
         """Launch application."""
