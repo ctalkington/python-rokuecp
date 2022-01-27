@@ -68,8 +68,7 @@ class Roku:
             host=host,
             port=self.port,
             path=self.base_path,
-            encoded=encoded,
-        ).join(URL(uri))
+        ).join(URL(uri, encoded=encoded))
 
         headers = {
             "User-Agent": self.user_agent,
