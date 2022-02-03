@@ -4,7 +4,6 @@ from typing import List
 
 import pytest
 import xmltodict
-
 from rokuecp import RokuError, models
 
 from . import load_fixture

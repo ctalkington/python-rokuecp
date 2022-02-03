@@ -5,9 +5,9 @@ from unittest.mock import AsyncMock
 
 import pytest
 from aiohttp import ClientError, ClientSession
-
 from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
+
 from tests import fake_addrinfo_results
 
 HOSTNAME = "roku.local"
