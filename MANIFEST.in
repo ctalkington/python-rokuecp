@@ -1,5 +1,0 @@
-include README.md
-include LICENSE
-include requirements.txt
-graft rokuecp
-recursive-exclude * *.py[co]

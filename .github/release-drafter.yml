@@ -1,29 +1,35 @@
+---
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+sort-direction: ascending
+
 categories:
-  - title: "Breaking Changes"
+  - title: "🚨 Breaking changes"
     labels:
       - "breaking-change"
-  - title: "Features"
+  - title: "✨ New features"
     labels:
       - "new-feature"
+  - title: "🐛 Bug fixes"
+    labels:
+      - "bugfix"
+  - title: "🚀 Enhancements"
+    labels:
       - "enhancement"
       - "refactor"
       - "performance"
-  - title: "Bug Fixes"
+  - title: "🧰 Maintenance"
     labels:
-      - "bug"
-      - "bugfix"
-  - title: "Maintenance"
-    labels:
-      - "ci"
-      - "dependencies"
       - "maintenance"
-      - "tooling"
-  - title: "Documentation"
+      - "ci"
+  - title: "📚 Documentation"
     labels:
       - "documentation"
-change-template: "- $TITLE (#$NUMBER)"
-name-template: "$NEXT_PATCH_VERSION"
-tag-template: "$NEXT_PATCH_VERSION"
+  - title: "⬆️ Dependency updates"
+    labels:
+      - "dependencies"
+
 version-resolver:
   major:
     labels:
@@ -44,5 +50,8 @@ version-resolver:
       - "performance"
       - "refactor"
   default: patch
+
 template: |
+  ## What’s changed
+
   $CHANGES
