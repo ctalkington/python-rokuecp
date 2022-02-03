@@ -1,4 +1,0 @@
-aiohttp>=3.6.2
-cachetools>=4.2.4
-xmltodict>=0.12.0
-yarl>=1.4.2
