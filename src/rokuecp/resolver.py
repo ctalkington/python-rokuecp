@@ -1,4 +1,6 @@
 """DNS Resolver for Roku Client based on aiohttp logic."""
+from __future__ import annotations
+
 import socket
 from asyncio import get_running_loop
 from typing import Any, Dict, List

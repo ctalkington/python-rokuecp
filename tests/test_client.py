@@ -19,7 +19,7 @@ NON_STANDARD_PORT = 3333
 
 
 @pytest.mark.asyncio
-async def test_xml_request(aresponses):
+async def test_xml_request(aresponses) -> None:
     """Test XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -41,7 +41,7 @@ async def test_xml_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_text_xml_request(aresponses):
+async def test_text_xml_request(aresponses) -> None:
     """Test (text) XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -63,7 +63,7 @@ async def test_text_xml_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_xml_request_parse_error(aresponses):
+async def test_xml_request_parse_error(aresponses) -> None:
     """Test invalid XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -83,7 +83,7 @@ async def test_xml_request_parse_error(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_text_request(aresponses):
+async def test_text_request(aresponses) -> None:
     """Test non XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -98,7 +98,7 @@ async def test_text_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_internal_session(aresponses):
+async def test_internal_session(aresponses) -> None:
     """Test JSON response is handled correctly with internal session."""
     aresponses.add(
         MATCH_HOST,
@@ -119,7 +119,7 @@ async def test_internal_session(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_post_request(aresponses):
+async def test_post_request(aresponses) -> None:
     """Test POST requests are handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -135,7 +135,7 @@ async def test_post_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_request_port(aresponses):
+async def test_request_port(aresponses) -> None:
     """Test the handling of non-standard API port."""
     aresponses.add(
         f"{HOST}:{NON_STANDARD_PORT}",
@@ -151,7 +151,7 @@ async def test_request_port(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_timeout(aresponses):
+async def test_timeout(aresponses) -> None:
     """Test request timeout from the API."""
     # Faking a timeout by sleeping
     async def response_handler(_):
@@ -172,7 +172,7 @@ async def test_timeout(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_client_error():
+async def test_client_error() -> None:
     """Test HTTP client error."""
     async with ClientSession() as session:
         session.request = AsyncMock(side_effect=ClientError)
@@ -183,7 +183,7 @@ async def test_client_error():
 
 
 @pytest.mark.asyncio
-async def test_http_error404(aresponses):
+async def test_http_error404(aresponses) -> None:
     """Test HTTP 404 response handling."""
     aresponses.add(
         MATCH_HOST,
@@ -199,7 +199,7 @@ async def test_http_error404(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_http_error500(aresponses):
+async def test_http_error500(aresponses) -> None:
     """Test HTTP 500 response handling."""
     aresponses.add(
         MATCH_HOST,

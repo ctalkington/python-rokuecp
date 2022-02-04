@@ -1,4 +1,6 @@
 """Helpers for Roku Client."""
+from __future__ import annotations
+
 from ipaddress import ip_address
 from socket import gaierror as SocketGIAError
 

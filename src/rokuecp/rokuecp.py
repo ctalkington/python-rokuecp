@@ -1,4 +1,6 @@
 """Asynchronous Python client for Roku."""
+from __future__ import annotations
+
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
