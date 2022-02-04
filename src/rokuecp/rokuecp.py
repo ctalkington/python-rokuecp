@@ -200,15 +200,19 @@ class Roku:
 
         tasks = []
         futures: list[Any] = []
+        app_id = None
 
         if updates["available"] and not updates["standby"]:
-            updates["app"] = app = await self.async_get_active_app()
+            updates["app"] = app = await self._get_active_app()
 
-            if app and app.app_id and app.app_id[:7] != "tvinput":
+            if isinstance(app["app"], dict):
+                app_id = app["app"].get("@id")
+
+            if app_id and app.app_id[:7] != "tvinput":
                 tasks.append("media")
                 futures.append(self._get_media_state())
 
-            if app and app.app_id == "tvinput.dtv":
+            if app_id == "tvinput.dtv":
                 tasks.append("channel")
                 futures.append(self._get_tv_active_channel())
 
