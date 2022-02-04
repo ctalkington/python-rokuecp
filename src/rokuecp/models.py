@@ -224,9 +224,6 @@ class Device:
         Args:
             data: Dictionary of data.
 
-        Returns:
-            The Device object.
-
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
