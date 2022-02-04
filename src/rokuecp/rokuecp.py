@@ -325,6 +325,6 @@ class Roku:
         """Async enter."""
         return self
 
-    async def __aexit__(self) -> None:
+    async def __aexit__(self, *exc_info) -> None:
         """Async exit."""
         await self.close_session()
