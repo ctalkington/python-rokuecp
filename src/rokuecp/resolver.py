@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import socket
 from asyncio import get_running_loop
-from typing import Any, Dict, List
+from typing import Any
 
 
 class ThreadedResolver:
@@ -19,8 +19,20 @@ class ThreadedResolver:
 
     async def resolve(
         self, hostname: str, port: int = 0, family: int = socket.AF_INET
-    ) -> List[Dict[str, Any]]:
-        """Return IP address for given hostname."""
+    ) -> list[dict[str, Any]]:
+        """Return IP addresses for given hostname.
+
+        Args:
+            hostname: The hostname to resolve.
+            port: The port to use when resolving.
+            family: The socket address family.
+
+        Returns:
+            List of resolved IP addresses dictionaries.
+
+        Raises:
+            OSError: An error occurred while resolving the hostname.
+        """
         infos = await self.get_loop().getaddrinfo(
             hostname,
             port,

@@ -162,6 +162,7 @@ good-names = [
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
   "too-few-public-methods",
+  "too-many-arguments",
   "duplicate-code",
   "format",
   "unsubscriptable-object",

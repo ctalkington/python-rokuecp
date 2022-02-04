@@ -9,9 +9,13 @@ from typing import Any
 from .exceptions import RokuError
 
 
-def _ms_to_sec(ms: str) -> int:
-    """Convert millisecond string to seconds integer."""
-    msi = int(ms.replace("ms", "").strip())
+def _ms_to_sec(msec: str) -> int:
+    """Convert millisecond string to seconds integer.
+
+    Returns:
+        The number of seconds converted from milliseconds.
+    """
+    msi = int(msec.replace("ms", "").strip())
     return floor(msi / 1000)
 
 
@@ -25,12 +29,16 @@ class Application:
     screensaver: bool
 
     @staticmethod
-    def from_dict(data: dict) -> Application:
-        """Return Application object from Roku API response."""
-        if "app" in data:
-            app = data["app"]
-        else:
-            app = data
+    def from_dict(data: dict[str, Any]) -> Application:
+        """Return Application object from Roku API response.
+
+        Args:
+            data: Dictionary of data.
+
+        Returns:
+            The Application object.
+        """
+        app = data.get("app", data)
 
         if isinstance(app, str):
             app = {"#text": app}
@@ -66,8 +74,15 @@ class Info:
     headphones_connected: bool | None = None
 
     @staticmethod
-    def from_dict(data: dict) -> Info:
-        """Return Info object from Roku API response."""
+    def from_dict(data: dict[str, Any]) -> Info:
+        """Return Info object from Roku API response.
+
+        Args:
+            data: Dictionary of data.
+
+        Returns:
+            The Info object.
+        """
         device_type = "box"
 
         if data.get("is-tv", "false") == "true":
@@ -116,7 +131,14 @@ class Channel:
 
     @staticmethod
     def from_dict(data: dict) -> Channel:
-        """Return Channel object from Roku response."""
+        """Return Channel object from Roku response.
+
+        Args:
+            data: Dictionary of data.
+
+        Returns:
+            The Channel object.
+        """
         strength = data.get("signal-strength", None)
 
         if strength is not None:
@@ -146,11 +168,18 @@ class MediaState:
     live: bool
     paused: bool
     position: int
-    at: datetime = datetime.utcnow()
+    at: datetime = datetime.utcnow()  # pylint: disable=C0103
 
     @staticmethod
     def from_dict(data: dict) -> MediaState | None:
-        """Return MediaStste object from Roku response."""
+        """Return MediaStste object from Roku response.
+
+        Args:
+            data: Dictionary of data.
+
+        Returns:
+            The MediaState object.
+        """
         state = data.get("@state", None)
         if state not in ("play", "pause"):
             return None
@@ -172,7 +201,7 @@ class State:
 
     available: bool
     standby: bool
-    at: datetime = datetime.utcnow()
+    at: datetime = datetime.utcnow()  # pylint: disable=C0103
 
 
 class Device:
@@ -186,16 +215,31 @@ class Device:
     channel: Channel | None = None
     media: MediaState | None = None
 
-    def __init__(self, data: dict):
-        """Initialize an empty Roku device class."""
+    def __init__(self, data: dict[str, Any]):
+        """Initialize an empty Roku device class.
+
+        Args:
+            data: Dictionary of data.
+
+        Returns:
+            The Device object.
+
+        Raises:
+            RokuError: Received an unexpected response from the Roku device.
+
+        """
         # Check if all elements are in the passed dict, else raise an Error
-        if any(k not in data for k in ["info", "available", "standby"]):
+        if any(k not in data for k in ("info", "available", "standby")):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
         self.update_from_dict(data)
 
     def as_dict(self) -> dict[str, Any]:
-        """Return dictionary version of this device."""
+        """Return dictionary version of the Roku device.
+
+        Returns:
+            A Python dictionary created from the Device object attributes.
+        """
         apps = None
         if self.apps is not None:
             apps = [asdict(app) for app in self.apps]
@@ -226,8 +270,10 @@ class Device:
             "media": media,
         }
 
-    def update_from_dict(self, data: dict, update_state: bool = True) -> Device:
-        """Return Device object from Roku API response."""
+    def update_from_dict(
+        self, data: dict[str, Any], update_state: bool = True
+    ) -> Device:
+        """Return Device object from Roku device data."""
         if update_state:
             self.state = State(
                 available=data.get("available", False),

@@ -4,8 +4,9 @@ from __future__ import annotations
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
+from importlib import metadata
 from socket import gaierror as SocketGIAError
-from typing import Any, List
+from typing import Any
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
@@ -15,7 +16,6 @@ from aiohttp.client import ClientError, ClientSession
 from cachetools import TTLCache
 from yarl import URL
 
-from .__version__ import __version__
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
 from .helpers import is_ip_address, resolve_hostname
@@ -45,7 +45,9 @@ class Roku:
             self._dns_lookup = True
 
         if self.user_agent is None:
-            self.user_agent = f"PythonRokuECP/{__version__}"
+            version = metadata.version(__package__)
+
+            self.user_agent = f"PythonRokuECP/{version}"
 
     async def _request(
         self,
@@ -148,12 +150,13 @@ class Roku:
         """Get Roku device information.
 
         Returns:
-            A Device object, with information about the Roku device.
+            A Device object with information about the Roku device.
         """
         return self._device
 
     def app_icon_url(self, app_id: str) -> str:
         """Get the URL to the application icon.
+
         Args:
             app_id: The application ID.
 
@@ -196,7 +199,7 @@ class Roku:
             updates["standby"] = True
 
         tasks = []
-        futures: List[Any] = []
+        futures: list[Any] = []
         app_id = None
 
         if updates["available"] and not updates["standby"]:
@@ -320,7 +323,7 @@ class Roku:
         """Retrieve active app for updates.
 
         Returns:
-            An ordered Python Dictionary.
+            An ordered Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -332,7 +335,7 @@ class Roku:
 
         return res["active-app"]
 
-    async def _get_apps(self) -> List[OrderedDict]:
+    async def _get_apps(self) -> list[OrderedDict]:
         """Retrieve apps for updates.
 
         Returns:
@@ -355,7 +358,7 @@ class Roku:
         """Retrieve device info for updates.
 
         Returns:
-            An ordered Python Dictionary.
+            An ordered Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -371,7 +374,7 @@ class Roku:
         """Retrieve media state for updates.
 
         Returns:
-            An ordered Python Dictionary.
+            An ordered Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -387,7 +390,7 @@ class Roku:
         """Retrieve active TV channel for updates.
 
         Returns:
-            An ordered Python Dictionary.
+            An ordered Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -401,7 +404,7 @@ class Roku:
 
         return res["tv-channel"]["channel"]
 
-    async def _get_tv_channels(self) -> List[OrderedDict]:
+    async def _get_tv_channels(self) -> list[OrderedDict]:
         """Retrieve TV channels for updates.
 
         Returns:
@@ -431,7 +434,8 @@ class Roku:
     async def __aenter__(self) -> Roku:
         """Async enter.
 
-        Returns: The Roku object.
+        Returns:
+            The Roku object.
         """
         return self
 

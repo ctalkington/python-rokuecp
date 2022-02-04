@@ -216,7 +216,9 @@ async def test_http_error500(aresponses: ResponsesMockServer) -> None:
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname(aresponses: ResponsesMockServer, resolver: AsyncMock) -> None:
+async def test_resolve_hostname(
+    aresponses: ResponsesMockServer, resolver: AsyncMock
+) -> None:
     """Test that hostnames are resolved before request."""
     resolver.return_value = fake_addrinfo_results([HOST])
 
