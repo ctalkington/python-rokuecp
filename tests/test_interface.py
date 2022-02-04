@@ -656,7 +656,7 @@ async def test_get_apps(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_apps()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 8
 
 
