@@ -280,6 +280,9 @@ class Roku:
 
         Args:
             key: The remote keypress to send to the Roku device.
+
+        Raises:
+            RokuError: Received an unexpected response from the Roku device.
         """
         key_lower = key.lower()
         if key_lower not in VALID_REMOTE_KEYS:
@@ -314,6 +317,9 @@ class Roku:
     async def _get_active_app(self) -> OrderedDict:
         """Retrieve active app for updates.
 
+        Returns:
+            An ordered Python Dictionary.
+
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
@@ -326,6 +332,9 @@ class Roku:
 
     async def _get_apps(self) -> List[OrderedDict]:
         """Retrieve apps for updates.
+
+        Returns:
+            A list of ordered Python Dictionaries.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -343,6 +352,9 @@ class Roku:
     async def _get_device_info(self) -> OrderedDict:
         """Retrieve device info for updates.
 
+        Returns:
+            An ordered Python Dictionary.
+
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
@@ -356,6 +368,9 @@ class Roku:
     async def _get_media_state(self) -> OrderedDict:
         """Retrieve media state for updates.
 
+        Returns:
+            An ordered Python Dictionary.
+
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
@@ -368,6 +383,9 @@ class Roku:
 
     async def _get_tv_active_channel(self) -> OrderedDict:
         """Retrieve active TV channel for updates.
+
+        Returns:
+            An ordered Python Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -383,6 +401,9 @@ class Roku:
 
     async def _get_tv_channels(self) -> List[OrderedDict]:
         """Retrieve TV channels for updates.
+
+        Returns:
+            A list of ordered Python Dictionaries.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
