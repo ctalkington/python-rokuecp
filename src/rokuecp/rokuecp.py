@@ -19,7 +19,7 @@ from yarl import URL
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
 from .helpers import is_ip_address, resolve_hostname
-from .models import Application, Device
+from .models import Application, Device, Info, MediaState
 
 
 @dataclass
@@ -341,7 +341,7 @@ class Roku:
         result = await self._request("/query/apps")
         normalized = None
 
-        if isinstance(result, dict) and "apps" in res: 
+        if isinstance(result, dict) and "apps" in result: 
             if isinstance(normalized, OrderedDict):
                 normalized = [result["apps"]["app"]]
             else:
@@ -350,6 +350,57 @@ class Roku:
         return [
             Application.from_dict(app_data)
             for app_data in normalized
+            if normalized is not None
+        ]
+
+    async def device_info(self) -> Info:
+        """Retrieve information about the Roku device.
+
+        Returns:
+            An Info object, with information about the Roku device.
+        """
+        result = await self._request("/query/device-info")
+
+        return Info.from_dict(result["device-info"])
+
+    async def media_state(self) -> MediaState:
+        """Retrieve media state from the Roku device.
+
+        Returns:
+            A MediaState object, with information about the currently media stream.
+        """
+        result = await self._request("/query/media-player")
+
+        return MediaState.from_dict(result["player"])
+
+    async def tv_active_channel(self) -> Channel:
+        """Retrieve active TV channel for updates.
+
+        Returns:
+            A Channel object, with information about the current TV channel.
+        """
+        result = await self._request("/query/tv-active-channel")
+
+        return Channel.from_dict(result["tv-channel"]["channel"])
+
+    async def tv_channels(self) -> list[Channel]:
+        """Retrieve TV channels from the Roku device.
+
+        Returns:
+            A list of Channel objects, with information about the available TV channels.
+        """
+        result = await self._request("/query/tv-channels")
+        normalized = None
+
+        if isinstance(result, dict) and "tv-channels" in result: 
+            if isinstance(normalized, OrderedDict):
+                normalized = [result["tv-channels"]["channel"]]
+            else:
+                normalized = result["tv-channels"]["channel"]
+
+        return [
+            Channel.from_dict(channel_data)
+            for channel_data in normalized
             if normalized is not None
         ]
 
