@@ -12,6 +12,9 @@ from .exceptions import RokuError
 def _ms_to_sec(msec: str) -> int:
     """Convert millisecond string to seconds integer.
 
+    Args:
+        msec: The number of milliseconds as a string.
+
     Returns:
         The number of seconds converted from milliseconds.
     """
@@ -226,7 +229,6 @@ class Device:
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
-
         """
         # Check if all elements are in the passed dict, else raise an Error
         if any(k not in data for k in ("info", "available", "standby")):
@@ -273,7 +275,15 @@ class Device:
     def update_from_dict(
         self, data: dict[str, Any], update_state: bool = True
     ) -> Device:
-        """Return Device object from Roku device data."""
+        """Return Device object from Roku device data.
+
+        Args:
+            data: Dictionary of data.
+            update_state: Whether to update state attributes.
+
+        Returns:
+            The Device object.
+        """
         if update_state:
             self.state = State(
                 available=data.get("available", False),
