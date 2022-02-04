@@ -1,6 +1,4 @@
 """Tests for Roku."""
-from typing import List
-
 import pytest
 from aiohttp import ClientSession
 from rokuecp import Roku, RokuError, models
@@ -262,8 +260,8 @@ async def test_update(aresponses) -> None:
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
         assert response.media is None
@@ -277,8 +275,8 @@ async def test_update(aresponses) -> None:
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
         assert response.media is None
@@ -343,8 +341,8 @@ async def test_update_media_state(aresponses) -> None:
         assert isinstance(response.info, models.Info)
         assert isinstance(response.media, models.MediaState)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
 
@@ -390,8 +388,8 @@ async def test_update_power_off(aresponses) -> None:
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert response.app is None
         assert response.channel is None
         assert response.media is None
@@ -468,8 +466,8 @@ async def test_update_standby(aresponses) -> None:
         assert isinstance(response.info, models.Info)
         assert isinstance(response.media, models.MediaState)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
 
@@ -487,8 +485,8 @@ async def test_update_standby(aresponses) -> None:
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert response.app is None
         assert response.channel is None
         assert response.media is None
@@ -575,8 +573,8 @@ async def test_update_tv(aresponses) -> None:
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert isinstance(response.channel, models.Channel)
         assert response.media is None
@@ -590,8 +588,8 @@ async def test_update_tv(aresponses) -> None:
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert isinstance(response.channel, models.Channel)
         assert response.media is None
@@ -698,7 +696,7 @@ async def test_get_apps_single_app(aresponses) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_apps()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 1
 
 
@@ -875,7 +873,7 @@ async def test_get_tv_channels_no_channels(aresponses) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 0
 
 
@@ -896,5 +894,5 @@ async def test_get_tv_channels_single_channel(aresponses) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 1
