@@ -319,6 +319,16 @@ class Roku:
         """
         await self.launch("tvinput.dtv", {"ch": channel})
 
+    async def async_get_active_app(self) -> Application | None:
+        """Retrieve active app from the Roku device.
+
+        Returns:
+            An Application object, with information about the current application.
+        """
+        result = await self._request("/query/active-app")
+
+        return Application.from_dict(res["active-app"])
+
     async def _get_active_app(self) -> OrderedDict:
         """Retrieve active app for updates.
 
