@@ -5,7 +5,7 @@ import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
 from socket import gaierror as SocketGIAError
-from typing import Any, List, Mapping
+from typing import Any, List
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
@@ -52,10 +52,26 @@ class Roku:
         uri: str = "",
         method: str = "GET",
         data: Any | None = None,
-        params: Mapping[str, str] | None = None,
+        params: dict[str, Any] | None = None,
         encoded: bool = False,
     ) -> Any:
-        """Handle a request to a receiver."""
+        """Handle a request to a receiver.
+        Args:
+            uri: Request URI, for example `/query/device-info`.
+            method: HTTP method to use for the request.E.g., "GET" or "POST".
+            data: Dictionary of data to send to the Roku device.
+            params: The URL parameters sent with request.
+            encoded: Has the URI already been url encoded.
+
+        Returns:
+            A Python dictionary (XML decoded) with the response from the
+            Roku device.
+
+        Raises:
+            RokuConnectionError: An error occurred while communicating with
+            the Roku device.
+            RokuError: Received an unexpected response from the Roku device.
+        """
         host = self.host
 
         if self._dns_lookup:
@@ -128,11 +144,21 @@ class Roku:
 
     @property
     def device(self) -> Device | None:
-        """Return the cached Device object."""
+        """Get Roku device information.
+
+        Returns:
+            A Device object, with information about the Roku device.
+        """
         return self._device
 
     def app_icon_url(self, app_id: str) -> str:
-        """Get the URL to the application icon."""
+        """Get the URL to the application icon.
+        Args:
+            app_id: The application ID.
+
+        Returns:
+            The URL to the icon for the requested application ID.
+        """
         icon_url = URL.build(
             scheme=self._scheme, host=self.host, port=self.port, path=self.base_path
         ).join(URL(f"query/icon/{app_id}"))
@@ -248,7 +274,8 @@ class Roku:
         await self._request("search/browse", method="POST", params=request_params)
 
     async def tune(self, channel: str) -> None:
-        """Change the channel on TV tuner."""
+        """Change the channel on TV tuner.
+        """
         await self.launch("tvinput.dtv", {"ch": channel})
 
     async def _get_active_app(self) -> OrderedDict:
@@ -322,9 +349,16 @@ class Roku:
             await self.session.close()
 
     async def __aenter__(self) -> Roku:
-        """Async enter."""
+        """Async enter.
+
+        Returns: The Roku object.
+        """
         return self
 
-    async def __aexit__(self, *exc_info) -> None:
-        """Async exit."""
+    async def __aexit__(self, *_exc_info: Any) -> None:
+        """Async exit.
+
+        Args:
+            _exc_info: Exec type.
+        """
         await self.close_session()
