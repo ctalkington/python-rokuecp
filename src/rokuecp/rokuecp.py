@@ -234,12 +234,14 @@ class Roku:
 
         return self._device
 
-    async def play_on_roku(self, video_url: str, params: dict[str, Any] | None = None) -> None:
+    async def play_on_roku(
+        self, video_url: str, params: dict[str, Any] | None = None
+    ) -> None:
         """Play video via PlayOnRoku channel.
 
         Args:
             video_url: The URL to play on the Roku device.
-            params: Dictionary of request parameters to send to the Roku device.  
+            params: Dictionary of request parameters to send to the Roku device.
         """
         if params is None:
             params = {}
@@ -258,7 +260,7 @@ class Roku:
 
         Args:
             app_id: The application ID to launch on the Roku device.
-            params: Dictionary of request parameters to send to the Roku device.  
+            params: Dictionary of request parameters to send to the Roku device.
         """
         if params is None:
             params = {}
