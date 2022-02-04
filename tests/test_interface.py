@@ -28,7 +28,7 @@ async def test_app_icon_url() -> None:
 
 
 @pytest.mark.asyncio
-async def test_device(aresponses) -> None:
+async def test_device(aresponses: ResponsesMockServer) -> None:
     """Test app property is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -72,7 +72,7 @@ async def test_device(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_launch(aresponses) -> None:
+async def test_launch(aresponses: ResponsesMockServer) -> None:
     """Test launch is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -96,7 +96,7 @@ async def test_launch(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_play_on_roku(aresponses) -> None:
+async def test_play_on_roku(aresponses: ResponsesMockServer) -> None:
     """Test play_on_roku is handled correctly."""
     video_url = "http://example.com/video file÷awe.mp4?v=2"
     encoded = "http%3A%2F%2Fexample.com%2Fvideo+file%C3%B7awe.mp4%3Fv%3D2"
@@ -115,7 +115,7 @@ async def test_play_on_roku(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_literal(aresponses) -> None:
+async def test_literal(aresponses: ResponsesMockServer) -> None:
     """Test literal is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -144,7 +144,7 @@ async def test_literal(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_remote(aresponses) -> None:
+async def test_remote(aresponses: ResponsesMockServer) -> None:
     """Test remote is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -168,7 +168,7 @@ async def test_remote_invalid_key() -> None:
 
 
 @pytest.mark.asyncio
-async def test_remote_search(aresponses) -> None:
+async def test_remote_search(aresponses: ResponsesMockServer) -> None:
     """Test remote search keypress is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -183,7 +183,7 @@ async def test_remote_search(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_search(aresponses) -> None:
+async def test_search(aresponses: ResponsesMockServer) -> None:
     """Test search is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -199,7 +199,7 @@ async def test_search(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_tune(aresponses) -> None:
+async def test_tune(aresponses: ResponsesMockServer) -> None:
     """Test tune is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -215,7 +215,7 @@ async def test_tune(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_update(aresponses) -> None:
+async def test_update(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -287,7 +287,7 @@ async def test_update(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_update_media_state(aresponses) -> None:
+async def test_update_media_state(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly with pluto app."""
     aresponses.add(
         MATCH_HOST,
@@ -357,7 +357,7 @@ async def test_update_media_state(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_update_power_off(aresponses) -> None:
+async def test_update_power_off(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly when power is off."""
     aresponses.add(
         MATCH_HOST,
@@ -400,7 +400,7 @@ async def test_update_power_off(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_update_standby(aresponses) -> None:
+async def test_update_standby(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly when device transitions to standby."""
     aresponses.add(
         MATCH_HOST,
@@ -497,7 +497,7 @@ async def test_update_standby(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_update_tv(aresponses) -> None:
+async def test_update_tv(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly for TVs."""
     for _ in range(0, 2):
         aresponses.add(
@@ -600,7 +600,7 @@ async def test_update_tv(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_active_app(aresponses) -> None:
+async def test_get_active_app(aresponses: ResponsesMockServer) -> None:
     """Test _get_active_app method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -619,7 +619,7 @@ async def test_get_active_app(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_active_app_invalid(aresponses) -> None:
+async def test_get_active_app_invalid(aresponses: ResponsesMockServer) -> None:
     """Test _get_active_app method is handled correctly with invalid data."""
     aresponses.add(
         MATCH_HOST,
@@ -639,7 +639,7 @@ async def test_get_active_app_invalid(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_apps(aresponses) -> None:
+async def test_get_apps(aresponses: ResponsesMockServer) -> None:
     """Test _get_apps method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -660,7 +660,7 @@ async def test_get_apps(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_apps_invalid(aresponses) -> None:
+async def test_get_apps_invalid(aresponses: ResponsesMockServer) -> None:
     """Test _get_apps method is handled correctly with invalid data."""
     aresponses.add(
         MATCH_HOST,
@@ -680,7 +680,7 @@ async def test_get_apps_invalid(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_apps_single_app(aresponses) -> None:
+async def test_get_apps_single_app(aresponses: ResponsesMockServer) -> None:
     """Test _get_apps method is handled correctly with single app."""
     aresponses.add(
         MATCH_HOST,
@@ -701,7 +701,7 @@ async def test_get_apps_single_app(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_device_info(aresponses) -> None:
+async def test_get_device_info(aresponses: ResponsesMockServer) -> None:
     """Test _get_device_info method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -721,7 +721,7 @@ async def test_get_device_info(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_close(aresponses) -> None:
+async def test_get_media_state_close(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with closed media."""
     aresponses.add(
         MATCH_HOST,
@@ -740,7 +740,7 @@ async def test_get_media_state_close(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_invalid(aresponses) -> None:
+async def test_get_media_state_invalid(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with invalid data."""
     aresponses.add(
         MATCH_HOST,
@@ -760,7 +760,7 @@ async def test_get_media_state_invalid(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_live(aresponses) -> None:
+async def test_get_media_state_live(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with live media."""
     aresponses.add(
         MATCH_HOST,
@@ -779,7 +779,7 @@ async def test_get_media_state_live(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_pause(aresponses) -> None:
+async def test_get_media_state_pause(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with paused media."""
     aresponses.add(
         MATCH_HOST,
@@ -798,7 +798,7 @@ async def test_get_media_state_pause(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_play(aresponses) -> None:
+async def test_get_media_state_play(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with playing media."""
     aresponses.add(
         MATCH_HOST,
@@ -817,7 +817,7 @@ async def test_get_media_state_play(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_tv_active_channel(aresponses) -> None:
+async def test_get_tv_active_channel(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_active_channel method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -837,7 +837,7 @@ async def test_get_tv_active_channel(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels(aresponses) -> None:
+async def test_get_tv_channels(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_channels method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -857,7 +857,7 @@ async def test_get_tv_channels(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels_no_channels(aresponses) -> None:
+async def test_get_tv_channels_no_channels(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_channels method is handled correctly with no channels."""
     aresponses.add(
         MATCH_HOST,
@@ -878,7 +878,7 @@ async def test_get_tv_channels_no_channels(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels_single_channel(aresponses) -> None:
+async def test_get_tv_channels_single_channel(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_channels method is handled correctly with single channel."""
     aresponses.add(
         MATCH_HOST,
