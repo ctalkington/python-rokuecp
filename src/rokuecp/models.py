@@ -19,9 +19,9 @@ def _ms_to_sec(ms: str) -> int:
 class Application:
     """Object holding application information from Roku."""
 
-    app_id: str
-    name: str
-    version: str
+    app_id: str | None
+    name: str | None
+    version: str | None
     screensaver: bool
 
     @staticmethod
@@ -47,14 +47,14 @@ class Application:
 class Info:
     """Object holding device information from Roku."""
 
-    name: str
+    name: str | None
     brand: str
     device_type: str
-    device_location: str
-    model_name: str
-    model_number: str
-    serial_number: str
-    version: str
+    device_location: str | None
+    model_name: str | None
+    model_number: str | None
+    serial_number: str | None
+    version: str | None
     network_type: str | None = None
     network_name: str | None = None
     ethernet_support: bool | None = None
@@ -104,8 +104,8 @@ class Info:
 class Channel:
     """Object holding all information of TV Channel."""
 
-    name: str
-    number: str
+    name: str | None
+    number: str | None
     channel_type: str
     hidden: bool
     program_title: str | None = None
