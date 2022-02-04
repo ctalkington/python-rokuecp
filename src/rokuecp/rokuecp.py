@@ -51,7 +51,7 @@ class Roku:
         self,
         uri: str = "",
         method: str = "GET",
-        data: Any | None= None,
+        data: Any | None = None,
         params: Mapping[str, str] | None = None,
         encoded: bool = False,
     ) -> Any:
