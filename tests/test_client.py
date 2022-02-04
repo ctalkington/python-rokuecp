@@ -5,9 +5,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 from aiohttp import ClientError, ClientSession
-
+from aresponses import ResponsesMockServer
 from rokuecp import Roku
 from rokuecp.exceptions import RokuConnectionError, RokuError
+
 from tests import fake_addrinfo_results
 
 HOSTNAME = "roku.local"
@@ -19,7 +20,7 @@ NON_STANDARD_PORT = 3333
 
 
 @pytest.mark.asyncio
-async def test_xml_request(aresponses):
+async def test_xml_request(aresponses: ResponsesMockServer) -> None:
     """Test XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -41,7 +42,7 @@ async def test_xml_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_text_xml_request(aresponses):
+async def test_text_xml_request(aresponses: ResponsesMockServer) -> None:
     """Test (text) XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -63,7 +64,7 @@ async def test_text_xml_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_xml_request_parse_error(aresponses):
+async def test_xml_request_parse_error(aresponses: ResponsesMockServer) -> None:
     """Test invalid XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -83,7 +84,7 @@ async def test_xml_request_parse_error(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_text_request(aresponses):
+async def test_text_request(aresponses: ResponsesMockServer) -> None:
     """Test non XML response is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -98,7 +99,7 @@ async def test_text_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_internal_session(aresponses):
+async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly with internal session."""
     aresponses.add(
         MATCH_HOST,
@@ -119,7 +120,7 @@ async def test_internal_session(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_post_request(aresponses):
+async def test_post_request(aresponses: ResponsesMockServer) -> None:
     """Test POST requests are handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -135,7 +136,7 @@ async def test_post_request(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_request_port(aresponses):
+async def test_request_port(aresponses: ResponsesMockServer) -> None:
     """Test the handling of non-standard API port."""
     aresponses.add(
         f"{HOST}:{NON_STANDARD_PORT}",
@@ -151,7 +152,7 @@ async def test_request_port(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_timeout(aresponses):
+async def test_timeout(aresponses: ResponsesMockServer) -> None:
     """Test request timeout from the API."""
     # Faking a timeout by sleeping
     async def response_handler(_):
@@ -172,7 +173,7 @@ async def test_timeout(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_client_error():
+async def test_client_error() -> None:
     """Test HTTP client error."""
     async with ClientSession() as session:
         session.request = AsyncMock(side_effect=ClientError)
@@ -183,7 +184,7 @@ async def test_client_error():
 
 
 @pytest.mark.asyncio
-async def test_http_error404(aresponses):
+async def test_http_error404(aresponses: ResponsesMockServer) -> None:
     """Test HTTP 404 response handling."""
     aresponses.add(
         MATCH_HOST,
@@ -199,7 +200,7 @@ async def test_http_error404(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_http_error500(aresponses):
+async def test_http_error500(aresponses: ResponsesMockServer) -> None:
     """Test HTTP 500 response handling."""
     aresponses.add(
         MATCH_HOST,
@@ -215,7 +216,9 @@ async def test_http_error500(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname(aresponses, resolver) -> None:
+async def test_resolve_hostname(
+    aresponses: ResponsesMockServer, resolver: AsyncMock
+) -> None:
     """Test that hostnames are resolved before request."""
     resolver.return_value = fake_addrinfo_results([HOST])
 
@@ -232,7 +235,7 @@ async def test_resolve_hostname(aresponses, resolver) -> None:
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname_error(resolver) -> None:
+async def test_resolve_hostname_error(resolver: AsyncMock) -> None:
     """Test that hostname resolution errors are handled."""
     resolver.side_effect = SocketGIAError
 

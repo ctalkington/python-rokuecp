@@ -1,7 +1,9 @@
 """DNS Resolver for Roku Client based on aiohttp logic."""
+from __future__ import annotations
+
 import socket
-from asyncio import get_running_loop
-from typing import Any, Dict, List
+from asyncio import AbstractEventLoop, get_running_loop
+from typing import Any
 
 
 class ThreadedResolver:
@@ -11,14 +13,30 @@ class ThreadedResolver:
         """Initialize threaded resolver."""
         self._loop = get_running_loop()
 
-    def get_loop(self):
-        """Return the running loop."""
+    def get_loop(self) -> AbstractEventLoop:
+        """Return the running loop.
+
+        Returns:
+            The currently running event loop.
+        """
         return self._loop
 
     async def resolve(
         self, hostname: str, port: int = 0, family: int = socket.AF_INET
-    ) -> List[Dict[str, Any]]:
-        """Return IP address for given hostname."""
+    ) -> list[dict[str, Any]]:
+        """Return IP addresses for given hostname.
+
+        Args:
+            hostname: The hostname to resolve.
+            port: The port to use when resolving.
+            family: The socket address family.
+
+        Returns:
+            List of resolved IP addresses dictionaries.
+
+        Raises:
+            OSError: An error occurred while resolving the hostname.
+        """
         infos = await self.get_loop().getaddrinfo(
             hostname,
             port,
@@ -29,7 +47,7 @@ class ThreadedResolver:
 
         hosts = []
         for _family, _, proto, _, address in infos:
-            if _family == socket.AF_INET6 and address[3]:  # pragma: no cover
+            if _family == socket.AF_INET6 and address[3]:  # type: ignore
                 # LL IPv6 is a VERY rare case.
                 raise OSError("link-local IPv6 addresses not supported")
 

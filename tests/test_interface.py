@@ -1,9 +1,7 @@
 """Tests for Roku."""
-from typing import List
-
 import pytest
 from aiohttp import ClientSession
-
+from aresponses import ResponsesMockServer
 from rokuecp import Roku, RokuError, models
 
 from . import load_fixture
@@ -16,14 +14,14 @@ ICON_BASE = f"http://{MATCH_HOST}/query/icon"
 
 
 @pytest.mark.asyncio
-async def test_loop():
+async def test_loop() -> None:
     """Test loop usage is handled correctly."""
     async with Roku(HOST) as roku:
         assert isinstance(roku, Roku)
 
 
 @pytest.mark.asyncio
-async def test_app_icon_url():
+async def test_app_icon_url() -> None:
     """Test app_icon_url is handled correctly."""
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
@@ -31,7 +29,7 @@ async def test_app_icon_url():
 
 
 @pytest.mark.asyncio
-async def test_device(aresponses):
+async def test_device(aresponses: ResponsesMockServer) -> None:
     """Test app property is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -75,7 +73,7 @@ async def test_device(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_launch(aresponses):
+async def test_launch(aresponses: ResponsesMockServer) -> None:
     """Test launch is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -99,7 +97,7 @@ async def test_launch(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_play_on_roku(aresponses):
+async def test_play_on_roku(aresponses: ResponsesMockServer) -> None:
     """Test play_on_roku is handled correctly."""
     video_url = "http://example.com/video file÷awe.mp4?v=2"
     encoded = "http%3A%2F%2Fexample.com%2Fvideo+file%C3%B7awe.mp4%3Fv%3D2"
@@ -118,7 +116,7 @@ async def test_play_on_roku(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_literal(aresponses):
+async def test_literal(aresponses: ResponsesMockServer) -> None:
     """Test literal is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -147,7 +145,7 @@ async def test_literal(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_remote(aresponses):
+async def test_remote(aresponses: ResponsesMockServer) -> None:
     """Test remote is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -162,7 +160,7 @@ async def test_remote(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_remote_invalid_key():
+async def test_remote_invalid_key() -> None:
     """Test remote with invalid key is handled correctly."""
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
@@ -171,7 +169,7 @@ async def test_remote_invalid_key():
 
 
 @pytest.mark.asyncio
-async def test_remote_search(aresponses):
+async def test_remote_search(aresponses: ResponsesMockServer) -> None:
     """Test remote search keypress is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -186,7 +184,7 @@ async def test_remote_search(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_search(aresponses):
+async def test_search(aresponses: ResponsesMockServer) -> None:
     """Test search is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -202,7 +200,7 @@ async def test_search(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_tune(aresponses):
+async def test_tune(aresponses: ResponsesMockServer) -> None:
     """Test tune is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -218,7 +216,7 @@ async def test_tune(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update(aresponses):
+async def test_update(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -263,8 +261,8 @@ async def test_update(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
         assert response.media is None
@@ -278,8 +276,8 @@ async def test_update(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
         assert response.media is None
@@ -290,7 +288,7 @@ async def test_update(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update_media_state(aresponses):
+async def test_update_media_state(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly with pluto app."""
     aresponses.add(
         MATCH_HOST,
@@ -344,8 +342,8 @@ async def test_update_media_state(aresponses):
         assert isinstance(response.info, models.Info)
         assert isinstance(response.media, models.MediaState)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
 
@@ -360,7 +358,7 @@ async def test_update_media_state(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update_power_off(aresponses):
+async def test_update_power_off(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly when power is off."""
     aresponses.add(
         MATCH_HOST,
@@ -391,8 +389,8 @@ async def test_update_power_off(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert response.app is None
         assert response.channel is None
         assert response.media is None
@@ -403,7 +401,7 @@ async def test_update_power_off(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update_standby(aresponses):
+async def test_update_standby(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly when device transitions to standby."""
     aresponses.add(
         MATCH_HOST,
@@ -469,8 +467,8 @@ async def test_update_standby(aresponses):
         assert isinstance(response.info, models.Info)
         assert isinstance(response.media, models.MediaState)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert response.channel is None
 
@@ -488,8 +486,8 @@ async def test_update_standby(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert response.app is None
         assert response.channel is None
         assert response.media is None
@@ -500,7 +498,7 @@ async def test_update_standby(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_update_tv(aresponses):
+async def test_update_tv(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly for TVs."""
     for _ in range(0, 2):
         aresponses.add(
@@ -576,8 +574,8 @@ async def test_update_tv(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert isinstance(response.channel, models.Channel)
         assert response.media is None
@@ -591,8 +589,8 @@ async def test_update_tv(aresponses):
         assert response
         assert isinstance(response.info, models.Info)
         assert isinstance(response.state, models.State)
-        assert isinstance(response.apps, List)
-        assert isinstance(response.channels, List)
+        assert isinstance(response.apps, list)
+        assert isinstance(response.channels, list)
         assert isinstance(response.app, models.Application)
         assert isinstance(response.channel, models.Channel)
         assert response.media is None
@@ -603,7 +601,7 @@ async def test_update_tv(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_active_app(aresponses):
+async def test_get_active_app(aresponses: ResponsesMockServer) -> None:
     """Test _get_active_app method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -622,7 +620,7 @@ async def test_get_active_app(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_active_app_invalid(aresponses):
+async def test_get_active_app_invalid(aresponses: ResponsesMockServer) -> None:
     """Test _get_active_app method is handled correctly with invalid data."""
     aresponses.add(
         MATCH_HOST,
@@ -642,7 +640,7 @@ async def test_get_active_app_invalid(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_apps(aresponses):
+async def test_get_apps(aresponses: ResponsesMockServer) -> None:
     """Test _get_apps method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -658,12 +656,12 @@ async def test_get_apps(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_apps()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 8
 
 
 @pytest.mark.asyncio
-async def test_get_apps_invalid(aresponses):
+async def test_get_apps_invalid(aresponses: ResponsesMockServer) -> None:
     """Test _get_apps method is handled correctly with invalid data."""
     aresponses.add(
         MATCH_HOST,
@@ -683,7 +681,7 @@ async def test_get_apps_invalid(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_apps_single_app(aresponses):
+async def test_get_apps_single_app(aresponses: ResponsesMockServer) -> None:
     """Test _get_apps method is handled correctly with single app."""
     aresponses.add(
         MATCH_HOST,
@@ -699,12 +697,12 @@ async def test_get_apps_single_app(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_apps()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 1
 
 
 @pytest.mark.asyncio
-async def test_get_device_info(aresponses):
+async def test_get_device_info(aresponses: ResponsesMockServer) -> None:
     """Test _get_device_info method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -724,7 +722,7 @@ async def test_get_device_info(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_close(aresponses):
+async def test_get_media_state_close(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with closed media."""
     aresponses.add(
         MATCH_HOST,
@@ -743,7 +741,7 @@ async def test_get_media_state_close(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_invalid(aresponses):
+async def test_get_media_state_invalid(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with invalid data."""
     aresponses.add(
         MATCH_HOST,
@@ -763,7 +761,7 @@ async def test_get_media_state_invalid(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_live(aresponses):
+async def test_get_media_state_live(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with live media."""
     aresponses.add(
         MATCH_HOST,
@@ -782,7 +780,7 @@ async def test_get_media_state_live(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_pause(aresponses):
+async def test_get_media_state_pause(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with paused media."""
     aresponses.add(
         MATCH_HOST,
@@ -801,7 +799,7 @@ async def test_get_media_state_pause(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_media_state_play(aresponses):
+async def test_get_media_state_play(aresponses: ResponsesMockServer) -> None:
     """Test _get_media_state method is handled correctly with playing media."""
     aresponses.add(
         MATCH_HOST,
@@ -820,7 +818,7 @@ async def test_get_media_state_play(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_tv_active_channel(aresponses):
+async def test_get_tv_active_channel(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_active_channel method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -840,7 +838,7 @@ async def test_get_tv_active_channel(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels(aresponses):
+async def test_get_tv_channels(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_channels method is handled correctly."""
     aresponses.add(
         MATCH_HOST,
@@ -860,7 +858,7 @@ async def test_get_tv_channels(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels_no_channels(aresponses):
+async def test_get_tv_channels_no_channels(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_channels method is handled correctly with no channels."""
     aresponses.add(
         MATCH_HOST,
@@ -876,12 +874,12 @@ async def test_get_tv_channels_no_channels(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 0
 
 
 @pytest.mark.asyncio
-async def test_get_tv_channels_single_channel(aresponses):
+async def test_get_tv_channels_single_channel(aresponses: ResponsesMockServer) -> None:
     """Test _get_tv_channels method is handled correctly with single channel."""
     aresponses.add(
         MATCH_HOST,
@@ -897,5 +895,5 @@ async def test_get_tv_channels_single_channel(aresponses):
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         res = await client._get_tv_channels()
-        assert isinstance(res, List)
+        assert isinstance(res, list)
         assert len(res) == 1

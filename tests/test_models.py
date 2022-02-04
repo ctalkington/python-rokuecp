@@ -1,10 +1,8 @@
 """Tests for Roku Models."""
 from datetime import datetime
-from typing import List
 
 import pytest
 import xmltodict
-
 from rokuecp import RokuError, models
 
 from . import load_fixture
@@ -58,7 +56,7 @@ def test_device() -> None:
     assert isinstance(device.state, models.State)
 
     assert device.apps
-    assert isinstance(device.apps, List)
+    assert isinstance(device.apps, list)
 
     assert device.app
     assert isinstance(device.app, models.Application)
@@ -66,7 +64,7 @@ def test_device() -> None:
     assert device.media
     assert isinstance(device.media, models.MediaState)
 
-    assert isinstance(device.channels, List)
+    assert isinstance(device.channels, list)
     assert len(device.channels) == 0
 
     assert device.channel is None
@@ -91,7 +89,7 @@ def test_device_tv() -> None:
     assert isinstance(device.state, models.State)
 
     assert device.apps
-    assert isinstance(device.apps, List)
+    assert isinstance(device.apps, list)
 
     assert device.app
     assert isinstance(device.app, models.Application)
@@ -99,7 +97,7 @@ def test_device_tv() -> None:
 
     assert device.media is None
 
-    assert isinstance(device.channels, List)
+    assert isinstance(device.channels, list)
     assert len(device.channels) == 2
 
     assert isinstance(device.channel, models.Channel)
@@ -115,14 +113,14 @@ def test_device_as_dict() -> None:
     assert isinstance(device_dict, dict)
     assert isinstance(device_dict["info"], dict)
     assert isinstance(device_dict["state"], dict)
-    assert isinstance(device_dict["apps"], List)
+    assert isinstance(device_dict["apps"], list)
     assert len(device_dict["apps"]) == 8
     assert device_dict["app"]
     assert isinstance(device_dict["app"], dict)
     assert device_dict["channel"] is None
     assert device_dict["media"]
     assert isinstance(device_dict["media"], dict)
-    assert isinstance(device_dict["channels"], List)
+    assert isinstance(device_dict["channels"], list)
     assert len(device_dict["channels"]) == 0
 
 
@@ -136,14 +134,14 @@ def test_device_tv_as_dict() -> None:
     assert isinstance(device_dict, dict)
     assert isinstance(device_dict["info"], dict)
     assert isinstance(device_dict["state"], dict)
-    assert isinstance(device_dict["apps"], List)
+    assert isinstance(device_dict["apps"], list)
     assert len(device_dict["apps"]) == 10
     assert device_dict["app"]
     assert isinstance(device_dict["app"], dict)
     assert device_dict["channel"]
     assert isinstance(device_dict["channel"], dict)
     assert device_dict["media"] is None
-    assert isinstance(device_dict["channels"], List)
+    assert isinstance(device_dict["channels"], list)
     assert len(device_dict["channels"]) == 2
 
 
