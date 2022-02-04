@@ -47,7 +47,7 @@ class ThreadedResolver:
 
         hosts = []
         for _family, _, proto, _, address in infos:
-            if _family == socket.AF_INET6 and address[3]:  # pragma: no cover
+            if _family == socket.AF_INET6 and len(address) > 2 and address[3]:  # pragma: no cover
                 # LL IPv6 is a VERY rare case.
                 raise OSError("link-local IPv6 addresses not supported")
 
