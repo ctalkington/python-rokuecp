@@ -1,6 +1,7 @@
 """Tests for Roku."""
 import pytest
 from aiohttp import ClientSession
+from aresponses import ResponsesMockServer
 from rokuecp import Roku, RokuError, models
 
 from . import load_fixture
