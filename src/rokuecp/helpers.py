@@ -36,7 +36,7 @@ async def resolve_hostname(host: str) -> str:
 
     Raises:
         RokuConnectionError: An error occurred while communicating with
-        the Roku device.
+            the Roku device.
     """
     try:
         resolver = ThreadedResolver()
