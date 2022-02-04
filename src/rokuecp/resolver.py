@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import socket
-from asyncio import get_running_loop
+from asyncio import AbstractEventLoop, get_running_loop
 from typing import Any
 
 
@@ -13,8 +13,12 @@ class ThreadedResolver:
         """Initialize threaded resolver."""
         self._loop = get_running_loop()
 
-    def get_loop(self):
-        """Return the running loop."""
+    def get_loop(self) -> AbstractEventLoop:
+        """Return the running loop.
+
+        Returns:
+            The currently running event loop.
+        """
         return self._loop
 
     async def resolve(
