@@ -64,7 +64,7 @@ class Roku:
             method: HTTP method to use for the request.E.g., "GET" or "POST".
             data: Dictionary of data to send to the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
-            encoded: Has the URI already been url encoded.
+            encoded: Whether the URI has already been url encoded.
 
         Returns:
             A Python dictionary (XML decoded) with the response from the
@@ -72,7 +72,7 @@ class Roku:
 
         Raises:
             RokuConnectionError: An error occurred while communicating with
-            the Roku device.
+                the Roku device.
             RokuError: Received an unexpected response from the Roku device.
         """
         host = self.host
