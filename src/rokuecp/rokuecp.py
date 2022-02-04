@@ -5,7 +5,7 @@ import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
 from socket import gaierror as SocketGIAError
-from typing import Any, List, Mapping, Optional
+from typing import Any, List, Mapping
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
@@ -30,13 +30,13 @@ class Roku:
     base_path: str = "/"
     port: int = 8060
     request_timeout: int = 5
-    session: ClientSession = None
-    user_agent: Optional[str] = None
+    session: ClientSession | None = None
+    user_agent: str | None = None
 
     _close_session: bool = False
     _dns_lookup: bool = False
     _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
-    _device: Optional[Device] = None
+    _device: Device | None = None
     _scheme: str = "http"
 
     def __post_init__(self):
@@ -51,8 +51,8 @@ class Roku:
         self,
         uri: str = "",
         method: str = "GET",
-        data: Optional[Any] = None,
-        params: Optional[Mapping[str, str]] = None,
+        data: Any | None= None,
+        params: Mapping[str, str] | None = None,
         encoded: bool = False,
     ) -> Any:
         """Handle a request to a receiver."""
@@ -127,7 +127,7 @@ class Roku:
         return await response.text()
 
     @property
-    def device(self) -> Optional[Device]:
+    def device(self) -> Device | None:
         """Return the cached Device object."""
         return self._device
 
@@ -200,7 +200,7 @@ class Roku:
 
         return self._device
 
-    async def play_on_roku(self, video_url: str, params: Optional[dict] = None):
+    async def play_on_roku(self, video_url: str, params: dict[str, Any] | None = None):
         """Play video via PlayOnRoku channel."""
         if params is None:
             params = {}
@@ -214,7 +214,7 @@ class Roku:
         encoded = urlencode(request_params)
         await self._request(f"input/15985?{encoded}", method="POST", encoded=True)
 
-    async def launch(self, app_id: str, params: Optional[dict] = None) -> None:
+    async def launch(self, app_id: str, params: dict[str, Any] = None) -> None:
         """Launch application."""
         if params is None:
             params = {}
@@ -321,10 +321,10 @@ class Roku:
         if self.session and self._close_session:
             await self.session.close()
 
-    async def __aenter__(self) -> "Roku":
+    async def __aenter__(self) -> Roku:
         """Async enter."""
         return self
 
-    async def __aexit__(self, *exc_info) -> None:
+    async def __aexit__(self) -> None:
         """Async exit."""
         await self.close_session()
