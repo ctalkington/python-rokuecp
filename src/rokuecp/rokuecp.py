@@ -19,7 +19,7 @@ from yarl import URL
 from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
 from .helpers import is_ip_address, resolve_hostname
-from .models import Application, Device, Info, MediaState
+from .models import Application, Channel, Device, Info, MediaState
 
 
 @dataclass
