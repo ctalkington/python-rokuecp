@@ -319,7 +319,7 @@ class Roku:
         """
         await self.launch("tvinput.dtv", {"ch": channel})
 
-    async def active_app(self) -> Application | None:
+    async def active_app(self) -> Application:
         """Retrieve active app from the Roku device.
 
         Returns:
@@ -327,10 +327,7 @@ class Roku:
         """
         result = await self._request("/query/active-app")
 
-        if not isinstance(result, dict) or "active-app" not in result:
-            return None
-
-        return Application.from_dict(res["active-app"])
+        return Application.from_dict(result["active-app"])
 
     async def apps(self) -> list[Application]:
         """Retrieve installed apps from the Roku device.
