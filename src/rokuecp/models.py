@@ -212,8 +212,8 @@ class Device:
 
     info: Info
     state: State
-    apps: list[Application] | None = []
-    channels: list[Channel] | None = []
+    apps: list[Application] = []
+    channels: list[Channel] = []
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None
