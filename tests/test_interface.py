@@ -616,7 +616,7 @@ async def test_get_active_app(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        assert await client._get_active_app()
+        assert await client.active_app()
 
 
 @pytest.mark.asyncio
@@ -636,7 +636,7 @@ async def test_get_active_app_invalid(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_active_app()
+            assert await client.active_app()
 
 
 @pytest.mark.asyncio
@@ -655,7 +655,7 @@ async def test_get_apps(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        res = await client._get_apps()
+        res = await client.apps()
         assert isinstance(res, list)
         assert len(res) == 8
 
@@ -677,7 +677,7 @@ async def test_get_apps_invalid(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_apps()
+            assert await client.apps()
 
 
 @pytest.mark.asyncio
@@ -696,7 +696,7 @@ async def test_get_apps_single_app(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        res = await client._get_apps()
+        res = await client.apps()
         assert isinstance(res, list)
         assert len(res) == 1
 
@@ -718,7 +718,7 @@ async def test_get_device_info(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_device_info()
+            assert await client.device_info()
 
 
 @pytest.mark.asyncio
@@ -737,7 +737,7 @@ async def test_get_media_state_close(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        assert await client._get_media_state()
+        assert await client.media_state()
 
 
 @pytest.mark.asyncio
@@ -757,7 +757,7 @@ async def test_get_media_state_invalid(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_media_state()
+            assert await client.media_state()
 
 
 @pytest.mark.asyncio
@@ -776,7 +776,7 @@ async def test_get_media_state_live(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        assert await client._get_media_state()
+        assert await client.media_state()
 
 
 @pytest.mark.asyncio
@@ -795,7 +795,7 @@ async def test_get_media_state_pause(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        assert await client._get_media_state()
+        assert await client.media_state()
 
 
 @pytest.mark.asyncio
@@ -814,7 +814,7 @@ async def test_get_media_state_play(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        assert await client._get_media_state()
+        assert await client.media_state()
 
 
 @pytest.mark.asyncio
@@ -834,7 +834,7 @@ async def test_get_tv_active_channel(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_tv_active_channel()
+            assert await client.tv_active_channel()
 
 
 @pytest.mark.asyncio
@@ -854,7 +854,7 @@ async def test_get_tv_channels(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
-            assert await client._get_tv_channels()
+            assert await client.tv_channels()
 
 
 @pytest.mark.asyncio
@@ -873,7 +873,7 @@ async def test_get_tv_channels_no_channels(aresponses: ResponsesMockServer) -> N
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        res = await client._get_tv_channels()
+        res = await client.tv_channels()
         assert isinstance(res, list)
         assert len(res) == 0
 
@@ -894,6 +894,6 @@ async def test_get_tv_channels_single_channel(aresponses: ResponsesMockServer) -
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
-        res = await client._get_tv_channels()
+        res = await client.tv_channels()
         assert isinstance(res, list)
         assert len(res) == 1
