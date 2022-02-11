@@ -152,7 +152,7 @@ class Channel:
 
         return Channel(
             name=data.get("name", None),
-            number=data.get("number", 0),
+            number=data.get("number", "0"),
             channel_type=data.get("type", "unknown"),
             hidden=data.get("user-hidden", "false") == "true",
             program_title=data.get("program-title", None),
