@@ -123,7 +123,7 @@ class Channel:
     """Object holding all information of TV Channel."""
 
     name: str | None
-    number: str | None
+    number: str
     channel_type: str
     hidden: bool
     program_title: str | None = None
@@ -152,7 +152,7 @@ class Channel:
 
         return Channel(
             name=data.get("name", None),
-            number=data.get("number", None),
+            number=data.get("number", 0),
             channel_type=data.get("type", "unknown"),
             hidden=data.get("user-hidden", "false") == "true",
             program_title=data.get("program-title", None),
