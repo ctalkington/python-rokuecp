@@ -4,8 +4,50 @@ from __future__ import annotations
 from ipaddress import ip_address
 from socket import gaierror as SocketGIAError
 
+import yarl
+
 from .exceptions import RokuConnectionError
 from .resolver import ThreadedResolver
+
+MIME_TO_STREAM_FORMAT = {
+    "application/dash+xml": "dash",
+    "application/x-mpegURL": "hls",
+    "audio/mpeg": "mp3",
+    "audio/x-ms-wma": "wma",
+    "video/mp4": "mp4",
+    "video/quicktime": "mp4",
+    "video/x-matroska": "mkv",
+}
+
+
+def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
+    """Guess the Roku stream format for a given URL and MIME type."""
+    parsed = yarl.URL(url)
+    parsed_name = parsed.name.lower()
+
+    if mime_type == "audio/mpeg" and parsed.name.endswith(".m4a"):
+        return "m4a"
+
+    if mime_type is None:
+        if parsed_name.endswith(".dash"):
+            return "dash"
+        if parsed_name.endswith(".mpd"):
+            return "dash"
+        if parsed_name.endswith(".mp3"):
+            return "mp3"
+        if parsed_name.endswith(".m4v"):
+            return "mp4"
+        if parsed_name.endswith(".mks"):
+            return "mks"
+        if parsed_name.endswith(".mka"):
+            return "mka"
+        if ".ism/manifest" in parsed.path.lower():
+            return "ism"
+
+    if mime_type not in MIME_TO_STREAM_FORMAT:
+        return None
+
+    return MIME_TO_STREAM_FORMAT[mime_type]
 
 
 def is_ip_address(host: str) -> bool:
