@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from ipaddress import ip_address
+import mimetypes
 from socket import gaierror as SocketGIAError
 
 import yarl
@@ -24,6 +25,9 @@ def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
     """Guess the Roku stream format for a given URL and MIME type."""
     parsed = yarl.URL(url)
     parsed_name = parsed.name.lower()
+
+    if mime_type is None:
+        mime_type, _ = mimetypes.guess_type(parsed.path)
 
     if mime_type == "audio/mpeg" and parsed.name.endswith(".m4a"):
         return "m4a"
