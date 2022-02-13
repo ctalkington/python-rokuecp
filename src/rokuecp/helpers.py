@@ -37,7 +37,7 @@ def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
     if mime_type is None:
         mime_type, _ = mimetypes.guess_type(parsed.path)
 
-    if mime_type == "audio/mpeg" and parsed.name.endswith(".m4a"):
+    if mime_type == "audio/mpeg" and parsed_name.endswith(".m4a"):
         return "m4a"
 
     if mime_type is None:
