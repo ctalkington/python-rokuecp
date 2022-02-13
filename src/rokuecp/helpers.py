@@ -54,6 +54,9 @@ def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
         if ".ism/manifest" in parsed.path.lower():
             return "ism"
 
+    if mime_type is None:
+        return None
+
     if mime_type not in MIME_TO_STREAM_FORMAT:
         return None
 
