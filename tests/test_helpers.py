@@ -19,6 +19,9 @@ def test_guess_stream_format() -> None:
     assert guess_stream_format("/path/media.mkv") == "mkv"
     assert guess_stream_format("/path/media.mks") == "mks"
     assert guess_stream_format("/path/media.m3u8") == "hls"
+    assert guess_stream_format("/path/media.dash") == "dash"
+    assert guess_stream_format("/path/media.mpd") == "dash"
+    assert guess_stream_format("/path/media.ism/manifest") == "ism"
 
     assert guess_stream_format("/path/media.mp3") == "mp3"
     assert guess_stream_format("/path/media.m4a") == "m4a"
