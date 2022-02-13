@@ -22,7 +22,15 @@ MIME_TO_STREAM_FORMAT = {
 
 
 def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
-    """Guess the Roku stream format for a given URL and MIME type."""
+    """Guess the Roku stream format for a given URL and MIME type.
+    
+    Params:
+        url: The URL to determine stream format for.
+        mime_type: The MIME type to aid in stream format determination.
+
+    Returns:
+        The stream format or None if unable to determine stream format.
+    """
     parsed = yarl.URL(url)
     parsed_name = parsed.name.lower()
 
