@@ -11,7 +11,7 @@ from . import fake_addrinfo_results
 HOSTNAME = "roku.local"
 HOST = "192.168.1.2"
 
-def test_guess_stream_format() - > None:
+def test_guess_stream_format() -> None:
     """Test the guess_stream_format helper."""
     assert guess_stream_format("/path/media.mp4") == "mp4"
     assert guess_stream_format("/path/media.m4v") == "mp4"
