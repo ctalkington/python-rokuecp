@@ -17,6 +17,7 @@ def test_guess_stream_format() -> None:
     assert guess_stream_format("/path/media.media") is None
     assert guess_stream_format("/path/media.txt") is None
 
+    assert guess_stream_format("/path/media.mp4", "video/mpeg") == "mp4"
     assert guess_stream_format("/path/media.mp4") == "mp4"
     assert guess_stream_format("/path/media.m4v") == "mp4"
     assert guess_stream_format("/path/media.mov") == "mp4"
