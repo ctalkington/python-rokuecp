@@ -45,8 +45,6 @@ def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
             return "dash"
         if parsed_name.endswith(".mpd"):
             return "dash"
-        if parsed_name.endswith(".mp3"):
-            return "mp3"
         if parsed_name.endswith(".m4v"):
             return "mp4"
         if parsed_name.endswith(".mks"):
