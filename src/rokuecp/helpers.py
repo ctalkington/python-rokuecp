@@ -13,6 +13,7 @@ from .resolver import ThreadedResolver
 MIME_TO_STREAM_FORMAT = {
     "application/dash+xml": "dash",
     "application/x-mpegURL": "hls",
+    "application/vnd.apple.mpegurl": "hls",
     "audio/mpeg": "mp3",
     "audio/x-ms-wma": "wma",
     "video/mp4": "mp4",
