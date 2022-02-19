@@ -52,7 +52,7 @@ class Roku:
 
             self.user_agent = f"PythonRokuECP/{version}"
 
-    async def _request(  # pylint: disable-next=too-many-branches
+    async def _request(
         self,
         uri: str = "",
         method: str = "GET",
@@ -182,6 +182,7 @@ class Roku:
         Returns:
             A Device object, with information about the Roku device.
         """
+        # pylint: disable-next=too-many-branches
         if self._device is None:
             full_update = True
 
