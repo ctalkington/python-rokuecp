@@ -1,4 +1,5 @@
 """Tests for Roku."""
+# pylint: disable=protected-access
 import asyncio
 from socket import gaierror as SocketGIAError
 from unittest.mock import AsyncMock
