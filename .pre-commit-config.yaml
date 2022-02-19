@@ -104,8 +104,6 @@ repos:
         language: system
         types: [python]
         entry: poetry run isort
-        args:
-          - --diff
       - id: mypy
         name: Static type checking using mypy
         language: system
