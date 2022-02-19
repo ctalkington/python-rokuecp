@@ -4,8 +4,8 @@ from __future__ import annotations
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
-import logging
 from importlib import metadata
+import logging
 from socket import gaierror as SocketGIAError
 from typing import Any
 from urllib.parse import quote_plus, urlencode
