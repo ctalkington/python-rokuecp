@@ -52,7 +52,7 @@ class Roku:
 
             self.user_agent = f"PythonRokuECP/{version}"
 
-    async def _request(
+    async def _request(  # pylint: disable-next=too-many-branches
         self,
         uri: str = "",
         method: str = "GET",
