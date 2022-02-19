@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 from collections import OrderedDict
 from dataclasses import dataclass
+import logging
 from importlib import metadata
 from socket import gaierror as SocketGIAError
 from typing import Any
@@ -20,6 +21,8 @@ from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
+
+LOGGER = logging.getLogger(__package__)
 
 
 @dataclass
@@ -138,6 +141,7 @@ class Roku:
 
             try:
                 data = xmltodict.parse(content)
+                LOGGER.debug("Requesting %s returned %s", url, data)
             except (ExpatError, IndexError) as error:
                 raise RokuError from error
 
