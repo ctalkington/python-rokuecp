@@ -2,9 +2,9 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections import OrderedDict
 from dataclasses import dataclass
-import logging
 from importlib import metadata
 from socket import gaierror as SocketGIAError
 from typing import Any
@@ -173,7 +173,9 @@ class Roku:
 
         return str(icon_url)
 
-    async def update(self, full_update: bool = False) -> Device:
+    async def update(  # pylint: disable=too-many-branches
+        self, full_update: bool = False
+    ) -> Device:
         """Get all information about the device in a single call.
 
         Args:

@@ -142,9 +142,7 @@ class Channel:
         Returns:
             The Channel object.
         """
-        strength = data.get("signal-strength", None)
-
-        if strength is not None:
+        if (strength := data.get("signal-strength", None)) is not None:
             try:
                 strength = int(strength)
             except ValueError:
@@ -183,8 +181,7 @@ class MediaState:
         Returns:
             The MediaState object.
         """
-        state = data.get("@state", None)
-        if state not in ("play", "pause"):
+        if (state := data.get("@state", None)) not in ("play", "pause"):
             return None
 
         duration = data.get("duration", "0")
