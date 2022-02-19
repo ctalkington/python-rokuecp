@@ -268,7 +268,8 @@ class Roku:
         if params is None:
             params = {}
 
-        await self._request(f"launch/{app_id}", method="POST", params=params)
+        encoded = urlencode(params)
+        await self._request(f"launch/{app_id}?{encoded}", method="POST", encoded=True)
 
     async def literal(self, text: str) -> None:
         """Send literal text to the Roku device.
