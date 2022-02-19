@@ -49,7 +49,7 @@ class Roku:
 
             self.user_agent = f"PythonRokuECP/{version}"
 
-    async def _request(
+    async def request(
         self,
         uri: str = "",
         method: str = "GET",
@@ -256,7 +256,7 @@ class Roku:
         }
 
         encoded = urlencode(request_params)
-        await self._request(f"input/15985?{encoded}", method="POST", encoded=True)
+        await self.request(f"input/15985?{encoded}", method="POST", encoded=True)
 
     async def launch(self, app_id: str, params: dict[str, Any] = None) -> None:
         """Launch an application on the Roku device.
@@ -269,7 +269,7 @@ class Roku:
             params = {}
 
         encoded = urlencode(params)
-        await self._request(f"launch/{app_id}?{encoded}", method="POST", encoded=True)
+        await self.request(f"launch/{app_id}?{encoded}", method="POST", encoded=True)
 
     async def literal(self, text: str) -> None:
         """Send literal text to the Roku device.
@@ -279,7 +279,7 @@ class Roku:
         """
         for char in text:
             encoded = quote_plus(char)
-            await self._request(f"keypress/Lit_{encoded}", method="POST")
+            await self.request(f"keypress/Lit_{encoded}", method="POST")
 
     async def remote(self, key: str) -> None:
         """Emulate pressing a key on the remote.
@@ -298,7 +298,7 @@ class Roku:
             await self._request("search/browse", method="POST")
             return
 
-        await self._request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
+        await self.request(f"keypress/{VALID_REMOTE_KEYS[key_lower]}", method="POST")
 
     async def search(self, keyword: str) -> None:
         """Emulate opening search and entering keyword on the Roku device.
@@ -310,7 +310,7 @@ class Roku:
             "keyword": keyword,
         }
 
-        await self._request("search/browse", method="POST", params=request_params)
+        await self.request("search/browse", method="POST", params=request_params)
 
     async def tune(self, channel: str) -> None:
         """Change the channel on Roku TV device.
@@ -329,7 +329,7 @@ class Roku:
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
-        res = await self._request("/query/active-app")
+        res = await self.request("/query/active-app")
 
         if not isinstance(res, dict) or "active-app" not in res:
             raise RokuError("Roku device returned a malformed result (active-app)")
@@ -345,7 +345,7 @@ class Roku:
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
-        res = await self._request("/query/apps")
+        res = await self.request("/query/apps")
 
         if not isinstance(res, dict) or "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
@@ -364,7 +364,7 @@ class Roku:
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
-        res = await self._request("/query/device-info")
+        res = await self.request("/query/device-info")
 
         if not isinstance(res, dict) or "device-info" not in res:
             raise RokuError("Roku device returned a malformed result (device-info)")
@@ -380,7 +380,7 @@ class Roku:
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
-        res = await self._request("/query/media-player")
+        res = await self.request("/query/media-player")
 
         if not isinstance(res, dict) or "player" not in res:
             raise RokuError("Roku device returned a malformed result (player)")
@@ -396,7 +396,7 @@ class Roku:
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
-        res = await self._request("/query/tv-active-channel")
+        res = await self.request("/query/tv-active-channel")
 
         if not isinstance(res, dict) or "tv-channel" not in res:
             raise RokuError(
@@ -414,7 +414,7 @@ class Roku:
         Raises:
             RokuError: Received an unexpected response from the Roku device.
         """
-        res = await self._request("/query/tv-channels")
+        res = await self.request("/query/tv-channels")
 
         if not isinstance(res, dict) or "tv-channels" not in res:
             raise RokuError("Roku device returned a malformed result (tv-channels)")
