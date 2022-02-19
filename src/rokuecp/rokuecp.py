@@ -1,5 +1,4 @@
 """Asynchronous Python client for Roku."""
-# pylint: disable=protected-access
 from __future__ import annotations
 
 import asyncio
