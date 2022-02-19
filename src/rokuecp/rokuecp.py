@@ -173,7 +173,9 @@ class Roku:
 
         return str(icon_url)
 
-    async def update(self, full_update: bool = False) -> Device:  # pylint: disable-next=too-many-branches
+    async def update(  # pylint: disable-next=too-many-branches
+        self, full_update: bool = False
+    ) -> Device:
         """Get all information about the device in a single call.
 
         Args:
