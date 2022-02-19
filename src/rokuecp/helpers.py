@@ -22,7 +22,9 @@ MIME_TO_STREAM_FORMAT = {
 }
 
 
-def guess_stream_format(url: str, mime_type: str | None = None) -> str | None:
+def guess_stream_format(  # pylint: disable=too-many-return-statements
+    url: str, mime_type: str | None = None
+) -> str | None:
     """Guess the Roku stream format for a given URL and MIME type.
 
     Args:
