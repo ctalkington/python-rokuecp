@@ -266,7 +266,7 @@ class Roku:
         encoded = urlencode(request_params)
         await self._request(f"input/15985?{encoded}", method="POST", encoded=True)
 
-    async def launch(self, app_id: str, params: dict[str, Any] = None) -> None:
+    async def launch(self, app_id: str, params: dict[str, Any] | None = None) -> None:
         """Launch an application on the Roku device.
 
         Args:
