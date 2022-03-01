@@ -8,7 +8,11 @@ import pytest
 from aiohttp import ClientError, ClientSession
 from aresponses import ResponsesMockServer
 from rokuecp import Roku
-from rokuecp.exceptions import RokuConnectionError, RokuConnectionTimeoutError, RokuError
+from rokuecp.exceptions import (
+    RokuConnectionError,
+    RokuConnectionTimeoutError,
+    RokuError,
+)
 
 from tests import fake_addrinfo_results
 

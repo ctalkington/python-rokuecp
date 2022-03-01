@@ -74,6 +74,8 @@ class Roku:
             Roku device.
 
         Raises:
+            RokuConnectionTimeoutError: A timeout occurred while communicating with
+                the Roku device.
             RokuConnectionError: An error occurred while communicating with
                 the Roku device.
             RokuError: Received an unexpected response from the Roku device.
