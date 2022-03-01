@@ -18,7 +18,7 @@ from cachetools import TTLCache
 from yarl import URL
 
 from .const import VALID_REMOTE_KEYS
-from .exceptions import RokuConnectionError, RokuError
+from .exceptions import RokuConnectionError, RokuConnectionTimeoutError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
@@ -113,7 +113,7 @@ class Roku:
                     headers=headers,
                 )
         except asyncio.TimeoutError as exception:
-            raise RokuConnectionError(
+            raise RokuConnectionTimeoutError(
                 "Timeout occurred while connecting to device"
             ) from exception
         except (ClientError, SocketGIAError) as exception:
