@@ -7,3 +7,7 @@ class RokuError(Exception):
 
 class RokuConnectionError(RokuError):
     """Roku connection exception."""
+
+
+class RokuConnectionTimeoutError(RokuConnectionError):
+    """Roku connection timeout exception."""

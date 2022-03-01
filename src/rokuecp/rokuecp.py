@@ -18,7 +18,7 @@ from cachetools import TTLCache
 from yarl import URL
 
 from .const import VALID_REMOTE_KEYS
-from .exceptions import RokuConnectionError, RokuError
+from .exceptions import RokuConnectionError, RokuConnectionTimeoutError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
@@ -74,6 +74,8 @@ class Roku:
             Roku device.
 
         Raises:
+            RokuConnectionTimeoutError: A timeout occurred while communicating with
+                the Roku device.
             RokuConnectionError: An error occurred while communicating with
                 the Roku device.
             RokuError: Received an unexpected response from the Roku device.
@@ -113,7 +115,7 @@ class Roku:
                     headers=headers,
                 )
         except asyncio.TimeoutError as exception:
-            raise RokuConnectionError(
+            raise RokuConnectionTimeoutError(
                 "Timeout occurred while connecting to device"
             ) from exception
         except (ClientError, SocketGIAError) as exception:
