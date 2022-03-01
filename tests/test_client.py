@@ -8,7 +8,7 @@ import pytest
 from aiohttp import ClientError, ClientSession
 from aresponses import ResponsesMockServer
 from rokuecp import Roku
-from rokuecp.exceptions import RokuConnectionError, RokuError
+from rokuecp.exceptions import RokuConnectionError, RokuConnectionTimeoutError, RokuError
 
 from tests import fake_addrinfo_results
 
@@ -169,7 +169,7 @@ async def test_timeout(aresponses: ResponsesMockServer) -> None:
 
     async with ClientSession() as session:
         client = Roku(HOST, session=session, request_timeout=1)
-        with pytest.raises(RokuConnectionError):
+        with pytest.raises(RokuConnectionTimeoutError):
             assert await client._request("timeout")
 
 
