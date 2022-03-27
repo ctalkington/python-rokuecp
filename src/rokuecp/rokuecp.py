@@ -38,7 +38,7 @@ class Roku:
 
     _close_session: bool = False
     _dns_lookup: bool = False
-    _dns_cache: TTLCache | None = TTLCache(maxsize=16, ttl=7200)
+    _dns_cache: TTLCache | None = None
 
     _device: Device | None = None
     _scheme: str = "http"
