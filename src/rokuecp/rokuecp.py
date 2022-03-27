@@ -38,7 +38,7 @@ class Roku:
 
     _close_session: bool = False
     _dns_lookup: bool = False
-    _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
+    _dns_cache: TTLCache | None = None
     _device: Device | None = None
     _scheme: str = "http"
 
@@ -46,6 +46,7 @@ class Roku:
         """Initialize connection parameters."""
         if not is_ip_address(self.host):
             self._dns_lookup = True
+            self._dns_cache = TTLCache(maxsize=16, ttl=7200)
 
         if self.user_agent is None:
             version = metadata.version(__package__)
