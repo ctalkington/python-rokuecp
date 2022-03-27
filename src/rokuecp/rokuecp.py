@@ -5,6 +5,7 @@ import asyncio
 import logging
 from collections import OrderedDict
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from importlib import metadata
 from socket import gaierror as SocketGIAError
 from typing import Any
@@ -14,7 +15,6 @@ from xml.parsers.expat import ExpatError
 import async_timeout
 import xmltodict
 from aiohttp.client import ClientError, ClientSession
-from cachetools import TTLCache
 from yarl import URL
 
 from .const import VALID_REMOTE_KEYS
@@ -38,7 +38,9 @@ class Roku:
 
     _close_session: bool = False
     _dns_lookup: bool = False
-    _dns_cache: TTLCache | None = None
+    _dns_ip_address: str | None = None
+    _dns_resolved_at: datetime | None = None
+    _dns_update_interval: timedelta | None = None
 
     _device: Device | None = None
     _scheme: str = "http"
@@ -52,6 +54,26 @@ class Roku:
             version = metadata.version(__package__)
 
             self.user_agent = f"PythonRokuECP/{version}"
+
+    async def _resolve_hostname(self) -> str:
+        """Attempt to resolve hostname from cache or via resolver.
+
+        Returns:
+            The resolved IP Address.
+        """
+        if self._dns_update_interval is None:
+            self._dns_update_interval = timedelta(hours=2)
+
+        update = self._dns_resolved_at is None or datetime.utcnow() >= (
+            self._dns_resolved_at + self._dns_update_interval
+        )
+
+        if self._dns_ip_address is None or update:
+            ip_address = await resolve_hostname(self.host)
+            self._dns_ip_address = ip_address
+            self._dns_resolved_at = datetime.utcnow()
+
+        return self._dns_ip_address
 
     async def _request(
         self,
@@ -84,14 +106,7 @@ class Roku:
         host = self.host
 
         if self._dns_lookup:
-            if self._dns_cache is None:
-                self._dns_cache = TTLCache(maxsize=16, ttl=7200)
-
-            try:
-                host = self._dns_cache["ip_address"]
-            except KeyError:
-                host = await resolve_hostname(self.host)
-                self._dns_cache["ip_address"] = host
+            host = await self._resolve_hostname()
 
         url = URL.build(
             scheme=self._scheme,
@@ -438,6 +453,21 @@ class Roku:
             return [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
+
+    def get_dns_diagnostics(self) -> dict[str, Any]:
+        """Retrieve DNS resolution information for diagnostic purposes.
+
+        Returns:
+            A dictionary of DNS diagnostics.
+        """
+        diagnostics = {
+            "enabled": self._dns_lookup,
+            "hostname": self.host if self._dns_lookup else None,
+            "ip_address": self._dns_ip_address,
+            "resolved_at": self._dns_resolved_at,
+        }
+
+        return diagnostics
 
     async def close_session(self) -> None:
         """Close open client session."""

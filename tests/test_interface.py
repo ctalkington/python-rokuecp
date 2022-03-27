@@ -1,11 +1,14 @@
 """Tests for Roku."""
 # pylint: disable=protected-access
+from datetime import datetime
+from unittest.mock import AsyncMock
+
 import pytest
 from aiohttp import ClientSession
 from aresponses import ResponsesMockServer
 from rokuecp import Roku, RokuError, models
 
-from . import load_fixture
+from . import fake_addrinfo_results, load_fixture
 
 HOST = "192.168.1.86"
 PORT = 8060
@@ -27,6 +30,36 @@ async def test_app_icon_url() -> None:
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         assert roku.app_icon_url("101") == f"{ICON_BASE}/101"
+
+
+@pytest.mark.asyncio
+@pytest.mark.freeze_time("2022-03-27")
+async def test_get_dns_diagnostics(resolver: AsyncMock) -> None:
+    """Test get_dns_diagnostics is handled correctly."""
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        assert roku.get_dns_diagnostics() == {
+            "enabled": False,
+            "hostname": None,
+            "ip_address": None,
+            "resolved_at": None,
+        }
+
+        roku2 = Roku("roku.dev", session=session)
+        assert roku2.get_dns_diagnostics() == {
+            "enabled": True,
+            "hostname": "roku.dev",
+            "ip_address": None,
+            "resolved_at": None,
+        }
+
+        resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
+        await roku2._resolve_hostname()
+        dns = roku2.get_dns_diagnostics()
+        assert dns["enabled"]
+        assert dns["hostname"] == "roku.dev"
+        assert dns["ip_address"] == "192.168.1.99"
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
 
 
 @pytest.mark.asyncio
