@@ -252,7 +252,7 @@ async def test_resolve_hostname_multiple_clients(
     )
 
     aresponses.add(
-        "192.168.1.99:{PORT}",
+        f"192.168.1.99:{PORT}",
         "/support/hostname",
         "GET",
         aresponses.Response(status=200, text="OK"),
