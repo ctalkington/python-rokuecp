@@ -28,8 +28,8 @@ class Updateable:
     def update(self, updates: dict[str, Any]):
         """Update dataclass attributes from dictionary.
 
-           Args:
-               updates: Dictionary of attribute updates.
+        Args:
+            updates: Dictionary of attribute updates.
         """
         for key, value in updates.items():
             if hasattr(self, key):
