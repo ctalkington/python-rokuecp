@@ -46,7 +46,6 @@ class Roku:
         """Initialize connection parameters."""
         if not is_ip_address(self.host):
             self._dns_lookup = True
-            self._dns_cache = TTLCache(maxsize=16, ttl=7200)
 
         if self.user_agent is None:
             version = metadata.version(__package__)
@@ -84,6 +83,9 @@ class Roku:
         host = self.host
 
         if self._dns_lookup:
+            if self._dns_cache is None:
+                self._dns_cache = TTLCache(maxsize=16, ttl=7200)
+
             try:
                 host = self._dns_cache["ip_address"]
             except KeyError:
