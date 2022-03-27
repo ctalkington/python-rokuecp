@@ -226,6 +226,7 @@ class State:
 class Device:
     """Object holding all information of device."""
 
+    dns: DNS
     info: Info
     state: State
     apps: list[Application] = []
@@ -233,7 +234,6 @@ class Device:
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None
-    dns: DNS | None = None
 
     def __init__(self, data: dict[str, Any]):
         """Initialize an empty Roku device class.
