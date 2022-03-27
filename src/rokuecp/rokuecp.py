@@ -53,6 +53,29 @@ class Roku:
 
             self.user_agent = f"PythonRokuECP/{version}"
 
+
+    async def _maybe_update_dns_cache():
+        """Attempt to access DNS cache or resolve hostname.
+
+        Returns:
+            The resolved IP Address.
+
+        Raises:
+            RokuConnectionError: An error occurred while communicating with
+                the Roku device.
+        """
+        if self._dns_cache is None:
+            self._dns_cache = TTLCache(maxsize=16, ttl=7200)
+
+        try:
+            host = self._dns_cache["ip_address"]
+        except KeyError:
+            host = await resolve_hostname(self.host)
+            self._dns_cache["ip_address"] = host
+
+        return host
+
+
     async def _request(
         self,
         uri: str = "",
@@ -84,14 +107,7 @@ class Roku:
         host = self.host
 
         if self._dns_lookup:
-            if self._dns_cache is None:
-                self._dns_cache = TTLCache(maxsize=16, ttl=7200)
-
-            try:
-                host = self._dns_cache["ip_address"]
-            except KeyError:
-                host = await resolve_hostname(self.host)
-                self._dns_cache["ip_address"] = host
+            host = self._maybe_update_dns_cache()
 
         url = URL.build(
             scheme=self._scheme,
@@ -191,7 +207,7 @@ class Roku:
             A Device object, with information about the Roku device.
         """
         if self._device is None:
-            full_update = True
+            full_update = True 
 
         updates: dict = {}
         updates["info"] = None
@@ -204,6 +220,13 @@ class Roku:
         if full_update:
             updates["apps"] = []
             updates["channels"] = []
+
+        if self._dns_lookup:
+            resolved_host = self._maybe_update_dns_cache()
+            updates["dns"] = {
+               "enabled": True,
+               "ip_address": resolved_host
+            }
 
         updates["info"] = info = await self._get_device_info()
 
