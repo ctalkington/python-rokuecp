@@ -90,8 +90,7 @@ class Roku:
                 host = self._dns_cache["ip_address"]
             except KeyError:
                 host = await resolve_hostname(self.host)
-                if self._dns_cache is not None:
-                    self._dns_cache["ip_address"] = host
+                self._dns_cache["ip_address"] = host
 
         url = URL.build(
             scheme=self._scheme,
