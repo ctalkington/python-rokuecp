@@ -38,7 +38,8 @@ class Roku:
 
     _close_session: bool = False
     _dns_lookup: bool = False
-    _dns_cache: TTLCache = TTLCache(maxsize=16, ttl=7200)
+    _dns_cache: TTLCache | None = None
+
     _device: Device | None = None
     _scheme: str = "http"
 
@@ -83,6 +84,9 @@ class Roku:
         host = self.host
 
         if self._dns_lookup:
+            if self._dns_cache is None:
+                self._dns_cache = TTLCache(maxsize=16, ttl=7200)
+
             try:
                 host = self._dns_cache["ip_address"]
             except KeyError:
