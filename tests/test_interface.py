@@ -34,8 +34,20 @@ async def test_app_icon_url() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.freeze_time("2022-03-27")
-async def test_get_dns_diagnostics(resolver: AsyncMock, freezer) -> None:
+async def test_get_dns_diagnostics(
+    aresponses: ResponsesMockServer,
+    resolver: AsyncMock,
+    freezer,
+) -> None:
     """Test get_dns_diagnostics is handled correctly."""
+    aresponses.add(
+        f"192.168.1.99:{PORT}",
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+        repeat=2,
+    )
+
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         assert roku.get_dns_diagnostics() == {
@@ -54,7 +66,7 @@ async def test_get_dns_diagnostics(resolver: AsyncMock, freezer) -> None:
         }
 
         resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
-        await roku2._resolve_hostname()
+        assert await roku2._request("support/hostname")
         dns = roku2.get_dns_diagnostics()
         assert dns["enabled"]
         assert dns["hostname"] == "roku.dev"
@@ -62,7 +74,7 @@ async def test_get_dns_diagnostics(resolver: AsyncMock, freezer) -> None:
         assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
 
         freezer.tick(delta=timedelta(hours=3))
-        await roku2._resolve_hostname()
+        assert await roku2._request("support/hostname")
         dns = roku2.get_dns_diagnostics()
         assert dns["enabled"]
         assert dns["hostname"] == "roku.dev"
