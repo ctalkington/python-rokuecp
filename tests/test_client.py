@@ -267,6 +267,7 @@ async def test_resolve_hostname(
 
 
 @pytest.mark.asyncio
+@pytest.mark.freeze_time("2022-03-27")
 async def test_resolve_hostname_multiple_clients(
     aresponses: ResponsesMockServer, resolver: AsyncMock
 ) -> None:
@@ -290,9 +291,21 @@ async def test_resolve_hostname_multiple_clients(
         client = Roku(HOSTNAME, session=session)
         assert await client._request("support/hostname")
 
+        dns = client.get_dns_diagnostics()
+        assert dns["enabled"]
+        assert dns["hostname"] == HOSTNAME
+        assert dns["ip_address"] == HOST
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+
         resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
         client2 = Roku("roku.dev", session=session)
         assert await client2._request("support/hostname")
+
+        dns2 = clien2.get_dns_diagnostics()
+        assert dns2["enabled"]
+        assert dns2["hostname"] == "roku.dev"
+        assert dns2["ip_address"] == "192.168.1.99"
+        assert dns2["resolved_at"] == datetime(2022, 3, 27, 0, 0)
 
 
 @pytest.mark.asyncio
