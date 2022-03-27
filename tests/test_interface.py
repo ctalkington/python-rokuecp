@@ -1,6 +1,6 @@
 """Tests for Roku."""
 # pylint: disable=protected-access
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest.mock import AsyncMock
 
 import pytest
@@ -34,7 +34,7 @@ async def test_app_icon_url() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.freeze_time("2022-03-27")
-async def test_get_dns_diagnostics(resolver: AsyncMock) -> None:
+async def test_get_dns_diagnostics(resolver: AsyncMock, freezer) -> None:
     """Test get_dns_diagnostics is handled correctly."""
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
@@ -60,6 +60,14 @@ async def test_get_dns_diagnostics(resolver: AsyncMock) -> None:
         assert dns["hostname"] == "roku.dev"
         assert dns["ip_address"] == "192.168.1.99"
         assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+
+        freezer.tick(delta=timedelta(hours=3))
+        await roku2._resolve_hostname()
+        dns = roku2.get_dns_diagnostics()
+        assert dns["enabled"]
+        assert dns["hostname"] == "roku.dev"
+        assert dns["ip_address"] == "192.168.1.99"
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
 
 
 @pytest.mark.asyncio
