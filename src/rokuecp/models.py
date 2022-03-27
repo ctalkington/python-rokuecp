@@ -22,6 +22,16 @@ def _ms_to_sec(msec: str) -> int:
     return floor(msi / 1000)
 
 
+class Updateable(object):
+    """Mixin to add dataclass update functionality."""
+
+    def update(self, new: dict[str, Any]):
+        """Update dataclass attributes from dictionary."""
+        for key, value in new.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+
 @dataclass
 class Application:
     """Object holding application information from Roku."""
@@ -52,6 +62,15 @@ class Application:
             version=app.get("@version", None),
             screensaver=data.get("screensaver") is not None,
         )
+
+
+@dataclass
+class DNS(Updateable):
+    """Object holding information about DNS resolution."""
+
+    enabled: bool = False
+    hostname: str | None = None
+    ip_address: str | None = None
 
 
 @dataclass
@@ -214,6 +233,7 @@ class Device:
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None
+    dns: DNS | None = None
 
     def __init__(self, data: dict[str, Any]):
         """Initialize an empty Roku device class.
@@ -228,6 +248,7 @@ class Device:
         if any(k not in data for k in ("info", "available", "standby")):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
+        self.dns = DNS()
         self.update_from_dict(data)
 
     def as_dict(self) -> dict[str, Any]:
@@ -257,6 +278,7 @@ class Device:
             media = asdict(self.media)
 
         return {
+            "dns": asdict(self.dns),
             "info": asdict(self.info),
             "state": asdict(self.state),
             "apps": apps,
@@ -283,6 +305,9 @@ class Device:
                 available=data.get("available", False),
                 standby=data.get("standby", False),
             )
+
+        if "dns" in data and data["dns"]:
+            self.dns.update(data["dns"])
 
         if "info" in data and data["info"]:
             self.info = Info.from_dict(data["info"])
