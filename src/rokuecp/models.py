@@ -25,9 +25,13 @@ def _ms_to_sec(msec: str) -> int:
 class Updateable:
     """Mixin to add dataclass update functionality."""
 
-    def update(self, new: dict[str, Any]):
-        """Update dataclass attributes from dictionary."""
-        for key, value in new.items():
+    def update(self, updates: dict[str, Any]):
+        """Update dataclass attributes from dictionary.
+
+           Args:
+               updates: Dictionary of attribute updates.
+        """
+        for key, value in updates.items():
             if hasattr(self, key):
                 setattr(self, key, value)
 
