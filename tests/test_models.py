@@ -111,6 +111,7 @@ def test_device_as_dict() -> None:
     device_dict = device.as_dict()
     assert device_dict
     assert isinstance(device_dict, dict)
+    assert isinstance(device_dict["dns"], dict)
     assert isinstance(device_dict["info"], dict)
     assert isinstance(device_dict["state"], dict)
     assert isinstance(device_dict["apps"], list)
@@ -132,6 +133,7 @@ def test_device_tv_as_dict() -> None:
     device_dict = device.as_dict()
     assert device_dict
     assert isinstance(device_dict, dict)
+    assert isinstance(device_dict["dns"], dict)
     assert isinstance(device_dict["info"], dict)
     assert isinstance(device_dict["state"], dict)
     assert isinstance(device_dict["apps"], list)
