@@ -240,6 +240,35 @@ async def test_resolve_hostname(
 
 
 @pytest.mark.asyncio
+async def test_resolve_hostname_multiple_clients(
+    aresponses: ResponsesMockServer, resolver: AsyncMock
+) -> None:
+    """Test that hostnames are resolved before request with multiple clients."""
+    aresponses.add(
+        MATCH_HOST,
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    aresponses.add(
+        "192.168.1.99:{PORT}",
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    async with ClientSession() as session:
+        resolver.return_value = fake_addrinfo_results([HOST])
+        client = Roku(HOSTNAME, session=session)
+        assert await client._request("support/hostname")
+
+        resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
+        client2 = Roku("roku.dev", session=session)
+        assert await client2._request("support/hostname")
+
+
+@pytest.mark.asyncio
 async def test_resolve_hostname_error(resolver: AsyncMock) -> None:
     """Test that hostname resolution errors are handled."""
     resolver.side_effect = SocketGIAError
