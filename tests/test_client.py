@@ -221,8 +221,11 @@ async def test_http_error500(aresponses: ResponsesMockServer) -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.freeze_time("2022-03-27")
 async def test_resolve_hostname(
-    aresponses: ResponsesMockServer, resolver: AsyncMock
+    aresponses: ResponsesMockServer,
+    resolver: AsyncMock,
+    freezer,
 ) -> None:
     """Test that hostnames are resolved before request."""
     resolver.return_value = fake_addrinfo_results([HOST])
@@ -234,9 +237,32 @@ async def test_resolve_hostname(
         aresponses.Response(status=200, text="OK"),
     )
 
+    aresponses.add(
+        f"192.168.1.68:{PORT}",
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
     async with ClientSession() as session:
         client = Roku(HOSTNAME, session=session)
         assert await client._request("support/hostname")
+
+        dns = client.get_dns_diagnostics()
+        assert dns["enabled"]
+        assert dns["hostname"] == HOSTNAME
+        assert dns["ip_address"] == HOST
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+
+        freezer.tick(delta=timedelta(hours=3))
+        resolver.return_value = fake_addrinfo_results(["192.168.1.68"])
+        assert await client._request("support/hostname")
+
+        dns = client.get_dns_diagnostics()
+        assert dns["enabled"]
+        assert dns["hostname"] == HOSTNAME
+        assert dns["ip_address"] == "192.168.1.68"
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
 
 
 @pytest.mark.asyncio
