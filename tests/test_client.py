@@ -301,7 +301,7 @@ async def test_resolve_hostname_multiple_clients(
         client2 = Roku("roku.dev", session=session)
         assert await client2._request("support/hostname")
 
-        dns2 = clien2.get_dns_diagnostics()
+        dns2 = client2.get_dns_diagnostics()
         assert dns2["enabled"]
         assert dns2["hostname"] == "roku.dev"
         assert dns2["ip_address"] == "192.168.1.99"
