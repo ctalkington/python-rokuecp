@@ -22,7 +22,7 @@ def _ms_to_sec(msec: str) -> int:
     return floor(msi / 1000)
 
 
-class Updateable(object):
+class Updateable:
     """Mixin to add dataclass update functionality."""
 
     def update(self, new: dict[str, Any]):
