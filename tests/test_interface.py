@@ -34,12 +34,12 @@ async def test_app_icon_url() -> None:
 
 @pytest.mark.asyncio
 @pytest.mark.freeze_time("2022-03-27")
-async def test_get_dns_diagnostics(
+async def test_get_dns_state(
     aresponses: ResponsesMockServer,
     resolver: AsyncMock,
     freezer,
 ) -> None:
-    """Test get_dns_diagnostics is handled correctly."""
+    """Test get_dns_state is handled correctly."""
     aresponses.add(
         f"192.168.1.99:{PORT}",
         "/support/hostname",
