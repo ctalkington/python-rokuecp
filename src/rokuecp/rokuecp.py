@@ -454,20 +454,20 @@ class Roku:
 
         return res["tv-channels"]["channel"]
 
-    def get_dns_diagnostics(self) -> dict[str, Any]:
-        """Retrieve DNS resolution information for diagnostic purposes.
+    def get_dns_state(self) -> dict[str, Any]:
+        """Retrieve DNS resolution state.
 
         Returns:
-            A dictionary of DNS diagnostics.
+            A dictionary of DNS state properties.
         """
-        diagnostics = {
+        state = {
             "enabled": self._dns_lookup,
             "hostname": self.host if self._dns_lookup else None,
             "ip_address": self._dns_ip_address,
             "resolved_at": self._dns_resolved_at,
         }
 
-        return diagnostics
+        return state
 
     async def close_session(self) -> None:
         """Close open client session."""
