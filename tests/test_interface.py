@@ -73,12 +73,13 @@ async def test_get_dns_state(
         assert dns["ip_address"] == "192.168.1.99"
         assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
 
+        resolver.return_value = fake_addrinfo_results(["192.168.1.98"])
         freezer.tick(delta=timedelta(hours=3))
         assert await roku2._request("support/hostname")
         dns = roku2.get_dns_state()
         assert dns["enabled"]
         assert dns["hostname"] == "roku.dev"
-        assert dns["ip_address"] == "192.168.1.99"
+        assert dns["ip_address"] == "192.168.1.98"
         assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
 
 
