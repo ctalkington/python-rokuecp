@@ -1,11 +1,14 @@
 """Tests for Roku."""
 # pylint: disable=protected-access
+from datetime import datetime, timedelta
+from unittest.mock import AsyncMock
+
 import pytest
 from aiohttp import ClientSession
 from aresponses import ResponsesMockServer
 from rokuecp import Roku, RokuError, models
 
-from . import load_fixture
+from . import fake_addrinfo_results, load_fixture
 
 HOST = "192.168.1.86"
 PORT = 8060
@@ -27,6 +30,63 @@ async def test_app_icon_url() -> None:
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         assert roku.app_icon_url("101") == f"{ICON_BASE}/101"
+
+
+@pytest.mark.asyncio
+@pytest.mark.freeze_time("2022-03-27")
+async def test_get_dns_state(
+    aresponses: ResponsesMockServer,
+    resolver: AsyncMock,
+    freezer,
+) -> None:
+    """Test get_dns_state is handled correctly."""
+    aresponses.add(
+        f"192.168.1.99:{PORT}",
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    aresponses.add(
+        f"192.168.1.89:{PORT}",
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        assert roku.get_dns_state() == {
+            "enabled": False,
+            "hostname": None,
+            "ip_address": None,
+            "resolved_at": None,
+        }
+
+        roku2 = Roku("roku.dev", session=session)
+        assert roku2.get_dns_state() == {
+            "enabled": True,
+            "hostname": "roku.dev",
+            "ip_address": None,
+            "resolved_at": None,
+        }
+
+        resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
+        assert await roku2._request("support/hostname")
+        dns = roku2.get_dns_state()
+        assert dns["enabled"]
+        assert dns["hostname"] == "roku.dev"
+        assert dns["ip_address"] == "192.168.1.99"
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+
+        resolver.return_value = fake_addrinfo_results(["192.168.1.89"])
+        freezer.tick(delta=timedelta(hours=3))
+        assert await roku2._request("support/hostname")
+        dns = roku2.get_dns_state()
+        assert dns["enabled"]
+        assert dns["hostname"] == "roku.dev"
+        assert dns["ip_address"] == "192.168.1.89"
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
 
 
 @pytest.mark.asyncio

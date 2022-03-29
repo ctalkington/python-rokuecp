@@ -1,6 +1,7 @@
 """Tests for Roku."""
 # pylint: disable=protected-access
 import asyncio
+from datetime import datetime, timedelta
 from socket import gaierror as SocketGIAError
 from unittest.mock import AsyncMock
 
@@ -221,8 +222,11 @@ async def test_http_error500(aresponses: ResponsesMockServer) -> None:
 
 
 @pytest.mark.asyncio
+@pytest.mark.freeze_time("2022-03-27")
 async def test_resolve_hostname(
-    aresponses: ResponsesMockServer, resolver: AsyncMock
+    aresponses: ResponsesMockServer,
+    resolver: AsyncMock,
+    freezer,
 ) -> None:
     """Test that hostnames are resolved before request."""
     resolver.return_value = fake_addrinfo_results([HOST])
@@ -234,12 +238,36 @@ async def test_resolve_hostname(
         aresponses.Response(status=200, text="OK"),
     )
 
+    aresponses.add(
+        f"192.168.1.68:{PORT}",
+        "/support/hostname",
+        "GET",
+        aresponses.Response(status=200, text="OK"),
+    )
+
     async with ClientSession() as session:
         client = Roku(HOSTNAME, session=session)
         assert await client._request("support/hostname")
 
+        dns = client.get_dns_state()
+        assert dns["enabled"]
+        assert dns["hostname"] == HOSTNAME
+        assert dns["ip_address"] == HOST
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+
+        freezer.tick(delta=timedelta(hours=3))
+        resolver.return_value = fake_addrinfo_results(["192.168.1.68"])
+        assert await client._request("support/hostname")
+
+        dns = client.get_dns_state()
+        assert dns["enabled"]
+        assert dns["hostname"] == HOSTNAME
+        assert dns["ip_address"] == "192.168.1.68"
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
+
 
 @pytest.mark.asyncio
+@pytest.mark.freeze_time("2022-03-27")
 async def test_resolve_hostname_multiple_clients(
     aresponses: ResponsesMockServer, resolver: AsyncMock
 ) -> None:
@@ -263,9 +291,21 @@ async def test_resolve_hostname_multiple_clients(
         client = Roku(HOSTNAME, session=session)
         assert await client._request("support/hostname")
 
+        dns = client.get_dns_state()
+        assert dns["enabled"]
+        assert dns["hostname"] == HOSTNAME
+        assert dns["ip_address"] == HOST
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+
         resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
         client2 = Roku("roku.dev", session=session)
         assert await client2._request("support/hostname")
+
+        dns2 = client2.get_dns_state()
+        assert dns2["enabled"]
+        assert dns2["hostname"] == "roku.dev"
+        assert dns2["ip_address"] == "192.168.1.99"
+        assert dns2["resolved_at"] == datetime(2022, 3, 27, 0, 0)
 
 
 @pytest.mark.asyncio
