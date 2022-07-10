@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from collections import OrderedDict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
@@ -347,11 +346,11 @@ class Roku:
         """
         await self.launch("tvinput.dtv", {"ch": channel})
 
-    async def _get_active_app(self) -> OrderedDict:
+    async def _get_active_app(self) -> dict[str, Any]:
         """Retrieve active app for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -367,7 +366,7 @@ class Roku:
         """Retrieve apps for updates.
 
         Returns:
-            A list of ordered Python Dictionaries.
+            A list of Python Dictionaries.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -386,7 +385,7 @@ class Roku:
         """Retrieve device info for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -402,7 +401,7 @@ class Roku:
         """Retrieve media state for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -418,7 +417,7 @@ class Roku:
         """Retrieve active TV channel for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -436,7 +435,7 @@ class Roku:
         """Retrieve TV channels for updates.
 
         Returns:
-            A list of ordered Python Dictionaries.
+            A list of Python Dictionaries.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
