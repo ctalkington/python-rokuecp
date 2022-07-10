@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from collections import OrderedDict
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
@@ -347,11 +346,11 @@ class Roku:
         """
         await self.launch("tvinput.dtv", {"ch": channel})
 
-    async def _get_active_app(self) -> OrderedDict:
+    async def _get_active_app(self) -> dict[str, Any]:
         """Retrieve active app for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -363,11 +362,11 @@ class Roku:
 
         return res["active-app"]
 
-    async def _get_apps(self) -> list[OrderedDict]:
+    async def _get_apps(self) -> list[dict[str, Any]]:
         """Retrieve apps for updates.
 
         Returns:
-            A list of ordered Python Dictionaries.
+            A list of Python Dictionaries.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -377,16 +376,16 @@ class Roku:
         if not isinstance(res, dict) or "apps" not in res:
             raise RokuError("Roku device returned a malformed result (apps)")
 
-        if isinstance(res["apps"]["app"], OrderedDict):
+        if isinstance(res["apps"]["app"], dict):
             return [res["apps"]["app"]]
 
         return res["apps"]["app"]
 
-    async def _get_device_info(self) -> OrderedDict:
+    async def _get_device_info(self) -> dict[str, Any]:
         """Retrieve device info for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -398,11 +397,11 @@ class Roku:
 
         return res["device-info"]
 
-    async def _get_media_state(self) -> OrderedDict:
+    async def _get_media_state(self) -> dict[str, Any]:
         """Retrieve media state for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -414,11 +413,11 @@ class Roku:
 
         return res["player"]
 
-    async def _get_tv_active_channel(self) -> OrderedDict:
+    async def _get_tv_active_channel(self) -> dict[str, Any]:
         """Retrieve active TV channel for updates.
 
         Returns:
-            An ordered Dictionary.
+            A Dictionary.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -432,11 +431,11 @@ class Roku:
 
         return res["tv-channel"]["channel"]
 
-    async def _get_tv_channels(self) -> list[OrderedDict]:
+    async def _get_tv_channels(self) -> list[dict[str, Any]]:
         """Retrieve TV channels for updates.
 
         Returns:
-            A list of ordered Python Dictionaries.
+            A list of Python Dictionaries.
 
         Raises:
             RokuError: Received an unexpected response from the Roku device.
@@ -449,7 +448,7 @@ class Roku:
         if res["tv-channels"] is None or "channel" not in res["tv-channels"]:
             return []
 
-        if isinstance(res["tv-channels"]["channel"], OrderedDict):
+        if isinstance(res["tv-channels"]["channel"], dict):
             return [res["tv-channels"]["channel"]]
 
         return res["tv-channels"]["channel"]
