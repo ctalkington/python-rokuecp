@@ -12,13 +12,17 @@ from .resolver import ThreadedResolver
 
 MIME_TO_STREAM_FORMAT = {
     "application/dash+xml": "dash",
-    "application/x-mpegURL": "hls",
+    "application/x-mpegurl": "hls",
     "application/vnd.apple.mpegurl": "hls",
     "audio/mpeg": "mp3",
+    "audio/mp4": "m4a",
+    "audio/mp4a-latm": "m4a",
+    "audio/x-matroska": "mka",
     "audio/x-ms-wma": "wma",
     "video/mp4": "mp4",
     "video/quicktime": "mp4",
     "video/x-matroska": "mkv",
+    "video/x-m4v": "mp4",
 }
 
 
@@ -60,10 +64,7 @@ def guess_stream_format(  # pylint: disable=too-many-return-statements
     if mime_type is None:
         return None
 
-    if mime_type not in MIME_TO_STREAM_FORMAT:
-        return None
-
-    return MIME_TO_STREAM_FORMAT[mime_type]
+    return MIME_TO_STREAM_FORMAT.get(mime_type.casefold())
 
 
 def is_ip_address(host: str) -> bool:
