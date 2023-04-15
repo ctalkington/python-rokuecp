@@ -165,6 +165,7 @@ def test_info() -> None:
     assert not info.supports_airplay
     assert not info.supports_find_remote
     assert not info.supports_private_listening
+    assert not info.supports_wake_on_wlan
     assert not info.headphones_connected
     assert info.version == "7.5.0"
 
@@ -189,6 +190,7 @@ def test_info_stick_3500x() -> None:
     assert not info.supports_airplay
     assert info.supports_find_remote
     assert not info.supports_private_listening
+    assert not info.supports_wake_on_wlan
     assert not info.headphones_connected
     assert info.version == "10.0.0"
 
@@ -213,6 +215,7 @@ def test_info_tv_7820x() -> None:
     assert info.supports_airplay
     assert info.supports_find_remote
     assert info.supports_private_listening
+    assert info.supports_wake_on_wlan
     assert not info.headphones_connected
     assert info.version == "9.2.0"
 
@@ -237,6 +240,7 @@ def test_info_tv_d803x() -> None:
     assert info.supports_airplay
     assert not info.supports_find_remote
     assert info.supports_private_listening
+    assert info.supports_wake_on_wlan
     assert not info.headphones_connected
     assert info.version == "10.0.0"
 

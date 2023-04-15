@@ -74,6 +74,7 @@ class Info:
     supports_airplay: bool | None = None
     supports_find_remote: bool | None = None
     supports_private_listening: bool | None = None
+    supports_wake_on_wlan: bool | None = None
     headphones_connected: bool | None = None
 
     @staticmethod
@@ -114,6 +115,7 @@ class Info:
             supports_airplay=airplay,
             supports_find_remote=find_remote,
             supports_private_listening=private_listening,
+            supports_wake_on_wlan=data.get("supports-wake-on-wlan", "false") == "true",
             headphones_connected=data.get("headphones-connected", "false") == "true",
         )
 
