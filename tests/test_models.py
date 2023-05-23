@@ -172,6 +172,34 @@ def test_info() -> None:
     assert info.version == "7.5.0"
 
 
+def test_info_without_client_device_name() -> None:
+    """Test the Info model without a client device name."""
+    temp = {
+        **DEVICE_INFO["device-info"],
+        "user-device-name": None,
+        "friendly-device-name": None,
+        "default-device-name": None,
+    }
+
+    info = models.Info.from_dict(temp)
+
+    assert info
+    assert info.name == "Roku Roku 3"
+
+    temp["friendly-device-name"] = "Friendly Fallback"
+    info = models.Info.from_dict(temp)
+
+    assert info
+    assert info.name == "Friendly Fallback"
+
+    temp["friendly-device-name"] = None
+    temp["default-device-name"] = "Default Fallback"
+    info = models.Info.from_dict(temp)
+
+    assert info
+    assert info.name == "Default Fallback"
+
+
 def test_info_stick_3500x() -> None:
     """Test the Info model with Roku Stick."""
     info = models.Info.from_dict(DEVICE_INFO_3500X["device-info"])
@@ -222,25 +250,25 @@ def test_info_tv_7820x() -> None:
     assert info.version == "9.2.0"
 
 
-def test_info_tv_c127x() -> None:
+def test_info_tv_c147x() -> None:
 
-    """Test the Info model with TV model C127X."""
+    """Test the Info model with TV model C147X."""
 
     info = models.Info.from_dict(DEVICE_INFO_C147X["device-info"])
 
     assert info
 
-    assert info.name == "TCL Roku TV - X000008YG08J"
+    assert info.name == "TCL•Roku TV - X000008YG08J"
     assert info.brand == "TCL"
     assert info.device_location is None
     assert info.device_type == "tv"
     assert info.network_type == "wifi"
     assert info.network_name == "NetworkSSID"
     assert info.model_name == "55S20"
-    assert info.model_number == "C127X"
+    assert info.model_number == "C147X"
     assert info.serial_number == "X000008YG08J"
-    assert not info.ethernet_support
-    assert info.ethernet_mac is None
+    assert info.ethernet_support
+    assert info.ethernet_mac == "34:51:80:6d:01:42"
     assert info.wifi_mac == "d4:ab:cd:f8:e1:d5"
     assert info.supports_airplay
     assert not info.supports_find_remote

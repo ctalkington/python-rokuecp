@@ -94,16 +94,31 @@ class Info:
         elif data.get("is-stick", "false") == "true":
             device_type = "stick"
 
+        device_name = data.get("user-device-name", None)
+        model_name = data.get("model-name", None)
+        brand = data.get("vendor-name", "Roku")
+
+        if device_name is None:
+            friendly_device_name = data.get("friendly-device-name", None)
+            default_device_name = data.get("default-device-name", None)
+
+            if friendly_device_name is not None:
+                device_name = friendly_device_name
+            elif default_device_name is not None:
+                device_name = default_device_name
+            else:
+                device_name = f"{brand} {model_name}"
+
         airplay = data.get("supports-airplay", "false") == "true"
         find_remote = data.get("supports-find-remote", "false") == "true"
         private_listening = data.get("supports-private-listening", "false") == "true"
 
         return Info(
-            name=data.get("user-device-name", None),
-            brand=data.get("vendor-name", "Roku"),
+            name=device_name,
+            brand=brand,
             device_type=device_type,
             device_location=data.get("user-device-location", None),
-            model_name=data.get("model-name", None),
+            model_name=model_name,
             model_number=data.get("model-number", None),
             network_type=data.get("network-type", None),
             network_name=data.get("network-name", None),
