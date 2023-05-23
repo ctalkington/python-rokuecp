@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock
 import pytest
 from aiohttp import ClientSession
 from aresponses import ResponsesMockServer
+
 from rokuecp import Roku, RokuError, models
 
 from . import fake_addrinfo_results, load_fixture

@@ -1,76 +1,76 @@
 <device-info>
-  <udn>28000000-0000-1000-8008-d4abcdf8e1d5</udn>
-  <serial-number>X000008YG08J</serial-number>
-  <device-id>S04KH07YG08J</device-id>
-  <advertising-id>641a3a59-7cfb-52a3-aa9c-61ce4b9938f2</advertising-id>
-  <vendor-name>TCL</vendor-name>
-  <model-name>55S20</model-name>
-  <model-number>C147X</model-number>
-  <model-region>US</model-region>
-  <is-tv>true</is-tv>
-  <is-stick>false</is-stick>
-  <screen-size>55</screen-size>
-  <panel-id>25</panel-id>
-  <mobile-has-live-tv>true</mobile-has-live-tv>
-  <ui-resolution>1080p</ui-resolution>
-  <tuner-type>ATSC</tuner-type>
-  <supports-ethernet>true</supports-ethernet>
-  <wifi-mac>d4:ab:cd:f8:e1:d5</wifi-mac>
-  <wifi-driver>realtek</wifi-driver>
-  <has-wifi-extender>false</has-wifi-extender>
-  <has-wifi-5G-support>true</has-wifi-5G-support>
-  <can-use-wifi-extender>true</can-use-wifi-extender>
-  <ethernet-mac>34:51:80:6d:01:42</ethernet-mac>
-  <network-type>wifi</network-type>
-  <network-name>NetworkSSID</network-name>
-  <friendly-device-name>TCL•Roku TV - X000008YG08J</friendly-device-name>
-  <friendly-model-name>TCL•Roku TV</friendly-model-name>
-  <default-device-name>TCL•Roku TV - X000008YG08J</default-device-name>
-  <user-device-name/>
-  <user-device-location/>
-  <build-number>93C.50E04312A</build-number>
-  <software-version>11.5.0</software-version>
-  <software-build>4312</software-build>
-  <secure-device>true</secure-device>
-  <language>en</language>
-  <country>US</country>
-  <locale>en_US</locale>
-  <time-zone-auto>true</time-zone-auto>
-  <time-zone>US/Eastern</time-zone>
-  <time-zone-name>United States/Eastern</time-zone-name>
-  <time-zone-tz>America/New_York</time-zone-tz>
-  <time-zone-offset>-240</time-zone-offset>
-  <clock-format>12-hour</clock-format>
-  <uptime>124327</uptime>
-  <power-mode>PowerOn</power-mode>
-  <supports-suspend>true</supports-suspend>
-  <supports-find-remote>false</supports-find-remote>
-  <supports-audio-guide>true</supports-audio-guide>
-  <supports-rva>true</supports-rva>
-  <has-hands-free-voice-remote>false</has-hands-free-voice-remote>
-  <developer-enabled>false</developer-enabled>
-  <keyed-developer-id/>
-  <search-enabled>true</search-enabled>
-  <search-channels-enabled>true</search-channels-enabled>
-  <voice-search-enabled>true</voice-search-enabled>
-  <notifications-enabled>false</notifications-enabled>
-  <notifications-first-use>true</notifications-first-use>
-  <supports-private-listening>true</supports-private-listening>
-  <supports-private-listening-dtv>true</supports-private-listening-dtv>
-  <supports-warm-standby>true</supports-warm-standby>
-  <headphones-connected>false</headphones-connected>
-  <supports-audio-settings>false</supports-audio-settings>
-  <expert-pq-enabled>1.0</expert-pq-enabled>
-  <supports-ecs-textedit>true</supports-ecs-textedit>
-  <supports-ecs-microphone>true</supports-ecs-microphone>
-  <supports-wake-on-wlan>true</supports-wake-on-wlan>
-  <supports-airplay>true</supports-airplay>
-  <has-play-on-roku>true</has-play-on-roku>
-  <has-mobile-screensaver>false</has-mobile-screensaver>
-  <support-url>support.tcl.com/us</support-url>
-  <grandcentral-version>9.2.45</grandcentral-version>
-  <trc-version>3.0</trc-version>
-  <trc-channel-version>8.0.72</trc-channel-version>
-  <davinci-version>2.8.20</davinci-version>
-  <av-sync-calibration-enabled>3.0</av-sync-calibration-enabled>
+<udn>28000000-0000-1000-8008-d4abcdf8e1d5</udn>
+<serial-number>X000008YG08J</serial-number>
+<device-id>S04KH07YG08J</device-id>
+<advertising-id>641a3a59-7cfb-52a3-aa9c-61ce4b9938f2</advertising-id>
+<vendor-name>TCL</vendor-name>
+<model-name>55S20</model-name>
+<model-number>C147X</model-number>
+<model-region>US</model-region>
+<is-tv>true</is-tv>
+<is-stick>false</is-stick>
+<screen-size>55</screen-size>
+<panel-id>25</panel-id>
+<mobile-has-live-tv>true</mobile-has-live-tv>
+<ui-resolution>1080p</ui-resolution>
+<tuner-type>ATSC</tuner-type>
+<supports-ethernet>true</supports-ethernet>
+<wifi-mac>d4:ab:cd:f8:e1:d5</wifi-mac>
+<wifi-driver>realtek</wifi-driver>
+<has-wifi-extender>false</has-wifi-extender>
+<has-wifi-5G-support>true</has-wifi-5G-support>
+<can-use-wifi-extender>true</can-use-wifi-extender>
+<ethernet-mac>34:51:80:6d:01:42</ethernet-mac>
+<network-type>wifi</network-type>
+<network-name>NetworkSSID</network-name>
+<friendly-device-name>TCL•Roku TV - X000008YG08J</friendly-device-name>
+<friendly-model-name>TCL•Roku TV</friendly-model-name>
+<default-device-name>TCL•Roku TV - X000008YG08J</default-device-name>
+<user-device-name/>
+<user-device-location/>
+<build-number>93C.50E04312A</build-number>
+<software-version>11.5.0</software-version>
+<software-build>4312</software-build>
+<secure-device>true</secure-device>
+<language>en</language>
+<country>US</country>
+<locale>en_US</locale>
+<time-zone-auto>true</time-zone-auto>
+<time-zone>US/Eastern</time-zone>
+<time-zone-name>United States/Eastern</time-zone-name>
+<time-zone-tz>America/New_York</time-zone-tz>
+<time-zone-offset>-240</time-zone-offset>
+<clock-format>12-hour</clock-format>
+<uptime>124327</uptime>
+<power-mode>PowerOn</power-mode>
+<supports-suspend>true</supports-suspend>
+<supports-find-remote>false</supports-find-remote>
+<supports-audio-guide>true</supports-audio-guide>
+<supports-rva>true</supports-rva>
+<has-hands-free-voice-remote>false</has-hands-free-voice-remote>
+<developer-enabled>false</developer-enabled>
+<keyed-developer-id/>
+<search-enabled>true</search-enabled>
+<search-channels-enabled>true</search-channels-enabled>
+<voice-search-enabled>true</voice-search-enabled>
+<notifications-enabled>false</notifications-enabled>
+<notifications-first-use>true</notifications-first-use>
+<supports-private-listening>true</supports-private-listening>
+<supports-private-listening-dtv>true</supports-private-listening-dtv>
+<supports-warm-standby>true</supports-warm-standby>
+<headphones-connected>false</headphones-connected>
+<supports-audio-settings>false</supports-audio-settings>
+<expert-pq-enabled>1.0</expert-pq-enabled>
+<supports-ecs-textedit>true</supports-ecs-textedit>
+<supports-ecs-microphone>true</supports-ecs-microphone>
+<supports-wake-on-wlan>true</supports-wake-on-wlan>
+<supports-airplay>true</supports-airplay>
+<has-play-on-roku>true</has-play-on-roku>
+<has-mobile-screensaver>false</has-mobile-screensaver>
+<support-url>support.tcl.com/us</support-url>
+<grandcentral-version>9.2.45</grandcentral-version>
+<trc-version>3.0</trc-version>
+<trc-channel-version>8.0.72</trc-channel-version>
+<davinci-version>2.8.20</davinci-version>
+<av-sync-calibration-enabled>3.0</av-sync-calibration-enabled>
 </device-info>

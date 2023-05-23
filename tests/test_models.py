@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pytest
 import xmltodict
+
 from rokuecp import RokuError, models
 
 from . import load_fixture
@@ -229,7 +230,7 @@ def test_info_tv_c127x() -> None:
 
     assert info
 
-    assert info.name == 'TCL Roku TV - X000008YG08J'
+    assert info.name == "TCL Roku TV - X000008YG08J"
     assert info.brand == "TCL"
     assert info.device_location is None
     assert info.device_type == "tv"
