@@ -186,14 +186,14 @@ def test_info_without_client_device_name() -> None:
     assert info
     assert info.name == "Roku Roku 3"
 
-    temp["friendly-device-name"] = "Friendly Fallback"
+    temp["friendly-device-name"] = "Friendly Fallback"  # type: ignore
     info = models.Info.from_dict(temp)
 
     assert info
     assert info.name == "Friendly Fallback"
 
-    temp["friendly-device-name"] = None
-    temp["default-device-name"] = "Default Fallback"
+    temp["friendly-device-name"] = None  # type: ignore
+    temp["default-device-name"] = "Default Fallback"  # type: ignore
     info = models.Info.from_dict(temp)
 
     assert info
@@ -251,7 +251,6 @@ def test_info_tv_7820x() -> None:
 
 
 def test_info_tv_c147x() -> None:
-
     """Test the Info model with TV model C147X."""
 
     info = models.Info.from_dict(DEVICE_INFO_C147X["device-info"])
