@@ -7,6 +7,7 @@ from math import floor
 from typing import Any
 
 from .exceptions import RokuError
+from .helpers import determine_device_name
 
 
 def _ms_to_sec(msec: str) -> int:
@@ -98,16 +99,12 @@ class Info:
         model_name = data.get("model-name", None)
         brand = data.get("vendor-name", "Roku")
 
-        if device_name is None:
+        if device_name is None or not device_name.strip():
             friendly_device_name = data.get("friendly-device-name", None)
             default_device_name = data.get("default-device-name", None)
-
-            if friendly_device_name is not None:
-                device_name = friendly_device_name
-            elif default_device_name is not None:
-                device_name = default_device_name
-            else:
-                device_name = f"{brand} {model_name}"
+            device_name = determine_device_name(
+                brand, friendly_device_name, default_device_name, model_name
+            )
 
         airplay = data.get("supports-airplay", "false") == "true"
         find_remote = data.get("supports-find-remote", "false") == "true"
