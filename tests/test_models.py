@@ -3,7 +3,6 @@ from datetime import datetime
 
 import pytest
 import xmltodict
-
 from rokuecp import RokuError, models
 
 from . import load_fixture
