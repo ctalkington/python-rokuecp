@@ -15,6 +15,7 @@ APPS_TV = xmltodict.parse(load_fixture("apps-tv.xml"))
 DEVICE_INFO = xmltodict.parse(load_fixture("device-info.xml"))
 DEVICE_INFO_3500X = xmltodict.parse(load_fixture("device-info-3500x.xml"))
 DEVICE_INFO_7820X = xmltodict.parse(load_fixture("device-info-7820x.xml"))
+DEVICE_INFO_C147X = xmltodict.parse(load_fixture("device-info-c147x.xml"))
 DEVICE_INFO_D803X = xmltodict.parse(load_fixture("device-info-d803x.xml"))
 MEDIA_PLAYER_CLOSE = xmltodict.parse(load_fixture("media-player-close.xml"))
 MEDIA_PLAYER_PLUTO_LIVE = xmltodict.parse(load_fixture("media-player-pluto-live.xml"))
@@ -170,6 +171,21 @@ def test_info() -> None:
     assert info.version == "7.5.0"
 
 
+def test_info_without_client_device_name() -> None:
+    """Test the Info model without a client device name."""
+    temp = {
+        **DEVICE_INFO["device-info"],
+        "user-device-name": None,
+        "friendly-device-name": None,
+        "default-device-name": None,
+    }
+
+    info = models.Info.from_dict(temp)
+
+    assert info
+    assert info.name == "Roku Roku 3"
+
+
 def test_info_stick_3500x() -> None:
     """Test the Info model with Roku Stick."""
     info = models.Info.from_dict(DEVICE_INFO_3500X["device-info"])
@@ -218,6 +234,33 @@ def test_info_tv_7820x() -> None:
     assert info.supports_wake_on_wlan
     assert not info.headphones_connected
     assert info.version == "9.2.0"
+
+
+def test_info_tv_c147x() -> None:
+    """Test the Info model with TV model C147X."""
+
+    info = models.Info.from_dict(DEVICE_INFO_C147X["device-info"])
+
+    assert info
+
+    assert info.name == "TCL•Roku TV - X000008YG08J"
+    assert info.brand == "TCL"
+    assert info.device_location is None
+    assert info.device_type == "tv"
+    assert info.network_type == "wifi"
+    assert info.network_name == "NetworkSSID"
+    assert info.model_name == "55S20"
+    assert info.model_number == "C147X"
+    assert info.serial_number == "X000008YG08J"
+    assert info.ethernet_support
+    assert info.ethernet_mac == "34:51:80:6d:01:42"
+    assert info.wifi_mac == "d4:ab:cd:f8:e1:d5"
+    assert info.supports_airplay
+    assert not info.supports_find_remote
+    assert info.supports_private_listening
+    assert info.supports_wake_on_wlan
+    assert not info.headphones_connected
+    assert info.version == "11.5.0"
 
 
 def test_info_tv_d803x() -> None:

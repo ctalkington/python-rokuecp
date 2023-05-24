@@ -26,6 +26,38 @@ MIME_TO_STREAM_FORMAT = {
 }
 
 
+def determine_device_name(
+    brand: str,
+    friendly_name: str | None = None,
+    default_name: str | None = None,
+    model_name: str | None = None,
+) -> str:
+    """Determine device name with fallbacks.
+
+    Args:
+        friendly_name: The friendly device name.
+        default_name: The default device name.
+        model_name: The device model name.
+        brand: The device brand.
+
+    Returns:
+        The device name.
+    """
+    if friendly_name is not None and friendly_name.strip():
+        return friendly_name.strip()
+
+    if default_name is not None and default_name.strip():
+        return default_name.strip()
+
+    if brand.strip() and model_name is not None and model_name.strip():
+        return f"{brand.strip()} {model_name.strip()}"
+
+    if brand.strip():
+        return brand.strip()
+
+    return "Roku (Unknown Name)"
+
+
 def guess_stream_format(  # pylint: disable=too-many-return-statements
     url: str, mime_type: str | None = None
 ) -> str | None:

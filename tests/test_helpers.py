@@ -4,12 +4,27 @@ from socket import gaierror as SocketGIAError
 
 import pytest
 from rokuecp.exceptions import RokuConnectionError
-from rokuecp.helpers import guess_stream_format, is_ip_address, resolve_hostname
+from rokuecp.helpers import (
+    determine_device_name,
+    guess_stream_format,
+    is_ip_address,
+    resolve_hostname,
+)
 
 from . import fake_addrinfo_results
 
 HOSTNAME = "roku.local"
 HOST = "192.168.1.2"
+
+
+def test_determine_device_name() -> None:
+    """Test the determine_device_name helper."""
+    brand = "Brand"
+    assert determine_device_name("", None, None, None) == "Roku (Unknown Name)"
+    assert determine_device_name(brand, None, None, None) == "Brand"
+    assert determine_device_name(brand, "Friendly Name", None, None) == "Friendly Name"
+    assert determine_device_name(brand, None, "Default Name", None) == "Default Name"
+    assert determine_device_name(brand, None, None, "Model Name") == "Brand Model Name"
 
 
 def test_guess_stream_format() -> None:
