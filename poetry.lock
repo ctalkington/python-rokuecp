@@ -1228,15 +1228,18 @@ setuptools = "*"
 
 [[package]]
 name = "packaging"
-version = "23.1"
+version = "21.3"
 description = "Core utilities for Python packages"
 category = "dev"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.6"
 files = [
-    {file = "packaging-23.1-py3-none-any.whl", hash = "sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61"},
-    {file = "packaging-23.1.tar.gz", hash = "sha256:a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f"},
+    {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
+    {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
+
+[package.dependencies]
+pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "pathspec"
@@ -1415,6 +1418,21 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 [package.extras]
 spelling = ["pyenchant (>=3.2,<4.0)"]
 testutils = ["gitpython (>3)"]
+
+[[package]]
+name = "pyparsing"
+version = "3.0.9"
+description = "pyparsing module - Classes and methods to define and execute parsing grammars"
+category = "dev"
+optional = false
+python-versions = ">=3.6.8"
+files = [
+    {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
+    {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
+]
+
+[package.extras]
+diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pytest"
@@ -1681,22 +1699,27 @@ files = [
 
 [[package]]
 name = "safety"
-version = "1.10.3"
-description = "Checks installed dependencies for known vulnerabilities."
+version = "2.3.5"
+description = "Checks installed dependencies for known vulnerabilities and licenses."
 category = "dev"
 optional = false
-python-versions = ">=3.5"
+python-versions = "*"
 files = [
-    {file = "safety-1.10.3-py2.py3-none-any.whl", hash = "sha256:5f802ad5df5614f9622d8d71fedec2757099705c2356f862847c58c6dfe13e84"},
-    {file = "safety-1.10.3.tar.gz", hash = "sha256:30e394d02a20ac49b7f65292d19d38fa927a8f9582cdfd3ad1adbbc66c641ad5"},
+    {file = "safety-2.3.5-py3-none-any.whl", hash = "sha256:2227fcac1b22b53c1615af78872b48348661691450aa25d6704a5504dbd1f7e2"},
+    {file = "safety-2.3.5.tar.gz", hash = "sha256:a60c11f8952f412cbb165d70cb1f673a3b43a2ba9a93ce11f97e6a4de834aa3a"},
 ]
 
 [package.dependencies]
-Click = ">=6.0"
-dparse = ">=0.5.1"
-packaging = "*"
+Click = ">=8.0.2"
+dparse = ">=0.6.2"
+packaging = ">=21.0,<22.0"
 requests = "*"
-setuptools = "*"
+"ruamel.yaml" = ">=0.17.21"
+setuptools = ">=19.3"
+
+[package.extras]
+github = ["jinja2 (>=3.1.0)", "pygithub (>=1.43.3)"]
+gitlab = ["python-gitlab (>=1.3.0)"]
 
 [[package]]
 name = "setuptools"
@@ -2087,4 +2110,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "98e26b0af2402aae76a0d23a87b99de4eb6078414dc1df11c2b4ac2063e71259"
+content-hash = "47971407db571894cdcd14666c3003a9ba59951ccc99c32571709380df6dda49"
