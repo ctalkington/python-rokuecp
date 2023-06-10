@@ -14,9 +14,11 @@ def _ms_to_sec(msec: str) -> int:
     """Convert millisecond string to seconds integer.
 
     Args:
+    ----
         msec: The number of milliseconds as a string.
 
     Returns:
+    -------
         The number of seconds converted from milliseconds.
     """
     msi = int(msec.replace("ms", "").strip())
@@ -37,9 +39,11 @@ class Application:
         """Return Application object from Roku API response.
 
         Args:
+        ----
             data: Dictionary of data.
 
         Returns:
+        -------
             The Application object.
         """
         app = data.get("app", data)
@@ -83,9 +87,11 @@ class Info:
         """Return Info object from Roku API response.
 
         Args:
+        ----
             data: Dictionary of data.
 
         Returns:
+        -------
             The Info object.
         """
         device_type = "box"
@@ -103,7 +109,10 @@ class Info:
             friendly_device_name = data.get("friendly-device-name", None)
             default_device_name = data.get("default-device-name", None)
             device_name = determine_device_name(
-                brand, friendly_device_name, default_device_name, model_name
+                brand,
+                friendly_device_name,
+                default_device_name,
+                model_name,
             )
 
         airplay = data.get("supports-airplay", "false") == "true"
@@ -151,9 +160,11 @@ class Channel:
         """Return Channel object from Roku response.
 
         Args:
+        ----
             data: Dictionary of data.
 
         Returns:
+        -------
             The Channel object.
         """
         if (strength := data.get("signal-strength", None)) is not None:
@@ -183,16 +194,18 @@ class MediaState:
     live: bool
     paused: bool
     position: int
-    at: datetime = datetime.utcnow()  # pylint: disable=C0103
+    at: datetime = datetime.utcnow()  # noqa: DTZ003, RUF009  # pylint: disable=C0103
 
     @staticmethod
     def from_dict(data: dict) -> MediaState | None:
         """Return MediaStste object from Roku response.
 
         Args:
+        ----
             data: Dictionary of data.
 
         Returns:
+        -------
             The MediaState object.
         """
         if (state := data.get("@state", None)) not in ("play", "pause"):
@@ -215,7 +228,7 @@ class State:
 
     available: bool
     standby: bool
-    at: datetime = datetime.utcnow()  # pylint: disable=C0103
+    at: datetime = datetime.utcnow()  # noqa: RUF009, DTZ003  # pylint: disable=C0103
 
 
 class Device:
@@ -229,13 +242,15 @@ class Device:
     channel: Channel | None = None
     media: MediaState | None = None
 
-    def __init__(self, data: dict[str, Any]):
+    def __init__(self, data: dict[str, Any]) -> None:
         """Initialize an empty Roku device class.
 
         Args:
+        ----
             data: Dictionary of data.
 
         Raises:
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         # Check if all elements are in the passed dict, else raise an Error
@@ -247,7 +262,8 @@ class Device:
     def as_dict(self) -> dict[str, Any]:
         """Return dictionary version of the Roku device.
 
-        Returns:
+        Returns
+        -------
             A Python dictionary created from the Device object attributes.
         """
         apps = None
@@ -281,15 +297,19 @@ class Device:
         }
 
     def update_from_dict(
-        self, data: dict[str, Any], update_state: bool = True
+        self,
+        data: dict[str, Any],
+        update_state: bool = True,  # noqa: FBT001, FBT002
     ) -> Device:
         """Return Device object from Roku device data.
 
         Args:
+        ----
             data: Dictionary of data.
             update_state: Whether to update state attributes.
 
         Returns:
+        -------
             The Device object.
         """
         if update_state:

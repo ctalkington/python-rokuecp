@@ -1,8 +1,10 @@
 """Tests for Roku Client Helpers."""
 from ipaddress import ip_address
-from socket import gaierror as SocketGIAError
+from socket import gaierror
+from unittest.mock import AsyncMock
 
 import pytest
+
 from rokuecp.exceptions import RokuConnectionError
 from rokuecp.helpers import (
     determine_device_name,
@@ -56,7 +58,7 @@ def test_is_ip_address() -> None:
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname(resolver) -> None:
+async def test_resolve_hostname(resolver: AsyncMock) -> None:
     """Test the resolve_hostname helper."""
     resolver.return_value = fake_addrinfo_results([HOST])
 
@@ -66,7 +68,7 @@ async def test_resolve_hostname(resolver) -> None:
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname_error_invalid(resolver) -> None:
+async def test_resolve_hostname_error_invalid(resolver: AsyncMock) -> None:
     """Test the resolve_hostname helper fails properly."""
     resolver.return_value = fake_addrinfo_results(["not-an-ip"])
 
@@ -75,9 +77,9 @@ async def test_resolve_hostname_error_invalid(resolver) -> None:
 
 
 @pytest.mark.asyncio
-async def test_resolve_hostname_error_not_found(resolver) -> None:
+async def test_resolve_hostname_error_not_found(resolver: AsyncMock) -> None:
     """Test the resolve_hostname helper fails properly."""
-    resolver.side_effect = SocketGIAError
+    resolver.side_effect = gaierror
 
     with pytest.raises(RokuConnectionError):
         await resolve_hostname("error.local")

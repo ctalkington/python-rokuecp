@@ -3,6 +3,7 @@ from datetime import datetime
 
 import pytest
 import xmltodict
+
 from rokuecp import RokuError, models
 
 from . import load_fixture
@@ -238,7 +239,6 @@ def test_info_tv_7820x() -> None:
 
 def test_info_tv_c147x() -> None:
     """Test the Info model with TV model C147X."""
-
     info = models.Info.from_dict(DEVICE_INFO_C147X["device-info"])
 
     assert info

@@ -1,20 +1,18 @@
 ---
-name: Typing
+name: Release
 
 # yamllint disable-line rule:truthy
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-  workflow_dispatch:
+  release:
+    types:
+      - published
 
 env:
   DEFAULT_PYTHON: "3.10"
 
 jobs:
-  mypy:
-    name: mypy
+  release:
+    name: Releasing to PyPi
     runs-on: ubuntu-latest
     steps:
       - name: Check out code from GitHub
@@ -33,5 +31,17 @@ jobs:
           poetry config virtualenvs.in-project true
       - name: Install dependencies
         run: poetry install --no-interaction
-      - name: Run mypy
-        run: poetry run mypy examples src tests
+      - name: Set package version
+        run: |
+          version="${{ github.event.release.tag_name }}"
+          version="${version,,}"
+          version="${version#v}"
+          poetry version --no-interaction "${version}"
+      - name: Build package
+        run: poetry build --no-interaction
+      - name: Publish to PyPi
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry config pypi-token.pypi "${PYPI_TOKEN}"
+          poetry publish --no-interaction

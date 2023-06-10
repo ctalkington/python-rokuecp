@@ -6,7 +6,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
-from socket import gaierror as SocketGIAError
+from socket import gaierror
 from typing import Any
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
@@ -44,7 +44,7 @@ class Roku:
     _device: Device | None = None
     _scheme: str = "http"
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Initialize connection parameters."""
         if not is_ip_address(self.host):
             self._dns_lookup = True
@@ -57,34 +57,36 @@ class Roku:
     async def _resolve_hostname(self) -> str:
         """Attempt to resolve hostname from cache or via resolver.
 
-        Returns:
+        Returns
+        -------
             The resolved IP Address.
         """
         if self._dns_update_interval is None:
             self._dns_update_interval = timedelta(hours=2)
 
-        update = self._dns_resolved_at is None or datetime.utcnow() >= (
+        update = self._dns_resolved_at is None or datetime.utcnow() >= (  # noqa: DTZ003
             self._dns_resolved_at + self._dns_update_interval
         )
 
         if self._dns_ip_address is None or update:
             ip_address = await resolve_hostname(self.host)
             self._dns_ip_address = ip_address
-            self._dns_resolved_at = datetime.utcnow()
+            self._dns_resolved_at = datetime.utcnow()  # noqa: DTZ003
 
         return self._dns_ip_address
 
-    async def _request(
+    async def _request(  # noqa: PLR0913
         self,
         uri: str = "",
         method: str = "GET",
         data: Any | None = None,
         params: dict[str, Any] | None = None,
-        encoded: bool = False,
+        encoded: bool = False,  # noqa: FBT001, FBT002
     ) -> Any:
         """Handle a request to a Roku device.
 
         Args:
+        ----
             uri: Request URI, for example `/query/device-info`.
             method: HTTP method to use for the request.E.g., "GET" or "POST".
             data: Dictionary of data to send to the Roku device.
@@ -92,10 +94,12 @@ class Roku:
             encoded: Whether the URI has already been url encoded.
 
         Returns:
+        -------
             A Python dictionary (XML decoded) with the response from the
             Roku device.
 
         Raises:
+        ------
             RokuConnectionTimeoutError: A timeout occurred while communicating with
                 the Roku device.
             RokuConnectionError: An error occurred while communicating with
@@ -134,11 +138,11 @@ class Roku:
                 )
         except asyncio.TimeoutError as exception:
             raise RokuConnectionTimeoutError(
-                "Timeout occurred while connecting to device"
+                "Timeout occurred while connecting to device",
             ) from exception
-        except (ClientError, SocketGIAError) as exception:
+        except (ClientError, gaierror) as exception:
             raise RokuConnectionError(
-                "Error occurred while communicating with device"
+                "Error occurred while communicating with device",
             ) from exception
 
         content_type = response.headers.get("Content-Type", "")
@@ -147,8 +151,9 @@ class Roku:
             content = await response.read()
             response.close()
 
+            msg = f"HTTP {response.status}"
             raise RokuError(
-                f"HTTP {response.status}",
+                msg,
                 {
                     "content-type": content_type,
                     "message": content.decode("utf8"),
@@ -173,7 +178,8 @@ class Roku:
     def device(self) -> Device | None:
         """Get Roku device information.
 
-        Returns:
+        Returns
+        -------
             A Device object with information about the Roku device.
         """
         return self._device
@@ -182,26 +188,34 @@ class Roku:
         """Get the URL to the application icon.
 
         Args:
+        ----
             app_id: The application ID.
 
         Returns:
+        -------
             The URL to the icon for the requested application ID.
         """
         icon_url = URL.build(
-            scheme=self._scheme, host=self.host, port=self.port, path=self.base_path
+            scheme=self._scheme,
+            host=self.host,
+            port=self.port,
+            path=self.base_path,
         ).join(URL(f"query/icon/{app_id}"))
 
         return str(icon_url)
 
-    async def update(  # pylint: disable=too-many-branches
-        self, full_update: bool = False
+    async def update(  # noqa: PLR0912  # pylint: disable=R0912
+        self,
+        full_update: bool = False,  # noqa: FBT001, FBT002
     ) -> Device:
         """Get all information about the device in a single call.
 
         Args:
+        ----
             full_update: Should application and channel lists be updated.
 
         Returns:
+        -------
             A Device object, with information about the Roku device.
         """
         if self._device is None:
@@ -253,7 +267,7 @@ class Roku:
         if len(tasks) > 0:
             results = await asyncio.gather(*futures)
 
-            for (task, result) in zip(tasks, results):
+            for task, result in zip(tasks, results):  # noqa: B905
                 updates[task] = result
 
         if self._device is None:
@@ -264,11 +278,14 @@ class Roku:
         return self._device
 
     async def play_on_roku(
-        self, video_url: str, params: dict[str, Any] | None = None
+        self,
+        video_url: str,
+        params: dict[str, Any] | None = None,
     ) -> None:
         """Play video via PlayOnRoku channel.
 
         Args:
+        ----
             video_url: The URL to play on the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
         """
@@ -288,6 +305,7 @@ class Roku:
         """Launch an application on the Roku device.
 
         Args:
+        ----
             app_id: The application ID to launch on the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
         """
@@ -301,6 +319,7 @@ class Roku:
         """Send literal text to the Roku device.
 
         Args:
+        ----
             text: The literal text to send to the Roku device.
         """
         for char in text:
@@ -311,14 +330,17 @@ class Roku:
         """Emulate pressing a key on the remote.
 
         Args:
+        ----
             key: The remote keypress to send to the Roku device.
 
         Raises:
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         key_lower = key.lower()
         if key_lower not in VALID_REMOTE_KEYS:
-            raise RokuError(f"Remote key is invalid: {key}")
+            msg = f"Remote key is invalid: {key}"
+            raise RokuError(msg)
 
         if key_lower == "search":
             await self._request("search/browse", method="POST")
@@ -330,6 +352,7 @@ class Roku:
         """Emulate opening search and entering keyword on the Roku device.
 
         Args:
+        ----
             keyword: The search keyword to send to the Roku device.
         """
         request_params = {
@@ -342,6 +365,7 @@ class Roku:
         """Change the channel on Roku TV device.
 
         Args:
+        ----
             channel: The channel number to send to the Roku device.
         """
         await self.launch("tvinput.dtv", {"ch": channel})
@@ -349,10 +373,12 @@ class Roku:
     async def _get_active_app(self) -> dict[str, Any]:
         """Retrieve active app for updates.
 
-        Returns:
+        Returns
+        -------
             A Dictionary.
 
-        Raises:
+        Raises
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         res = await self._request("/query/active-app")
@@ -365,10 +391,12 @@ class Roku:
     async def _get_apps(self) -> list[dict[str, Any]]:
         """Retrieve apps for updates.
 
-        Returns:
+        Returns
+        -------
             A list of Python Dictionaries.
 
-        Raises:
+        Raises
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         res = await self._request("/query/apps")
@@ -384,10 +412,12 @@ class Roku:
     async def _get_device_info(self) -> dict[str, Any]:
         """Retrieve device info for updates.
 
-        Returns:
+        Returns
+        -------
             A Dictionary.
 
-        Raises:
+        Raises
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         res = await self._request("/query/device-info")
@@ -400,10 +430,12 @@ class Roku:
     async def _get_media_state(self) -> dict[str, Any]:
         """Retrieve media state for updates.
 
-        Returns:
+        Returns
+        -------
             A Dictionary.
 
-        Raises:
+        Raises
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         res = await self._request("/query/media-player")
@@ -416,17 +448,19 @@ class Roku:
     async def _get_tv_active_channel(self) -> dict[str, Any]:
         """Retrieve active TV channel for updates.
 
-        Returns:
+        Returns
+        -------
             A Dictionary.
 
-        Raises:
+        Raises
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         res = await self._request("/query/tv-active-channel")
 
         if not isinstance(res, dict) or "tv-channel" not in res:
             raise RokuError(
-                "Roku device returned a malformed result (tv-active-channel)"
+                "Roku device returned a malformed result (tv-active-channel)",
             )
 
         return res["tv-channel"]["channel"]
@@ -434,10 +468,12 @@ class Roku:
     async def _get_tv_channels(self) -> list[dict[str, Any]]:
         """Retrieve TV channels for updates.
 
-        Returns:
+        Returns
+        -------
             A list of Python Dictionaries.
 
-        Raises:
+        Raises
+        ------
             RokuError: Received an unexpected response from the Roku device.
         """
         res = await self._request("/query/tv-channels")
@@ -456,17 +492,16 @@ class Roku:
     def get_dns_state(self) -> dict[str, Any]:
         """Retrieve DNS resolution state.
 
-        Returns:
+        Returns
+        -------
             A dictionary of DNS state properties.
         """
-        state = {
+        return {
             "enabled": self._dns_lookup,
             "hostname": self.host if self._dns_lookup else None,
             "ip_address": self._dns_ip_address,
             "resolved_at": self._dns_resolved_at,
         }
-
-        return state
 
     async def close_session(self) -> None:
         """Close open client session."""
@@ -476,7 +511,8 @@ class Roku:
     async def __aenter__(self) -> Roku:
         """Async enter.
 
-        Returns:
+        Returns
+        -------
             The Roku object.
         """
         return self
@@ -485,6 +521,7 @@ class Roku:
         """Async exit.
 
         Args:
+        ----
             _exc_info: Exec type.
         """
         await self.close_session()

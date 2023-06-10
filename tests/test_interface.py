@@ -6,6 +6,8 @@ from unittest.mock import AsyncMock
 import pytest
 from aiohttp import ClientSession
 from aresponses import ResponsesMockServer
+from freezegun.api import FrozenDateTimeFactory
+
 from rokuecp import Roku, RokuError, models
 
 from . import fake_addrinfo_results, load_fixture
@@ -37,7 +39,7 @@ async def test_app_icon_url() -> None:
 async def test_get_dns_state(
     aresponses: ResponsesMockServer,
     resolver: AsyncMock,
-    freezer,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test get_dns_state is handled correctly."""
     aresponses.add(
@@ -77,7 +79,7 @@ async def test_get_dns_state(
         assert dns["enabled"]
         assert dns["hostname"] == "roku.dev"
         assert dns["ip_address"] == "192.168.1.99"
-        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)  # noqa: DTZ001
 
         resolver.return_value = fake_addrinfo_results(["192.168.1.89"])
         freezer.tick(delta=timedelta(hours=3))
@@ -86,7 +88,7 @@ async def test_get_dns_state(
         assert dns["enabled"]
         assert dns["hostname"] == "roku.dev"
         assert dns["ip_address"] == "192.168.1.89"
-        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)  # noqa: DTZ001
 
 
 @pytest.mark.asyncio
@@ -645,7 +647,7 @@ async def test_update_tv(aresponses: ResponsesMockServer) -> None:
         assert not response.state.standby
         assert len(response.channels) == 2
 
-        response = await client.update(True)
+        response = await client.update(True)  # noqa: FBT003
 
         assert response
         assert isinstance(response.info, models.Info)

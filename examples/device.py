@@ -5,7 +5,7 @@ import asyncio
 from rokuecp import Roku
 
 
-async def main():
+async def main() -> None:
     """Show example of connecting to your Roku."""
     async with Roku("192.168.1.61") as roku:
         # Get Roku Device Info
