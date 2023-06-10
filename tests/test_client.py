@@ -1,20 +1,21 @@
 """Tests for Roku."""
 # pylint: disable=protected-access
 import asyncio
-from datetime import datetime, timedelta
-from socket import gaierror as SocketGIAError
+from datetime import datetime, timedelta, timezone
+from socket import gaierror
 from unittest.mock import AsyncMock
 
 import pytest
-from aiohttp import ClientError, ClientSession
-from aresponses import ResponsesMockServer
+from aiohttp import ClientError, ClientResponse, ClientSession
+from aresponses import Response, ResponsesMockServer
+from freezegun.api import FrozenDateTimeFactory
+
 from rokuecp import Roku
 from rokuecp.exceptions import (
     RokuConnectionError,
     RokuConnectionTimeoutError,
     RokuError,
 )
-
 from tests import fake_addrinfo_results
 
 HOSTNAME = "roku.local"
@@ -160,8 +161,9 @@ async def test_request_port(aresponses: ResponsesMockServer) -> None:
 @pytest.mark.asyncio
 async def test_timeout(aresponses: ResponsesMockServer) -> None:
     """Test request timeout from the API."""
+
     # Faking a timeout by sleeping
-    async def response_handler(_):
+    async def response_handler(_: ClientResponse) -> Response:
         await asyncio.sleep(2)
         return aresponses.Response(body="Timeout!")
 
@@ -222,11 +224,11 @@ async def test_http_error500(aresponses: ResponsesMockServer) -> None:
 
 
 @pytest.mark.asyncio
-@pytest.mark.freeze_time("2022-03-27")
+@pytest.mark.freeze_time("2022-03-27 00:00:00+00:00")
 async def test_resolve_hostname(
     aresponses: ResponsesMockServer,
     resolver: AsyncMock,
-    freezer,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """Test that hostnames are resolved before request."""
     resolver.return_value = fake_addrinfo_results([HOST])
@@ -253,7 +255,7 @@ async def test_resolve_hostname(
         assert dns["enabled"]
         assert dns["hostname"] == HOSTNAME
         assert dns["ip_address"] == HOST
-        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)  # noqa: DTZ001
 
         freezer.tick(delta=timedelta(hours=3))
         resolver.return_value = fake_addrinfo_results(["192.168.1.68"])
@@ -263,13 +265,14 @@ async def test_resolve_hostname(
         assert dns["enabled"]
         assert dns["hostname"] == HOSTNAME
         assert dns["ip_address"] == "192.168.1.68"
-        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)  # noqa: DTZ001
 
 
 @pytest.mark.asyncio
-@pytest.mark.freeze_time("2022-03-27")
+@pytest.mark.freeze_time("2022-03-27 00:00:00+00:00")
 async def test_resolve_hostname_multiple_clients(
-    aresponses: ResponsesMockServer, resolver: AsyncMock
+    aresponses: ResponsesMockServer,
+    resolver: AsyncMock,
 ) -> None:
     """Test that hostnames are resolved before request with multiple clients."""
     aresponses.add(
@@ -295,7 +298,7 @@ async def test_resolve_hostname_multiple_clients(
         assert dns["enabled"]
         assert dns["hostname"] == HOSTNAME
         assert dns["ip_address"] == HOST
-        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+        assert dns["resolved_at"] == datetime(2022, 3, 27, 0, 0)  # noqa: DTZ001
 
         resolver.return_value = fake_addrinfo_results(["192.168.1.99"])
         client2 = Roku("roku.dev", session=session)
@@ -305,13 +308,13 @@ async def test_resolve_hostname_multiple_clients(
         assert dns2["enabled"]
         assert dns2["hostname"] == "roku.dev"
         assert dns2["ip_address"] == "192.168.1.99"
-        assert dns2["resolved_at"] == datetime(2022, 3, 27, 0, 0)
+        assert dns2["resolved_at"] == datetime(2022, 3, 27, 0, 0)  # noqa: DTZ001
 
 
 @pytest.mark.asyncio
 async def test_resolve_hostname_error(resolver: AsyncMock) -> None:
     """Test that hostname resolution errors are handled."""
-    resolver.side_effect = SocketGIAError
+    resolver.side_effect = gaierror
 
     async with ClientSession() as session:
         client = Roku(HOSTNAME, session=session)
