@@ -204,7 +204,7 @@ class Roku:
 
         return str(icon_url)
 
-    async def update(  # noqa: PLR0912
+    async def update(  # noqa: PLR0912  # pylint: disable=R0912
         self,
         full_update: bool = False,  # noqa: FBT001, FBT002
     ) -> Device:

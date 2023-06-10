@@ -1,7 +1,7 @@
 """Tests for Roku."""
 # pylint: disable=protected-access
 import asyncio
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from socket import gaierror
 from unittest.mock import AsyncMock
 
