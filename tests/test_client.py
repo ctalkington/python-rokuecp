@@ -3,7 +3,7 @@
 import asyncio
 from datetime import datetime, timedelta
 from socket import gaierror
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from aiohttp import ClientError, ClientResponse, ClientSession
@@ -184,11 +184,12 @@ async def test_timeout(aresponses: ResponsesMockServer) -> None:
 async def test_client_error() -> None:
     """Test HTTP client error."""
     async with ClientSession() as session:
-        session.request = AsyncMock(side_effect=ClientError)
+        with patch.object(session, "request") as mock:
+            mock.side_effect = ClientError
 
-        client = Roku(HOST, session=session)
-        with pytest.raises(RokuConnectionError):
-            assert await client._request("client/error", method="ABC")
+            client = Roku(HOST, session=session)
+            with pytest.raises(RokuConnectionError):
+                assert await client._request("client/error", method="ABC")
 
 
 @pytest.mark.asyncio

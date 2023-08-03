@@ -1,9 +1,14 @@
 """Tests for Roku."""
+from __future__ import annotations
+
 import os
 import socket
 
 
-def fake_addrinfo_results(hosts: list, family: int = socket.AF_INET) -> list:
+def fake_addrinfo_results(
+    hosts: list[str],
+    family: int = socket.AF_INET,
+) -> list[tuple[int, None, None, None, list[str | int]]]:
     """Resolve hostname for mocked testing."""
     return [(family, None, None, None, [h, 0]) for h in hosts]
 
