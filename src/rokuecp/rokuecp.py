@@ -22,6 +22,7 @@ from .helpers import is_ip_address, resolve_hostname
 from .models import Device
 
 LOGGER = logging.getLogger(__package__)
+VERSION = metadata.version(__package__)
 
 
 @dataclass
@@ -50,9 +51,7 @@ class Roku:
             self._dns_lookup = True
 
         if self.user_agent is None:
-            version = metadata.version(__package__)
-
-            self.user_agent = f"PythonRokuECP/{version}"
+            self.user_agent = f"PythonRokuECP/{VERSION}"
 
     async def _resolve_hostname(self) -> str:
         """Attempt to resolve hostname from cache or via resolver.
