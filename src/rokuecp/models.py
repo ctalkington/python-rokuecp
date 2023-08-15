@@ -156,7 +156,7 @@ class Channel:
     signal_strength: int | None = None
 
     @staticmethod
-    def from_dict(data: dict) -> Channel:
+    def from_dict(data: dict[str, Any]) -> Channel:
         """Return Channel object from Roku response.
 
         Args:
@@ -197,7 +197,7 @@ class MediaState:
     at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
 
     @staticmethod
-    def from_dict(data: dict) -> MediaState | None:
+    def from_dict(data: dict[str, Any]) -> MediaState | None:
         """Return MediaStste object from Roku response.
 
         Args:

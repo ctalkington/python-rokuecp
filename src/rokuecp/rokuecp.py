@@ -147,6 +147,7 @@ class Roku:
 
         content_type = response.headers.get("Content-Type", "")
 
+        content: str | bytes
         if (response.status // 100) in [4, 5]:
             content = await response.read()
             response.close()
@@ -221,7 +222,7 @@ class Roku:
         if self._device is None:
             full_update = True
 
-        updates: dict = {}
+        updates: dict[str, Any] = {}
         updates["info"] = None
         updates["available"] = True
         updates["standby"] = False
@@ -386,7 +387,7 @@ class Roku:
         if not isinstance(res, dict) or "active-app" not in res:
             raise RokuError("Roku device returned a malformed result (active-app)")
 
-        return res["active-app"]
+        return res["active-app"]  # type: ignore[no-any-return]
 
     async def _get_apps(self) -> list[dict[str, Any]]:
         """Retrieve apps for updates.
@@ -407,7 +408,7 @@ class Roku:
         if isinstance(res["apps"]["app"], dict):
             return [res["apps"]["app"]]
 
-        return res["apps"]["app"]
+        return res["apps"]["app"]  # type: ignore[no-any-return]
 
     async def _get_device_info(self) -> dict[str, Any]:
         """Retrieve device info for updates.
@@ -425,7 +426,7 @@ class Roku:
         if not isinstance(res, dict) or "device-info" not in res:
             raise RokuError("Roku device returned a malformed result (device-info)")
 
-        return res["device-info"]
+        return res["device-info"]  # type: ignore[no-any-return]
 
     async def _get_media_state(self) -> dict[str, Any]:
         """Retrieve media state for updates.
@@ -443,7 +444,7 @@ class Roku:
         if not isinstance(res, dict) or "player" not in res:
             raise RokuError("Roku device returned a malformed result (player)")
 
-        return res["player"]
+        return res["player"]  # type: ignore[no-any-return]
 
     async def _get_tv_active_channel(self) -> dict[str, Any]:
         """Retrieve active TV channel for updates.
@@ -463,7 +464,7 @@ class Roku:
                 "Roku device returned a malformed result (tv-active-channel)",
             )
 
-        return res["tv-channel"]["channel"]
+        return res["tv-channel"]["channel"]  # type: ignore[no-any-return]
 
     async def _get_tv_channels(self) -> list[dict[str, Any]]:
         """Retrieve TV channels for updates.
@@ -487,7 +488,7 @@ class Roku:
         if isinstance(res["tv-channels"]["channel"], dict):
             return [res["tv-channels"]["channel"]]
 
-        return res["tv-channels"]["channel"]
+        return res["tv-channels"]["channel"]  # type: ignore[no-any-return]
 
     def get_dns_state(self) -> dict[str, Any]:
         """Retrieve DNS resolution state.
