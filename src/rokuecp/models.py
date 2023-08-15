@@ -1,8 +1,8 @@
 """Models for Roku."""
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
-from datetime import datetime
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
 from math import floor
 from typing import Any
 
@@ -194,7 +194,7 @@ class MediaState:
     live: bool
     paused: bool
     position: int
-    at: datetime = datetime.utcnow()  # noqa: DTZ003, RUF009  # pylint: disable=C0103
+    at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
 
     @staticmethod
     def from_dict(data: dict) -> MediaState | None:
@@ -228,7 +228,7 @@ class State:
 
     available: bool
     standby: bool
-    at: datetime = datetime.utcnow()  # noqa: RUF009, DTZ003  # pylint: disable=C0103
+    at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
 
 
 class Device:
