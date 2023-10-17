@@ -36,6 +36,8 @@ class Roku:
     session: ClientSession | None = None
     user_agent: str | None = None
 
+    _unresolved_base_url: URL | None = None
+    _resolved_base_url: URL | None = None
     _close_session: bool = False
     _dns_lookup: bool = False
     _dns_ip_address: str | None = None
@@ -52,6 +54,13 @@ class Roku:
 
         if self.user_agent is None:
             self.user_agent = f"PythonRokuECP/{VERSION}"
+
+        self._unresolved_base_url = URL.build(
+            scheme=self._scheme,
+            host=self.host,
+            port=self.port,
+            path=self.base_path,
+        )
 
     async def _resolve_hostname(self) -> str:
         """Attempt to resolve hostname from cache or via resolver.
@@ -110,12 +119,15 @@ class Roku:
         if self._dns_lookup:
             host = await self._resolve_hostname()
 
-        url = URL.build(
-            scheme=self._scheme,
-            host=host,
-            port=self.port,
-            path=self.base_path,
-        ).join(URL(uri, encoded=encoded))
+        if not self._resolved_base_url or self._resolved_base_url.host != host:
+            self._resolved_base_url = URL.build(
+                scheme=self._scheme,
+                host=host,
+                port=self.port,
+                path=self.base_path,
+            )
+
+        url = self._resolved_base_url.join(URL(uri, encoded=encoded))
 
         headers = {
             "User-Agent": self.user_agent,
@@ -195,14 +207,7 @@ class Roku:
         -------
             The URL to the icon for the requested application ID.
         """
-        icon_url = URL.build(
-            scheme=self._scheme,
-            host=self.host,
-            port=self.port,
-            path=self.base_path,
-        ).join(URL(f"query/icon/{app_id}"))
-
-        return str(icon_url)
+        return str(self._unresolved_base_url.join(URL(f"query/icon/{app_id}")))
 
     async def update(  # noqa: PLR0912  # pylint: disable=R0912
         self,
