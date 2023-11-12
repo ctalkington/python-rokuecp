@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
 from socket import gaierror
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
@@ -207,6 +207,9 @@ class Roku:
         -------
             The URL to the icon for the requested application ID.
         """
+        if TYPE_CHECKING:
+            # _unresolved_base_url is set in __post_init__
+            assert self._unresolved_base_url is not None
         return str(self._unresolved_base_url.join(URL(f"query/icon/{app_id}")))
 
     async def update(  # noqa: PLR0912  # pylint: disable=R0912
