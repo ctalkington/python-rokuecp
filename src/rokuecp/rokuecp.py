@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
@@ -19,6 +20,11 @@ from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuConnectionTimeoutError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
+
+if sys.version_info >= (3, 11):
+    from asyncio import timeout
+else:
+    from async_timeout import timeout
 
 LOGGER = logging.getLogger(__package__)
 VERSION = metadata.version(__package__)
@@ -140,7 +146,7 @@ class Roku:
             self._close_session = True
 
         try:
-            async with asyncio.timeout(self.request_timeout):
+            async with async_timeout.timeout(self.request_timeout):
                 response = await self.session.request(
                     method,
                     url,
