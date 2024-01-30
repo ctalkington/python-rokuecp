@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from math import floor
-from typing import Any
+from typing import Any, ClassVar
 
 from .exceptions import RokuError
 from .helpers import determine_device_name
@@ -241,8 +241,8 @@ class Device:
 
     info: Info
     state: State
-    apps: list[Application] = []
-    channels: list[Channel] = []
+    apps: ClassVar[list[Application]]= []
+    channels: ClassVar[list[Channel]] = []
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None

@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
 from socket import gaierror
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Self
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
@@ -538,7 +538,7 @@ class Roku:
         if self.session and self._close_session:
             await self.session.close()
 
-    async def __aenter__(self) -> Roku:
+    async def __aenter__(self) -> Self:
         """Async enter.
 
         Returns
