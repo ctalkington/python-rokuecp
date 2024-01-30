@@ -20,6 +20,7 @@ def _ms_to_sec(msec: str) -> int:
     Returns:
     -------
         The number of seconds converted from milliseconds.
+
     """
     msi = int(msec.replace("ms", "").strip())
     return floor(msi / 1000)
@@ -45,6 +46,7 @@ class Application:
         Returns:
         -------
             The Application object.
+
         """
         app = data.get("app", data)
 
@@ -93,6 +95,7 @@ class Info:
         Returns:
         -------
             The Info object.
+
         """
         device_type = "box"
 
@@ -166,6 +169,7 @@ class Channel:
         Returns:
         -------
             The Channel object.
+
         """
         if (strength := data.get("signal-strength", None)) is not None:
             try:
@@ -207,6 +211,7 @@ class MediaState:
         Returns:
         -------
             The MediaState object.
+
         """
         if (state := data.get("@state", None)) not in ("play", "pause"):
             return None
@@ -252,6 +257,7 @@ class Device:
         Raises:
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         # Check if all elements are in the passed dict, else raise an Error
         if any(k not in data for k in ("info", "available", "standby")):
@@ -265,6 +271,7 @@ class Device:
         Returns
         -------
             A Python dictionary created from the Device object attributes.
+
         """
         apps = None
         if self.apps is not None:
@@ -311,6 +318,7 @@ class Device:
         Returns:
         -------
             The Device object.
+
         """
         if update_state:
             self.state = State(

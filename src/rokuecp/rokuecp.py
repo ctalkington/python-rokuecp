@@ -68,6 +68,7 @@ class Roku:
         Returns
         -------
             The resolved IP Address.
+
         """
         if self._dns_update_interval is None:
             self._dns_update_interval = timedelta(hours=2)
@@ -113,6 +114,7 @@ class Roku:
             RokuConnectionError: An error occurred while communicating with
                 the Roku device.
             RokuError: Received an unexpected response from the Roku device.
+
         """
         host = self.host
 
@@ -193,6 +195,7 @@ class Roku:
         Returns
         -------
             A Device object with information about the Roku device.
+
         """
         return self._device
 
@@ -206,6 +209,7 @@ class Roku:
         Returns:
         -------
             The URL to the icon for the requested application ID.
+
         """
         if TYPE_CHECKING:
             # _unresolved_base_url is set in __post_init__
@@ -225,6 +229,7 @@ class Roku:
         Returns:
         -------
             A Device object, with information about the Roku device.
+
         """
         if self._device is None:
             full_update = True
@@ -275,7 +280,7 @@ class Roku:
         if len(tasks) > 0:
             results = await asyncio.gather(*futures)
 
-            for task, result in zip(tasks, results):  # noqa: B905
+            for task, result in zip(tasks, results):
                 updates[task] = result
 
         if self._device is None:
@@ -296,6 +301,7 @@ class Roku:
         ----
             video_url: The URL to play on the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
+
         """
         if params is None:
             params = {}
@@ -316,6 +322,7 @@ class Roku:
         ----
             app_id: The application ID to launch on the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
+
         """
         if params is None:
             params = {}
@@ -329,6 +336,7 @@ class Roku:
         Args:
         ----
             text: The literal text to send to the Roku device.
+
         """
         for char in text:
             encoded = quote_plus(char)
@@ -344,6 +352,7 @@ class Roku:
         Raises:
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         if key[:4] == "Lit_":
             await self.literal(key[4:])
@@ -366,6 +375,7 @@ class Roku:
         Args:
         ----
             keyword: The search keyword to send to the Roku device.
+
         """
         request_params = {
             "keyword": keyword,
@@ -379,6 +389,7 @@ class Roku:
         Args:
         ----
             channel: The channel number to send to the Roku device.
+
         """
         await self.launch("tvinput.dtv", {"ch": channel})
 
@@ -392,6 +403,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/active-app")
 
@@ -410,6 +422,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/apps")
 
@@ -431,6 +444,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/device-info")
 
@@ -449,6 +463,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/media-player")
 
@@ -467,6 +482,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/tv-active-channel")
 
@@ -487,6 +503,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/tv-channels")
 
@@ -507,6 +524,7 @@ class Roku:
         Returns
         -------
             A dictionary of DNS state properties.
+
         """
         return {
             "enabled": self._dns_lookup,
@@ -526,14 +544,16 @@ class Roku:
         Returns
         -------
             The Roku object.
+
         """
         return self
 
-    async def __aexit__(self, *_exc_info: Any) -> None:
+    async def __aexit__(self, *_exc_info: object) -> None:
         """Async exit.
 
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close_session()

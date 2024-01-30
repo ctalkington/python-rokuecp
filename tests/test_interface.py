@@ -592,7 +592,7 @@ async def test_update_standby(aresponses: ResponsesMockServer) -> None:
 @pytest.mark.asyncio
 async def test_update_tv(aresponses: ResponsesMockServer) -> None:
     """Test update method is handled correctly for TVs."""
-    for _ in range(0, 2):
+    for _ in range(2):
         aresponses.add(
             MATCH_HOST,
             "/query/device-info",
