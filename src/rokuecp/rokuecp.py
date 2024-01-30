@@ -345,6 +345,10 @@ class Roku:
         ------
             RokuError: Received an unexpected response from the Roku device.
         """
+        if key[:4] == "Lit_":
+            await self.literal(key[4:])
+            return
+
         key_lower = key.lower()
         if key_lower not in VALID_REMOTE_KEYS:
             msg = f"Remote key is invalid: {key}"

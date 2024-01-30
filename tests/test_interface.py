@@ -247,6 +247,35 @@ async def test_remote_search(aresponses: ResponsesMockServer) -> None:
 
 
 @pytest.mark.asyncio
+async def test_remote_literal(aresponses: ResponsesMockServer) -> None:
+    """Test remote literal keypress is handled correctly."""
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_t",
+        "POST",
+        aresponses.Response(status=200),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_h",
+        "POST",
+        aresponses.Response(status=200),
+    )
+
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_e",
+        "POST",
+        aresponses.Response(status=200),
+    )
+
+    async with ClientSession() as session:
+        roku = Roku(HOST, session=session)
+        await roku.remote("Lit_the")
+
+
+@pytest.mark.asyncio
 async def test_search(aresponses: ResponsesMockServer) -> None:
     """Test search is handled correctly."""
     aresponses.add(
