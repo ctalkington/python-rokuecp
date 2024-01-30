@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
-import async_timeout
 import xmltodict
 from aiohttp.client import ClientError, ClientSession
 from yarl import URL
@@ -141,7 +140,7 @@ class Roku:
             self._close_session = True
 
         try:
-            async with async_timeout.timeout(self.request_timeout):
+            async with asyncio.timeout(self.request_timeout):
                 response = await self.session.request(
                     method,
                     url,
