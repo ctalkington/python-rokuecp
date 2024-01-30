@@ -146,7 +146,7 @@ class Roku:
             self._close_session = True
 
         try:
-            async with async_timeout.timeout(self.request_timeout):
+            async with timeout(self.request_timeout):
                 response = await self.session.request(
                     method,
                     url,
