@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from math import floor
-from typing import Any, ClassVar
+from typing import Any
 
 from .exceptions import RokuError
 from .helpers import determine_device_name
@@ -241,8 +241,8 @@ class Device:
 
     info: Info
     state: State
-    apps: ClassVar[list[Application]]= []
-    channels: ClassVar[list[Channel]] = []
+    apps: list[Application]
+    channels: list[Channel]
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None
@@ -263,6 +263,8 @@ class Device:
         if any(k not in data for k in ("info", "available", "standby")):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
+        self.apps = []
+        self.channels = []
         self.update_from_dict(data)
 
     def as_dict(self) -> dict[str, Any]:
