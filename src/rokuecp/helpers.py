@@ -44,6 +44,7 @@ def determine_device_name(
     Returns:
     -------
         The device name.
+
     """
     if friendly_name is not None and friendly_name.strip():
         return friendly_name.strip()
@@ -74,6 +75,7 @@ def guess_stream_format(  # noqa: PLR0911  # pylint: disable=too-many-return-sta
     Returns:
     -------
         The stream format or None if unable to determine stream format.
+
     """
     parsed = yarl.URL(url)
     parsed_name = parsed.name.lower()
@@ -114,6 +116,7 @@ def is_ip_address(host: str) -> bool:
     Returns:
     -------
         Whether the provided hostname is an IP address.
+
     """
     try:
         ip_address(host)
@@ -138,6 +141,7 @@ async def resolve_hostname(host: str) -> str:
     ------
         RokuConnectionError: An error occurred while communicating with
             the Roku device.
+
     """
     try:
         resolver = ThreadedResolver()
