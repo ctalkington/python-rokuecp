@@ -202,9 +202,16 @@ async def test_literal(aresponses: ResponsesMockServer) -> None:
         aresponses.Response(status=200),
     )
 
+    aresponses.add(
+        MATCH_HOST,
+        "/keypress/Lit_%40",
+        "POST",
+        aresponses.Response(status=200),
+    )
+
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
-        await roku.literal("the")
+        await roku.literal("the@")
 
 
 @pytest.mark.asyncio
