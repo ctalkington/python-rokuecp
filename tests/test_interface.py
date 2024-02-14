@@ -204,14 +204,14 @@ async def test_literal(aresponses: ResponsesMockServer) -> None:
 
     aresponses.add(
         MATCH_HOST,
-        "/keypress/Lit_%20",
+        "/keypress/Lit_+",
         "POST",
         aresponses.Response(status=200),
     )
 
     aresponses.add(
         MATCH_HOST,
-        "/keypress/Lit_%40",
+        "/keypress/Lit_@",
         "POST",
         aresponses.Response(status=200),
     )
