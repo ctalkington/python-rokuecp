@@ -345,7 +345,7 @@ class Roku:
         """
         for char in text:
             encoded = quote_plus(char)
-            await self._request(f"keypress/Lit_{encoded}", method="POST")
+            await self._request(f"keypress/Lit_{encoded}", method="POST", encoded=True)
 
     async def remote(self, key: str) -> None:
         """Emulate pressing a key on the remote.
