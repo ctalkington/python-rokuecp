@@ -47,6 +47,8 @@ async def test_xml_request(aresponses: ResponsesMockServer) -> None:
         assert isinstance(response, dict)
         assert response["status"] == "OK"
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_text_xml_request(aresponses: ResponsesMockServer) -> None:
@@ -69,6 +71,8 @@ async def test_text_xml_request(aresponses: ResponsesMockServer) -> None:
         assert isinstance(response, dict)
         assert response["status"] == "OK"
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_xml_request_parse_error(aresponses: ResponsesMockServer) -> None:
@@ -89,6 +93,8 @@ async def test_xml_request_parse_error(aresponses: ResponsesMockServer) -> None:
         with pytest.raises(RokuError):
             assert await client._request("response/xml-parse-error")
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_text_request(aresponses: ResponsesMockServer) -> None:
@@ -99,10 +105,13 @@ async def test_text_request(aresponses: ResponsesMockServer) -> None:
         "GET",
         aresponses.Response(status=200, text="OK"),
     )
+
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         response = await client._request("response/text")
         assert response == "OK"
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -125,6 +134,8 @@ async def test_internal_session(aresponses: ResponsesMockServer) -> None:
         assert isinstance(response, dict)
         assert response["status"] == "OK"
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_post_request(aresponses: ResponsesMockServer) -> None:
@@ -141,6 +152,8 @@ async def test_post_request(aresponses: ResponsesMockServer) -> None:
         response = await client._request("method/post", method="POST")
         assert response == "OK"
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_request_port(aresponses: ResponsesMockServer) -> None:
@@ -156,6 +169,8 @@ async def test_request_port(aresponses: ResponsesMockServer) -> None:
         client = Roku(host=HOST, port=NON_STANDARD_PORT, session=session)
         response = await client._request("support/port")
         assert response == "OK"
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -178,6 +193,8 @@ async def test_timeout(aresponses: ResponsesMockServer) -> None:
         client = Roku(HOST, session=session, request_timeout=1)
         with pytest.raises(RokuConnectionTimeoutError):
             assert await client._request("timeout")
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -207,6 +224,8 @@ async def test_http_error404(aresponses: ResponsesMockServer) -> None:
         with pytest.raises(RokuError):
             assert await client._request("http/404")
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_http_error500(aresponses: ResponsesMockServer) -> None:
@@ -222,6 +241,8 @@ async def test_http_error500(aresponses: ResponsesMockServer) -> None:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._request("http/500")
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -268,6 +289,8 @@ async def test_resolve_hostname(
         assert dns["ip_address"] == "192.168.1.68"
         assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)  # noqa: DTZ001
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 @pytest.mark.freeze_time("2022-03-27 00:00:00+00:00")
@@ -310,6 +333,8 @@ async def test_resolve_hostname_multiple_clients(
         assert dns2["hostname"] == "roku.dev"
         assert dns2["ip_address"] == "192.168.1.99"
         assert dns2["resolved_at"] == datetime(2022, 3, 27, 0, 0)  # noqa: DTZ001
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
