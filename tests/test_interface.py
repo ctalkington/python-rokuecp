@@ -213,6 +213,8 @@ async def test_literal(aresponses: ResponsesMockServer) -> None:
         roku = Roku(HOST, session=session)
         await roku.literal("the@")
 
+    aresponses.assert_called_in_order()
+
 
 @pytest.mark.asyncio
 async def test_remote(aresponses: ResponsesMockServer) -> None:
