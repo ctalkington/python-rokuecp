@@ -410,7 +410,8 @@ async def test_update(aresponses: ResponsesMockServer) -> None:
         assert not response.state.standby
         assert len(response.channels) == 0
 
-    aresponses.assert_plan_strictly_followed()
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
 
 
 @pytest.mark.asyncio
@@ -482,7 +483,8 @@ async def test_update_media_state(aresponses: ResponsesMockServer) -> None:
         assert response.media.duration == 6496
         assert response.media.position == 38
 
-    aresponses.assert_plan_strictly_followed()
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
 
 
 @pytest.mark.asyncio
