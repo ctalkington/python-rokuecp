@@ -135,7 +135,8 @@ async def test_device(aresponses: ResponsesMockServer) -> None:
         assert client.device
         assert isinstance(client.device, models.Device)
 
-    aresponses.assert_plan_strictly_followed()
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
 
 
 @pytest.mark.asyncio
