@@ -557,7 +557,6 @@ async def test_update_standby(aresponses: ResponsesMockServer) -> None:
             headers={"Content-Type": "application/xml"},
             text=load_fixture("apps.xml"),
         ),
-        repeat=2,
     )
 
     aresponses.add(
