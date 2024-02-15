@@ -90,6 +90,7 @@ async def test_get_dns_state(
         assert dns["ip_address"] == "192.168.1.89"
         assert dns["resolved_at"] == datetime(2022, 3, 27, 3, 0)  # noqa: DTZ001
 
+    aresponses.assert_plan_strictly_followed()
 
 @pytest.mark.asyncio
 async def test_device(aresponses: ResponsesMockServer) -> None:
@@ -134,6 +135,9 @@ async def test_device(aresponses: ResponsesMockServer) -> None:
         assert client.device
         assert isinstance(client.device, models.Device)
 
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
+
 
 @pytest.mark.asyncio
 async def test_launch(aresponses: ResponsesMockServer) -> None:
@@ -158,6 +162,8 @@ async def test_launch(aresponses: ResponsesMockServer) -> None:
         await roku.launch("101")
         await roku.launch("102", {"contentID": "deeplink"})
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_play_on_roku(aresponses: ResponsesMockServer) -> None:
@@ -176,6 +182,8 @@ async def test_play_on_roku(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         await roku.play_on_roku(video_url)
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -237,6 +245,8 @@ async def test_remote(aresponses: ResponsesMockServer) -> None:
         roku = Roku(HOST, session=session)
         await roku.remote("home")
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_remote_invalid_key() -> None:
@@ -260,6 +270,8 @@ async def test_remote_search(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         await roku.remote("search")
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -290,6 +302,8 @@ async def test_remote_literal(aresponses: ResponsesMockServer) -> None:
         roku = Roku(HOST, session=session)
         await roku.remote("Lit_the")
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_search(aresponses: ResponsesMockServer) -> None:
@@ -306,6 +320,8 @@ async def test_search(aresponses: ResponsesMockServer) -> None:
         roku = Roku(HOST, session=session)
         await roku.search("test")
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_tune(aresponses: ResponsesMockServer) -> None:
@@ -321,6 +337,8 @@ async def test_tune(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         roku = Roku(HOST, session=session)
         await roku.tune("13.4")
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -347,7 +365,6 @@ async def test_update(aresponses: ResponsesMockServer) -> None:
             headers={"Content-Type": "application/xml"},
             text=load_fixture("apps.xml"),
         ),
-        repeat=2,
     )
 
     aresponses.add(
@@ -393,6 +410,9 @@ async def test_update(aresponses: ResponsesMockServer) -> None:
         assert response.state.available
         assert not response.state.standby
         assert len(response.channels) == 0
+
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
 
 
 @pytest.mark.asyncio
@@ -464,6 +484,9 @@ async def test_update_media_state(aresponses: ResponsesMockServer) -> None:
         assert response.media.duration == 6496
         assert response.media.position == 38
 
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
+
 
 @pytest.mark.asyncio
 async def test_update_power_off(aresponses: ResponsesMockServer) -> None:
@@ -507,6 +530,9 @@ async def test_update_power_off(aresponses: ResponsesMockServer) -> None:
         assert response.state.standby
         assert len(response.channels) == 0
 
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
+
 
 @pytest.mark.asyncio
 async def test_update_standby(aresponses: ResponsesMockServer) -> None:
@@ -531,7 +557,6 @@ async def test_update_standby(aresponses: ResponsesMockServer) -> None:
             headers={"Content-Type": "application/xml"},
             text=load_fixture("apps.xml"),
         ),
-        repeat=2,
     )
 
     aresponses.add(
@@ -603,6 +628,9 @@ async def test_update_standby(aresponses: ResponsesMockServer) -> None:
         assert response.state.available
         assert response.state.standby
         assert len(response.channels) == 0
+
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
 
 
 @pytest.mark.asyncio
@@ -707,6 +735,9 @@ async def test_update_tv(aresponses: ResponsesMockServer) -> None:
         assert not response.state.standby
         assert len(response.channels) == 1
 
+    aresponses.assert_no_unused_routes()
+    aresponses.assert_all_requests_matched()
+
 
 @pytest.mark.asyncio
 async def test_get_active_app(aresponses: ResponsesMockServer) -> None:
@@ -725,6 +756,8 @@ async def test_get_active_app(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         assert await client._get_active_app()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -745,6 +778,8 @@ async def test_get_active_app_invalid(aresponses: ResponsesMockServer) -> None:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_active_app()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -767,6 +802,8 @@ async def test_get_apps(aresponses: ResponsesMockServer) -> None:
         assert isinstance(res, list)
         assert len(res) == 8
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_apps_invalid(aresponses: ResponsesMockServer) -> None:
@@ -786,6 +823,8 @@ async def test_get_apps_invalid(aresponses: ResponsesMockServer) -> None:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_apps()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -808,6 +847,8 @@ async def test_get_apps_single_app(aresponses: ResponsesMockServer) -> None:
         assert isinstance(res, list)
         assert len(res) == 1
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_device_info(aresponses: ResponsesMockServer) -> None:
@@ -828,6 +869,8 @@ async def test_get_device_info(aresponses: ResponsesMockServer) -> None:
         with pytest.raises(RokuError):
             assert await client._get_device_info()
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_media_state_close(aresponses: ResponsesMockServer) -> None:
@@ -846,6 +889,8 @@ async def test_get_media_state_close(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         assert await client._get_media_state()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -867,6 +912,8 @@ async def test_get_media_state_invalid(aresponses: ResponsesMockServer) -> None:
         with pytest.raises(RokuError):
             assert await client._get_media_state()
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_media_state_live(aresponses: ResponsesMockServer) -> None:
@@ -885,6 +932,8 @@ async def test_get_media_state_live(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         assert await client._get_media_state()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -905,6 +954,8 @@ async def test_get_media_state_pause(aresponses: ResponsesMockServer) -> None:
         client = Roku(HOST, session=session)
         assert await client._get_media_state()
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_media_state_play(aresponses: ResponsesMockServer) -> None:
@@ -923,6 +974,8 @@ async def test_get_media_state_play(aresponses: ResponsesMockServer) -> None:
     async with ClientSession() as session:
         client = Roku(HOST, session=session)
         assert await client._get_media_state()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -944,6 +997,8 @@ async def test_get_tv_active_channel(aresponses: ResponsesMockServer) -> None:
         with pytest.raises(RokuError):
             assert await client._get_tv_active_channel()
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_tv_channels(aresponses: ResponsesMockServer) -> None:
@@ -963,6 +1018,8 @@ async def test_get_tv_channels(aresponses: ResponsesMockServer) -> None:
         client = Roku(HOST, session=session)
         with pytest.raises(RokuError):
             assert await client._get_tv_channels()
+
+    aresponses.assert_plan_strictly_followed()
 
 
 @pytest.mark.asyncio
@@ -985,6 +1042,8 @@ async def test_get_tv_channels_no_channels(aresponses: ResponsesMockServer) -> N
         assert isinstance(res, list)
         assert len(res) == 0
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_get_tv_channels_single_channel(aresponses: ResponsesMockServer) -> None:
@@ -1005,3 +1064,5 @@ async def test_get_tv_channels_single_channel(aresponses: ResponsesMockServer) -
         res = await client._get_tv_channels()
         assert isinstance(res, list)
         assert len(res) == 1
+
+    aresponses.assert_plan_strictly_followed()
