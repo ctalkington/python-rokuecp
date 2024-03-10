@@ -23,6 +23,7 @@ VALID_REMOTE_KEYS = {
     "volume_down": "VolumeDown",
     "volume_up": "VolumeUp",
     "volume_mute": "VolumeMute",
+    "sleep": "Sleep",
     # For Roku TV while on TV tuner channel
     "channel_up": "ChannelUp",
     "channel_down": "ChannelDown",
