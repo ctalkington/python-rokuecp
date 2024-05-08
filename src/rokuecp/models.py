@@ -14,7 +14,7 @@ def _now() -> datetime:
 
     Returns
     -------
-        The current date and time as a datetime object.
+        A datetime object representing the current date and time.
 
     """
     return datetime.now(tz=timezone.utc)
