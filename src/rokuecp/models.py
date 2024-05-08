@@ -142,7 +142,7 @@ class Info:
             network_type=data.get("network-type"),
             network_name=data.get("network-name"),
             serial_number=data.get("serial-number"),
-            version=data.get("software-version", ),
+            version=data.get("software-version"),
             ethernet_support=data.get("supports-ethernet", "false") == "true",
             ethernet_mac=data.get("ethernet-mac"),
             wifi_mac=data.get("wifi-mac"),
@@ -223,7 +223,7 @@ class MediaState:
             The MediaState object.
 
         """
-        if (state := data.get("@state", None)) not in ("play", "pause"):
+        if (state := data.get("@state")) not in ("play", "pause"):
             return None
 
         duration = data.get("duration", "0")
