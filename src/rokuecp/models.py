@@ -12,7 +12,7 @@ from .helpers import determine_device_name
 def _now() -> datetime:
     """Get the current date and time in UTC.
 
-    Returns:
+    Returns
     -------
         The current date and time as a datetime object.
 
@@ -23,11 +23,11 @@ def _now() -> datetime:
 def _ms_to_sec(msec: str) -> int:
     """Convert millisecond string to seconds integer.
 
-    Args:
+    Args
     ----
         msec: The number of milliseconds as a string.
 
-    Returns:
+    Returns
     -------
         The number of seconds converted from milliseconds.
 
