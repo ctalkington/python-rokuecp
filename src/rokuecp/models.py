@@ -64,9 +64,9 @@ class Application:
             app = {"#text": app}
 
         return Application(
-            app_id=app.get("@id", None),
-            name=app.get("#text", None),
-            version=app.get("@version", None),
+            app_id=app.get("@id"),
+            name=app.get("#text"),
+            version=app.get("@version"),
             screensaver=data.get("screensaver") is not None,
         )
 
@@ -114,13 +114,13 @@ class Info:
         elif data.get("is-stick", "false") == "true":
             device_type = "stick"
 
-        device_name = data.get("user-device-name", None)
-        model_name = data.get("model-name", None)
+        device_name = data.get("user-device-name")
+        model_name = data.get("model-name")
         brand = data.get("vendor-name", "Roku")
 
         if device_name is None or not device_name.strip():
-            friendly_device_name = data.get("friendly-device-name", None)
-            default_device_name = data.get("default-device-name", None)
+            friendly_device_name = data.get("friendly-device-name")
+            default_device_name = data.get("default-device-name")
             device_name = determine_device_name(
                 brand,
                 friendly_device_name,
@@ -136,16 +136,16 @@ class Info:
             name=device_name,
             brand=brand,
             device_type=device_type,
-            device_location=data.get("user-device-location", None),
+            device_location=data.get("user-device-location"),
             model_name=model_name,
-            model_number=data.get("model-number", None),
-            network_type=data.get("network-type", None),
-            network_name=data.get("network-name", None),
-            serial_number=data.get("serial-number", None),
-            version=data.get("software-version", None),
+            model_number=data.get("model-number"),
+            network_type=data.get("network-type"),
+            network_name=data.get("network-name"),
+            serial_number=data.get("serial-number"),
+            version=data.get("software-version"),
             ethernet_support=data.get("supports-ethernet", "false") == "true",
-            ethernet_mac=data.get("ethernet-mac", None),
-            wifi_mac=data.get("wifi-mac", None),
+            ethernet_mac=data.get("ethernet-mac"),
+            wifi_mac=data.get("wifi-mac"),
             supports_airplay=airplay,
             supports_find_remote=find_remote,
             supports_private_listening=private_listening,
@@ -181,21 +181,21 @@ class Channel:
             The Channel object.
 
         """
-        if (strength := data.get("signal-strength", None)) is not None:
+        if (strength := data.get("signal-strength")) is not None:
             try:
                 strength = int(strength)
             except ValueError:
                 strength = None
 
         return Channel(
-            name=data.get("name", None),
+            name=data.get("name"),
             number=data.get("number", "0"),
             channel_type=data.get("type", "unknown"),
             hidden=data.get("user-hidden", "false") == "true",
-            program_title=data.get("program-title", None),
-            program_description=data.get("program-description", None),
-            program_rating=data.get("program-ratings", None),
-            signal_mode=data.get("signal-mode", None),
+            program_title=data.get("program-title"),
+            program_description=data.get("program-description"),
+            program_rating=data.get("program-ratings"),
+            signal_mode=data.get("signal-mode"),
             signal_strength=strength,
         )
 
@@ -223,7 +223,7 @@ class MediaState:
             The MediaState object.
 
         """
-        if (state := data.get("@state", None)) not in ("play", "pause"):
+        if (state := data.get("@state")) not in ("play", "pause"):
             return None
 
         duration = data.get("duration", "0")
