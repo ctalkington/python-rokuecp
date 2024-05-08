@@ -23,11 +23,11 @@ def _now() -> datetime:
 def _ms_to_sec(msec: str) -> int:
     """Convert millisecond string to seconds integer.
 
-    Args
+    Args:
     ----
         msec: The number of milliseconds as a string.
 
-    Returns
+    Returns:
     -------
         The number of seconds converted from milliseconds.
 
