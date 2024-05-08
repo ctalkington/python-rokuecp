@@ -9,6 +9,16 @@ from typing import Any
 from .exceptions import RokuError
 from .helpers import determine_device_name
 
+def _now() -> datetime:
+    """Get the current date and time in UTC.
+
+    Returns:
+    -------
+        The current date and time as a datetime object.
+
+    """
+    return datetime.now(tz=timezone.utc)
+
 
 def _ms_to_sec(msec: str) -> int:
     """Convert millisecond string to seconds integer.
@@ -198,7 +208,7 @@ class MediaState:
     live: bool
     paused: bool
     position: int
-    at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
+    at: datetime = field(default_factory=_now)  # pylint: disable=C0103
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> MediaState | None:
@@ -233,7 +243,7 @@ class State:
 
     available: bool
     standby: bool
-    at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
+    at: datetime = field(default_factory=_now)  # pylint: disable=C0103
 
 
 class Device:
