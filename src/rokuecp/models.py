@@ -9,6 +9,7 @@ from typing import Any
 from .exceptions import RokuError
 from .helpers import determine_device_name
 
+
 def _now() -> datetime:
     """Get the current date and time in UTC.
 
@@ -338,34 +339,34 @@ class Device:
                 standby=data.get("standby", False),
             )
 
-        if "info" in data and data["info"]:
+        if data.get("info"):
             self.info = Info.from_dict(data["info"])
 
-        if "apps" in data and data["apps"]:
+        if data.get("apps"):
             self.apps = [
                 Application.from_dict(app_data)
                 for app_data in data["apps"]
                 if data["apps"] is not None
             ]
 
-        if "channels" in data and data["channels"]:
+        if data.get("channels"):
             self.channels = [
                 Channel.from_dict(channel_data)
                 for channel_data in data["channels"]
                 if data["channels"] is not None
             ]
 
-        if "app" in data and data["app"]:
+        if data.get("app"):
             self.app = Application.from_dict(data["app"])
         elif "app" in data:
             self.app = None
 
-        if "channel" in data and data["channel"]:
+        if data.get("channel"):
             self.channel = Channel.from_dict(data["channel"])
         elif "channel" in data:
             self.channel = None
 
-        if "media" in data and data["media"]:
+        if data.get("media"):
             self.media = MediaState.from_dict(data["media"])
         elif "media" in data:
             self.media = None
