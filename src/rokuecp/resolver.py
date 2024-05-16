@@ -19,6 +19,7 @@ class ThreadedResolver:
         Returns
         -------
             The currently running event loop.
+
         """
         return self._loop
 
@@ -43,6 +44,7 @@ class ThreadedResolver:
         Raises:
         ------
             OSError: An error occurred while resolving the hostname.
+
         """
         infos = await self.get_loop().getaddrinfo(
             hostname,

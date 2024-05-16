@@ -10,6 +10,17 @@ from .exceptions import RokuError
 from .helpers import determine_device_name
 
 
+def _now() -> datetime:
+    """Get the current date and time in UTC.
+
+    Returns
+    -------
+        A datetime object representing the current date and time.
+
+    """
+    return datetime.now(tz=timezone.utc)
+
+
 def _ms_to_sec(msec: str) -> int:
     """Convert millisecond string to seconds integer.
 
@@ -20,6 +31,7 @@ def _ms_to_sec(msec: str) -> int:
     Returns:
     -------
         The number of seconds converted from milliseconds.
+
     """
     msi = int(msec.replace("ms", "").strip())
     return floor(msi / 1000)
@@ -45,6 +57,7 @@ class Application:
         Returns:
         -------
             The Application object.
+
         """
         app = data.get("app", data)
 
@@ -52,9 +65,9 @@ class Application:
             app = {"#text": app}
 
         return Application(
-            app_id=app.get("@id", None),
-            name=app.get("#text", None),
-            version=app.get("@version", None),
+            app_id=app.get("@id"),
+            name=app.get("#text"),
+            version=app.get("@version"),
             screensaver=data.get("screensaver") is not None,
         )
 
@@ -93,6 +106,7 @@ class Info:
         Returns:
         -------
             The Info object.
+
         """
         device_type = "box"
 
@@ -101,13 +115,13 @@ class Info:
         elif data.get("is-stick", "false") == "true":
             device_type = "stick"
 
-        device_name = data.get("user-device-name", None)
-        model_name = data.get("model-name", None)
+        device_name = data.get("user-device-name")
+        model_name = data.get("model-name")
         brand = data.get("vendor-name", "Roku")
 
         if device_name is None or not device_name.strip():
-            friendly_device_name = data.get("friendly-device-name", None)
-            default_device_name = data.get("default-device-name", None)
+            friendly_device_name = data.get("friendly-device-name")
+            default_device_name = data.get("default-device-name")
             device_name = determine_device_name(
                 brand,
                 friendly_device_name,
@@ -123,16 +137,16 @@ class Info:
             name=device_name,
             brand=brand,
             device_type=device_type,
-            device_location=data.get("user-device-location", None),
+            device_location=data.get("user-device-location"),
             model_name=model_name,
-            model_number=data.get("model-number", None),
-            network_type=data.get("network-type", None),
-            network_name=data.get("network-name", None),
-            serial_number=data.get("serial-number", None),
-            version=data.get("software-version", None),
+            model_number=data.get("model-number"),
+            network_type=data.get("network-type"),
+            network_name=data.get("network-name"),
+            serial_number=data.get("serial-number"),
+            version=data.get("software-version"),
             ethernet_support=data.get("supports-ethernet", "false") == "true",
-            ethernet_mac=data.get("ethernet-mac", None),
-            wifi_mac=data.get("wifi-mac", None),
+            ethernet_mac=data.get("ethernet-mac"),
+            wifi_mac=data.get("wifi-mac"),
             supports_airplay=airplay,
             supports_find_remote=find_remote,
             supports_private_listening=private_listening,
@@ -166,22 +180,23 @@ class Channel:
         Returns:
         -------
             The Channel object.
+
         """
-        if (strength := data.get("signal-strength", None)) is not None:
+        if (strength := data.get("signal-strength")) is not None:
             try:
                 strength = int(strength)
             except ValueError:
                 strength = None
 
         return Channel(
-            name=data.get("name", None),
+            name=data.get("name"),
             number=data.get("number", "0"),
             channel_type=data.get("type", "unknown"),
             hidden=data.get("user-hidden", "false") == "true",
-            program_title=data.get("program-title", None),
-            program_description=data.get("program-description", None),
-            program_rating=data.get("program-ratings", None),
-            signal_mode=data.get("signal-mode", None),
+            program_title=data.get("program-title"),
+            program_description=data.get("program-description"),
+            program_rating=data.get("program-ratings"),
+            signal_mode=data.get("signal-mode"),
             signal_strength=strength,
         )
 
@@ -194,7 +209,7 @@ class MediaState:
     live: bool
     paused: bool
     position: int
-    at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
+    at: datetime = field(default_factory=_now)  # pylint: disable=C0103
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> MediaState | None:
@@ -207,8 +222,9 @@ class MediaState:
         Returns:
         -------
             The MediaState object.
+
         """
-        if (state := data.get("@state", None)) not in ("play", "pause"):
+        if (state := data.get("@state")) not in ("play", "pause"):
             return None
 
         duration = data.get("duration", "0")
@@ -228,7 +244,7 @@ class State:
 
     available: bool
     standby: bool
-    at: datetime = field(default=datetime.now(tz=timezone.utc))  # pylint: disable=C0103
+    at: datetime = field(default_factory=_now)  # pylint: disable=C0103
 
 
 class Device:
@@ -236,8 +252,8 @@ class Device:
 
     info: Info
     state: State
-    apps: list[Application] = []
-    channels: list[Channel] = []
+    apps: list[Application]
+    channels: list[Channel]
     app: Application | None = None
     channel: Channel | None = None
     media: MediaState | None = None
@@ -252,11 +268,14 @@ class Device:
         Raises:
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         # Check if all elements are in the passed dict, else raise an Error
         if any(k not in data for k in ("info", "available", "standby")):
             raise RokuError("Roku data is incomplete, cannot construct device object")
 
+        self.apps = []
+        self.channels = []
         self.update_from_dict(data)
 
     def as_dict(self) -> dict[str, Any]:
@@ -265,6 +284,7 @@ class Device:
         Returns
         -------
             A Python dictionary created from the Device object attributes.
+
         """
         apps = None
         if self.apps is not None:
@@ -311,6 +331,7 @@ class Device:
         Returns:
         -------
             The Device object.
+
         """
         if update_state:
             self.state = State(
@@ -318,34 +339,34 @@ class Device:
                 standby=data.get("standby", False),
             )
 
-        if "info" in data and data["info"]:
+        if data.get("info"):
             self.info = Info.from_dict(data["info"])
 
-        if "apps" in data and data["apps"]:
+        if data.get("apps"):
             self.apps = [
                 Application.from_dict(app_data)
                 for app_data in data["apps"]
                 if data["apps"] is not None
             ]
 
-        if "channels" in data and data["channels"]:
+        if data.get("channels"):
             self.channels = [
                 Channel.from_dict(channel_data)
                 for channel_data in data["channels"]
                 if data["channels"] is not None
             ]
 
-        if "app" in data and data["app"]:
+        if data.get("app"):
             self.app = Application.from_dict(data["app"])
         elif "app" in data:
             self.app = None
 
-        if "channel" in data and data["channel"]:
+        if data.get("channel"):
             self.channel = Channel.from_dict(data["channel"])
         elif "channel" in data:
             self.channel = None
 
-        if "media" in data and data["media"]:
+        if data.get("media"):
             self.media = MediaState.from_dict(data["media"])
         elif "media" in data:
             self.media = None

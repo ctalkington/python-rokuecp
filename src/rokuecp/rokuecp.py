@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from importlib import metadata
@@ -11,7 +12,6 @@ from typing import TYPE_CHECKING, Any
 from urllib.parse import quote_plus, urlencode
 from xml.parsers.expat import ExpatError
 
-import async_timeout
 import xmltodict
 from aiohttp.client import ClientError, ClientSession
 from yarl import URL
@@ -20,6 +20,11 @@ from .const import VALID_REMOTE_KEYS
 from .exceptions import RokuConnectionError, RokuConnectionTimeoutError, RokuError
 from .helpers import is_ip_address, resolve_hostname
 from .models import Device
+
+if sys.version_info >= (3, 11):
+    from asyncio import timeout
+else:
+    from async_timeout import timeout
 
 LOGGER = logging.getLogger(__package__)
 VERSION = metadata.version(__package__)
@@ -68,6 +73,7 @@ class Roku:
         Returns
         -------
             The resolved IP Address.
+
         """
         if self._dns_update_interval is None:
             self._dns_update_interval = timedelta(hours=2)
@@ -113,6 +119,7 @@ class Roku:
             RokuConnectionError: An error occurred while communicating with
                 the Roku device.
             RokuError: Received an unexpected response from the Roku device.
+
         """
         host = self.host
 
@@ -139,7 +146,7 @@ class Roku:
             self._close_session = True
 
         try:
-            async with async_timeout.timeout(self.request_timeout):
+            async with timeout(self.request_timeout):
                 response = await self.session.request(
                     method,
                     url,
@@ -193,6 +200,7 @@ class Roku:
         Returns
         -------
             A Device object with information about the Roku device.
+
         """
         return self._device
 
@@ -206,6 +214,7 @@ class Roku:
         Returns:
         -------
             The URL to the icon for the requested application ID.
+
         """
         if TYPE_CHECKING:
             # _unresolved_base_url is set in __post_init__
@@ -225,6 +234,7 @@ class Roku:
         Returns:
         -------
             A Device object, with information about the Roku device.
+
         """
         if self._device is None:
             full_update = True
@@ -275,7 +285,7 @@ class Roku:
         if len(tasks) > 0:
             results = await asyncio.gather(*futures)
 
-            for task, result in zip(tasks, results):  # noqa: B905
+            for task, result in zip(tasks, results):
                 updates[task] = result
 
         if self._device is None:
@@ -296,6 +306,7 @@ class Roku:
         ----
             video_url: The URL to play on the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
+
         """
         if params is None:
             params = {}
@@ -316,6 +327,7 @@ class Roku:
         ----
             app_id: The application ID to launch on the Roku device.
             params: Dictionary of request parameters to send to the Roku device.
+
         """
         if params is None:
             params = {}
@@ -329,10 +341,11 @@ class Roku:
         Args:
         ----
             text: The literal text to send to the Roku device.
+
         """
         for char in text:
             encoded = quote_plus(char)
-            await self._request(f"keypress/Lit_{encoded}", method="POST")
+            await self._request(f"keypress/Lit_{encoded}", method="POST", encoded=True)
 
     async def remote(self, key: str) -> None:
         """Emulate pressing a key on the remote.
@@ -344,6 +357,7 @@ class Roku:
         Raises:
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         if key[:4] == "Lit_":
             await self.literal(key[4:])
@@ -366,6 +380,7 @@ class Roku:
         Args:
         ----
             keyword: The search keyword to send to the Roku device.
+
         """
         request_params = {
             "keyword": keyword,
@@ -379,6 +394,7 @@ class Roku:
         Args:
         ----
             channel: The channel number to send to the Roku device.
+
         """
         await self.launch("tvinput.dtv", {"ch": channel})
 
@@ -392,6 +408,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/active-app")
 
@@ -410,6 +427,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/apps")
 
@@ -431,6 +449,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/device-info")
 
@@ -449,6 +468,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/media-player")
 
@@ -467,6 +487,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/tv-active-channel")
 
@@ -487,6 +508,7 @@ class Roku:
         Raises
         ------
             RokuError: Received an unexpected response from the Roku device.
+
         """
         res = await self._request("/query/tv-channels")
 
@@ -507,6 +529,7 @@ class Roku:
         Returns
         -------
             A dictionary of DNS state properties.
+
         """
         return {
             "enabled": self._dns_lookup,
@@ -520,20 +543,22 @@ class Roku:
         if self.session and self._close_session:
             await self.session.close()
 
-    async def __aenter__(self) -> Roku:
+    async def __aenter__(self) -> Roku:  # noqa: PYI034
         """Async enter.
 
         Returns
         -------
             The Roku object.
+
         """
         return self
 
-    async def __aexit__(self, *_exc_info: Any) -> None:
+    async def __aexit__(self, *_exc_info: object) -> None:
         """Async exit.
 
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close_session()
