@@ -14,6 +14,7 @@ MIME_TO_STREAM_FORMAT = {
     "application/dash+xml": "dash",
     "application/x-mpegurl": "hls",
     "application/vnd.apple.mpegurl": "hls",
+    "audio/aac": "aac",
     "audio/mpeg": "mp3",
     "audio/mp4": "m4a",
     "audio/mp4a-latm": "m4a",
@@ -87,6 +88,8 @@ def guess_stream_format(  # noqa: PLR0911  # pylint: disable=too-many-return-sta
         return "m4a"
 
     if mime_type is None:
+        if parsed_name.endswith(".aac"):
+            return "aac"
         if parsed_name.endswith(".dash"):
             return "dash"
         if parsed_name.endswith(".mpd"):
