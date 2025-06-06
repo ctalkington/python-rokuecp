@@ -132,6 +132,7 @@ disable = [
   "duplicate-code",
   "format",
   "unsubscriptable-object",
+  "too-many-positional-arguments",
 ]
 
 [tool.pylint.SIMILARITIES]
