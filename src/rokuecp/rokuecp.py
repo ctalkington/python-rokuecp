@@ -396,7 +396,7 @@ class Roku:
             channel: The channel number to send to the Roku device.
 
         """
-        await self.launch("tvinput.dtv", {"ch": channel})
+        await self.launch("tvinput.dtv", {"ch": channel, "chan": channel, "lcn": channel})
 
     async def _get_active_app(self) -> dict[str, Any]:
         """Retrieve active app for updates.
