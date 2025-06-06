@@ -396,7 +396,6 @@ class Roku:
             channel: The channel number to send to the Roku device.
 
         """
-
         request_params = {
             "ch": channel,
             "chan": channel,
