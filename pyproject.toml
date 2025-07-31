@@ -41,7 +41,7 @@ codespell = "2.4.1"
 covdefaults = "2.3.0"
 coverage = {version = "7.9.1", extras = ["toml"]}
 freezegun = "1.5.2"
-mypy = "1.13.0"
+mypy = "1.17.1"
 pre-commit = "4.2.0"
 pre-commit-hooks = "4.6.0"
 pylint = "3.3.7"
